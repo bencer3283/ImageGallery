@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 void main() {
@@ -40,6 +42,20 @@ class _ViewerState extends State<Viewer> with SingleTickerProviderStateMixin {
             Tween<Offset>(begin: Offset.zero, end: Offset(100.0, 0));
         hidePreviousButtonTween =
             Tween<Offset>(begin: Offset.zero, end: Offset(-100, 0));
+        bottomInfoHideNumberTween =
+            Tween<Offset>(begin: Offset.zero, end: Offset(0, 150));
+      });
+      Timer(Duration(milliseconds: 100), () {
+        setState(() {
+          bottomInfoHideDescripTween =
+              Tween<Offset>(begin: Offset.zero, end: Offset(0, 150));
+        });
+      });
+      Timer(Duration(milliseconds: 150), () {
+        setState(() {
+          bottomInfoHideExposTween =
+              Tween<Offset>(begin: Offset.zero, end: Offset(0, 150));
+        });
       });
       isHide = !isHide;
     } else if (isHide) {
@@ -48,6 +64,20 @@ class _ViewerState extends State<Viewer> with SingleTickerProviderStateMixin {
             Tween<Offset>(begin: Offset.zero, end: Offset.zero);
         hidePreviousButtonTween =
             Tween<Offset>(begin: Offset.zero, end: Offset.zero);
+        bottomInfoHideNumberTween =
+            Tween<Offset>(begin: Offset.zero, end: Offset(0, 0));
+      });
+      Timer(Duration(milliseconds: 100), () {
+        setState(() {
+          bottomInfoHideDescripTween =
+              Tween<Offset>(begin: Offset.zero, end: Offset.zero);
+        });
+      });
+      Timer(Duration(milliseconds: 150), () {
+        setState(() {
+          bottomInfoHideExposTween =
+              Tween<Offset>(begin: Offset.zero, end: Offset.zero);
+        });
       });
       isHide = !isHide;
     }
@@ -55,6 +85,12 @@ class _ViewerState extends State<Viewer> with SingleTickerProviderStateMixin {
 
   var hideNextButtonTween = Tween<Offset>(begin: Offset.zero, end: Offset.zero);
   var hidePreviousButtonTween =
+      Tween<Offset>(begin: Offset.zero, end: Offset.zero);
+  var bottomInfoHideNumberTween =
+      Tween<Offset>(begin: Offset.zero, end: Offset.zero);
+  var bottomInfoHideDescripTween =
+      Tween<Offset>(begin: Offset.zero, end: Offset.zero);
+  var bottomInfoHideExposTween =
       Tween<Offset>(begin: Offset.zero, end: Offset.zero);
   var isHide = false;
 
@@ -65,7 +101,11 @@ class _ViewerState extends State<Viewer> with SingleTickerProviderStateMixin {
         Center(
             child:
                 InteractiveViewer(child: Image.asset('albums/_DSF1278.jpg'))),
-        BottomInfo(),
+        BottomInfo(
+          hideNumberTween: bottomInfoHideNumberTween,
+          hideDescripTween: bottomInfoHideDescripTween,
+          hideExposTween: bottomInfoHideExposTween,
+        ),
         TweenAnimationBuilder<Offset>(
           duration: Duration(milliseconds: 400),
           curve: Curves.easeInBack,
@@ -76,24 +116,27 @@ class _ViewerState extends State<Viewer> with SingleTickerProviderStateMixin {
             );
           },
           tween: hideNextButtonTween,
-          child: Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: PhysicalModel(
-                  color: Colors.lightGreen.shade200,
-                  elevation: 16.0,
-                  borderRadius: BorderRadius.circular(10),
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 30.0),
-                    child: IconButton(
-                      iconSize: 40,
-                      icon: Icon(Icons.arrow_forward_ios_rounded),
-                      onPressed: nextImage,
+          child: Opacity(
+            opacity: 0.75,
+            child: Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: PhysicalModel(
+                    color: Colors.lightGreen.shade200,
+                    elevation: 16.0,
+                    borderRadius: BorderRadius.circular(10),
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 30.0),
+                      child: IconButton(
+                        iconSize: 40,
+                        icon: Icon(Icons.arrow_forward_ios_rounded),
+                        onPressed: nextImage,
+                      ),
                     ),
                   ),
-                ),
-              )),
+                )),
+          ),
         ),
         TweenAnimationBuilder<Offset>(
           duration: Duration(milliseconds: 400),
@@ -105,24 +148,27 @@ class _ViewerState extends State<Viewer> with SingleTickerProviderStateMixin {
             );
           },
           tween: hidePreviousButtonTween,
-          child: Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: PhysicalModel(
-                  color: Colors.lightGreen.shade200,
-                  elevation: 16.0,
-                  borderRadius: BorderRadius.circular(10),
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 30.0),
-                    child: IconButton(
-                      iconSize: 40,
-                      icon: Icon(Icons.arrow_back_ios_rounded),
-                      onPressed: previousImage,
+          child: Opacity(
+            opacity: 0.75,
+            child: Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: PhysicalModel(
+                    color: Colors.lightGreen.shade200,
+                    elevation: 16.0,
+                    borderRadius: BorderRadius.circular(10),
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 30.0),
+                      child: IconButton(
+                        iconSize: 40,
+                        icon: Icon(Icons.arrow_back_ios_rounded),
+                        onPressed: previousImage,
+                      ),
                     ),
                   ),
-                ),
-              )),
+                )),
+          ),
         ),
         Padding(
             padding: EdgeInsets.all(8.0),
@@ -148,9 +194,16 @@ class _ViewerState extends State<Viewer> with SingleTickerProviderStateMixin {
 }
 
 class BottomInfo extends StatefulWidget {
-  const BottomInfo({
+  BottomInfo({
     Key? key,
+    required this.hideNumberTween,
+    required this.hideDescripTween,
+    required this.hideExposTween,
   }) : super(key: key);
+
+  var hideNumberTween = Tween<Offset>(begin: Offset.zero, end: Offset.zero);
+  var hideDescripTween = Tween<Offset>(begin: Offset.zero, end: Offset.zero);
+  var hideExposTween = Tween<Offset>(begin: Offset.zero, end: Offset.zero);
 
   @override
   _BottomInfoState createState() => _BottomInfoState();
@@ -167,59 +220,81 @@ class _BottomInfoState extends State<BottomInfo> {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Flexible(
-                flex: 2,
-                fit: FlexFit.loose,
-                child: PhysicalModel(
-                  color: Colors.yellow.shade300,
-                  elevation: 16.0,
-                  borderRadius: BorderRadius.circular(10),
-                  child: Container(
-                    width: double.maxFinite,
-                    margin: EdgeInsets.all(10),
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 20),
-                      child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              '1',
-                              style: TextStyle(
-                                  fontSize: 60,
-                                  fontFamily: 'HKGrotesk',
-                                  color: Colors.black),
-                            ),
-                            Text(
-                              '/2',
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  fontFamily: 'HKGrotesk',
-                                  color: Colors.black),
-                            ),
-                          ]),
+              flex: 2,
+              fit: FlexFit.loose,
+              child: TweenAnimationBuilder<Offset>(
+                  duration: Duration(milliseconds: 400),
+                  curve: Curves.easeInBack,
+                  builder: (context, offset, child) {
+                    return Transform.translate(
+                      offset: offset,
+                      child: child,
+                    );
+                  },
+                  tween: widget.hideNumberTween,
+                  child: PhysicalModel(
+                    color: Colors.yellow.shade300,
+                    elevation: 16.0,
+                    borderRadius: BorderRadius.circular(10),
+                    child: Container(
+                      width: double.maxFinite,
+                      margin: EdgeInsets.all(10),
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 20),
+                        child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                '1',
+                                style: TextStyle(
+                                    fontSize: 60,
+                                    fontFamily: 'HKGrotesk',
+                                    color: Colors.black),
+                              ),
+                              Text(
+                                '/2',
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontFamily: 'HKGrotesk',
+                                    color: Colors.black),
+                              ),
+                            ]),
+                      ),
                     ),
-                  ),
-                )),
+                  )),
+            ),
             Spacer(
               flex: 2,
             ),
             Flexible(
                 flex: 5,
                 fit: FlexFit.loose,
-                child: PhysicalModel(
-                  color: Colors.blueGrey.shade300,
-                  elevation: 16.0,
-                  borderRadius: BorderRadius.circular(10),
-                  child: Container(
-                    width: double.maxFinite,
-                    margin: EdgeInsets.all(10),
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 16),
-                      child: SelectableText(
-                        '社會科學院大樓',
-                        style: TextStyle(
-                            fontSize: 20,
-                            fontFamily: 'NotoSans',
-                            color: Colors.black),
+                child: TweenAnimationBuilder<Offset>(
+                  duration: Duration(milliseconds: 400),
+                  curve: Curves.easeInBack,
+                  builder: (context, offset, child) {
+                    return Transform.translate(
+                      offset: offset,
+                      child: child,
+                    );
+                  },
+                  tween: widget.hideDescripTween,
+                  child: PhysicalModel(
+                    color: Colors.blueGrey.shade300,
+                    elevation: 16.0,
+                    borderRadius: BorderRadius.circular(10),
+                    child: Container(
+                      width: double.maxFinite,
+                      margin: EdgeInsets.all(10),
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 16),
+                        child: SelectableText(
+                          '社會科學院大樓',
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontFamily: 'NotoSans',
+                              color: Colors.black),
+                        ),
                       ),
                     ),
                   ),
@@ -228,23 +303,34 @@ class _BottomInfoState extends State<BottomInfo> {
             Flexible(
                 flex: 3,
                 fit: FlexFit.loose,
-                child: PhysicalModel(
-                  borderRadius: BorderRadius.circular(10),
-                  elevation: 16.0,
-                  color: Colors.grey.shade300,
-                  child: Container(
-                      width: double.maxFinite,
-                      margin: EdgeInsets.all(10),
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 16.0),
-                        child: Text(
-                          '1/200, F/5.6',
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontFamily: 'HKGrotesk',
-                              color: Colors.black),
-                        ),
-                      )),
+                child: TweenAnimationBuilder<Offset>(
+                  duration: Duration(milliseconds: 400),
+                  curve: Curves.easeInBack,
+                  builder: (context, offset, child) {
+                    return Transform.translate(
+                      offset: offset,
+                      child: child,
+                    );
+                  },
+                  tween: widget.hideExposTween,
+                  child: PhysicalModel(
+                    borderRadius: BorderRadius.circular(10),
+                    elevation: 16.0,
+                    color: Colors.grey.shade300,
+                    child: Container(
+                        width: double.maxFinite,
+                        margin: EdgeInsets.all(10),
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 16.0),
+                          child: Text(
+                            '1/200, F/5.6',
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontFamily: 'HKGrotesk',
+                                color: Colors.black),
+                          ),
+                        )),
+                  ),
                 )),
           ],
         ),
