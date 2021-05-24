@@ -30,8 +30,33 @@ class _ViewerState extends State<Viewer> with SingleTickerProviderStateMixin {
   void nextImage() {}
   void previousImage() {}
   void goBack() {
-    //_controller.forward();
+    toggleUI();
   }
+
+  void toggleUI() {
+    if (!isHide) {
+      setState(() {
+        hideNextButtonTween =
+            Tween<Offset>(begin: Offset.zero, end: Offset(100.0, 0));
+        hidePreviousButtonTween =
+            Tween<Offset>(begin: Offset.zero, end: Offset(-100, 0));
+      });
+      isHide = !isHide;
+    } else if (isHide) {
+      setState(() {
+        hideNextButtonTween =
+            Tween<Offset>(begin: Offset.zero, end: Offset.zero);
+        hidePreviousButtonTween =
+            Tween<Offset>(begin: Offset.zero, end: Offset.zero);
+      });
+      isHide = !isHide;
+    }
+  }
+
+  var hideNextButtonTween = Tween<Offset>(begin: Offset.zero, end: Offset.zero);
+  var hidePreviousButtonTween =
+      Tween<Offset>(begin: Offset.zero, end: Offset.zero);
+  var isHide = false;
 
   @override
   Widget build(BuildContext context) {
@@ -41,16 +66,16 @@ class _ViewerState extends State<Viewer> with SingleTickerProviderStateMixin {
             child:
                 InteractiveViewer(child: Image.asset('albums/_DSF1278.jpg'))),
         BottomInfo(),
-        SlideTransition(
-          position: Tween<Offset>(
-            begin: Offset.zero,
-            end: const Offset(0.5, 0.0),
-          ).animate(CurvedAnimation(
-            parent: AnimationController(
-                duration: const Duration(seconds: 4), vsync: this)
-              ..repeat(reverse: true),
-            curve: Curves.linear,
-          )),
+        TweenAnimationBuilder<Offset>(
+          duration: Duration(milliseconds: 400),
+          curve: Curves.easeInBack,
+          builder: (context, offset, child) {
+            return Transform.translate(
+              offset: offset,
+              child: child,
+            );
+          },
+          tween: hideNextButtonTween,
           child: Padding(
               padding: EdgeInsets.all(8.0),
               child: Align(
@@ -70,24 +95,35 @@ class _ViewerState extends State<Viewer> with SingleTickerProviderStateMixin {
                 ),
               )),
         ),
-        Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: PhysicalModel(
-                color: Colors.lightGreen.shade200,
-                elevation: 16.0,
-                borderRadius: BorderRadius.circular(10),
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 30.0),
-                  child: IconButton(
-                    iconSize: 40,
-                    icon: Icon(Icons.arrow_back_ios_rounded),
-                    onPressed: previousImage,
+        TweenAnimationBuilder<Offset>(
+          duration: Duration(milliseconds: 400),
+          curve: Curves.easeInBack,
+          builder: (context, offset, child) {
+            return Transform.translate(
+              offset: offset,
+              child: child,
+            );
+          },
+          tween: hidePreviousButtonTween,
+          child: Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: PhysicalModel(
+                  color: Colors.lightGreen.shade200,
+                  elevation: 16.0,
+                  borderRadius: BorderRadius.circular(10),
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 30.0),
+                    child: IconButton(
+                      iconSize: 40,
+                      icon: Icon(Icons.arrow_back_ios_rounded),
+                      onPressed: previousImage,
+                    ),
                   ),
                 ),
-              ),
-            )),
+              )),
+        ),
         Padding(
             padding: EdgeInsets.all(8.0),
             child: Align(
