@@ -8,7 +8,12 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: Scaffold(body: Viewer()));
+    return MaterialApp(
+      home: Scaffold(
+        body: Viewer(),
+        backgroundColor: Colors.black,
+      ),
+    );
   }
 }
 
@@ -21,33 +26,50 @@ class Viewer extends StatefulWidget {
   _ViewerState createState() => _ViewerState();
 }
 
-class _ViewerState extends State<Viewer> {
+class _ViewerState extends State<Viewer> with SingleTickerProviderStateMixin {
   void nextImage() {}
   void previousImage() {}
+  void goBack() {
+    //_controller.forward();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        InteractiveViewer(child: Image.asset('albums/_DSF1278.jpg')),
+        Center(
+            child:
+                InteractiveViewer(child: Image.asset('albums/_DSF1278.jpg'))),
         BottomInfo(),
-        Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: PhysicalModel(
-                color: Colors.lightGreen.shade200,
-                elevation: 16.0,
-                borderRadius: BorderRadius.circular(10),
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 30.0),
-                  child: IconButton(
-                    iconSize: 40,
-                    icon: Icon(Icons.arrow_forward_ios_rounded),
-                    onPressed: nextImage,
+        SlideTransition(
+          position: Tween<Offset>(
+            begin: Offset.zero,
+            end: const Offset(0.5, 0.0),
+          ).animate(CurvedAnimation(
+            parent: AnimationController(
+                duration: const Duration(seconds: 4), vsync: this)
+              ..repeat(reverse: true),
+            curve: Curves.linear,
+          )),
+          child: Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: PhysicalModel(
+                  color: Colors.lightGreen.shade200,
+                  elevation: 16.0,
+                  borderRadius: BorderRadius.circular(10),
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 30.0),
+                    child: IconButton(
+                      iconSize: 40,
+                      icon: Icon(Icons.arrow_forward_ios_rounded),
+                      onPressed: nextImage,
+                    ),
                   ),
                 ),
-              ),
-            )),
+              )),
+        ),
         Padding(
             padding: EdgeInsets.all(8.0),
             child: Align(
@@ -79,7 +101,7 @@ class _ViewerState extends State<Viewer> {
                   child: IconButton(
                     iconSize: 40,
                     icon: Icon(Icons.arrow_back_rounded),
-                    onPressed: previousImage,
+                    onPressed: goBack,
                   ),
                 ),
               ),
@@ -89,11 +111,16 @@ class _ViewerState extends State<Viewer> {
   }
 }
 
-class BottomInfo extends StatelessWidget {
+class BottomInfo extends StatefulWidget {
   const BottomInfo({
     Key? key,
   }) : super(key: key);
 
+  @override
+  _BottomInfoState createState() => _BottomInfoState();
+}
+
+class _BottomInfoState extends State<BottomInfo> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -114,14 +141,25 @@ class BottomInfo extends StatelessWidget {
                     width: double.maxFinite,
                     margin: EdgeInsets.all(10),
                     child: Padding(
-                      padding: const EdgeInsets.only(top: 30),
-                      child: Text(
-                        '1',
-                        style: TextStyle(
-                            fontSize: 60,
-                            fontFamily: 'HKGrotesk',
-                            color: Colors.black),
-                      ),
+                      padding: const EdgeInsets.only(top: 20),
+                      child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              '1',
+                              style: TextStyle(
+                                  fontSize: 60,
+                                  fontFamily: 'HKGrotesk',
+                                  color: Colors.black),
+                            ),
+                            Text(
+                              '/2',
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  fontFamily: 'HKGrotesk',
+                                  color: Colors.black),
+                            ),
+                          ]),
                     ),
                   ),
                 )),
@@ -140,7 +178,7 @@ class BottomInfo extends StatelessWidget {
                     margin: EdgeInsets.all(10),
                     child: Padding(
                       padding: const EdgeInsets.only(top: 16),
-                      child: Text(
+                      child: SelectableText(
                         '社會科學院大樓',
                         style: TextStyle(
                             fontSize: 20,
