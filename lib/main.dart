@@ -161,11 +161,11 @@ class _ViewerState extends State<Viewer> with AfterLayoutMixin<Viewer> {
               currentIndex = value;
               _loadFullRes = false;
             });
-            if (!isHide) {
-              Timer(Duration(milliseconds: 200), () {
-                hideUI();
-              });
-            }
+            // if (!isHide) {
+            //   Timer(Duration(seconds: 5), () {
+            //     hideUI();
+            //   });
+            //}
           },
         ),
         GestureDetector(
@@ -335,14 +335,14 @@ class _BottomInfoState extends State<BottomInfo> {
                               Text(
                                 '${widget.photoIndex + 1}',
                                 style: TextStyle(
-                                    fontSize: 40,
+                                    fontSize: 24,
                                     fontFamily: 'HKGrotesk',
                                     color: Colors.black),
                               ),
                               Text(
                                 '/${widget.currentAlbum.photosList().length}',
                                 style: TextStyle(
-                                    fontSize: 20,
+                                    fontSize: 16,
                                     fontFamily: 'HKGrotesk',
                                     color: Colors.black),
                               ),
