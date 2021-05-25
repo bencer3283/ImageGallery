@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:after_layout/after_layout.dart';
 
 void main() {
   runApp(MyApp());
@@ -28,64 +29,86 @@ class Viewer extends StatefulWidget {
   _ViewerState createState() => _ViewerState();
 }
 
-class _ViewerState extends State<Viewer> with SingleTickerProviderStateMixin {
+class _ViewerState extends State<Viewer> with AfterLayoutMixin<Viewer> {
   void nextImage() {}
   void previousImage() {}
-  void goBack() {
-    toggleUI();
-  }
+  void goBack() {}
 
   void toggleUI() {
     if (!isHide) {
+      hideUI();
+    } else if (isHide) {
+      showUI();
+    }
+    // if (!isHide) {
+    //   Timer(Duration(seconds: 3), () {
+    //     hideUI();
+    //   });
+    // }
+  }
+
+  @override
+  void afterFirstLayout(BuildContext context) {
+    Timer(Duration(seconds: 3), () {
+      hideUI();
+    });
+  }
+
+  void showUI() {
+    setState(() {
+      hideNextButtonTween = Tween<Offset>(begin: Offset.zero, end: Offset.zero);
+      hidePreviousButtonTween =
+          Tween<Offset>(begin: Offset.zero, end: Offset.zero);
+      bottomInfoHideNumberTween =
+          Tween<Offset>(begin: Offset.zero, end: Offset(0, 0));
+      hideBackButtonTween =
+          Tween<Offset>(begin: Offset.zero, end: Offset(0, 0));
+    });
+    Timer(Duration(milliseconds: 100), () {
       setState(() {
-        hideNextButtonTween =
-            Tween<Offset>(begin: Offset.zero, end: Offset(100.0, 0));
-        hidePreviousButtonTween =
-            Tween<Offset>(begin: Offset.zero, end: Offset(-100, 0));
-        bottomInfoHideNumberTween =
+        bottomInfoHideDescripTween =
+            Tween<Offset>(begin: Offset.zero, end: Offset.zero);
+      });
+    });
+    Timer(Duration(milliseconds: 150), () {
+      setState(() {
+        bottomInfoHideExposTween =
+            Tween<Offset>(begin: Offset.zero, end: Offset.zero);
+      });
+    });
+    isHide = !isHide;
+  }
+
+  void hideUI() {
+    setState(() {
+      hideNextButtonTween =
+          Tween<Offset>(begin: Offset.zero, end: Offset(100.0, 0));
+      hidePreviousButtonTween =
+          Tween<Offset>(begin: Offset.zero, end: Offset(-100, 0));
+      hideBackButtonTween =
+          Tween<Offset>(begin: Offset.zero, end: Offset(0, -150));
+      bottomInfoHideNumberTween =
+          Tween<Offset>(begin: Offset.zero, end: Offset(0, 150));
+    });
+    Timer(Duration(milliseconds: 100), () {
+      setState(() {
+        bottomInfoHideDescripTween =
             Tween<Offset>(begin: Offset.zero, end: Offset(0, 150));
       });
-      Timer(Duration(milliseconds: 100), () {
-        setState(() {
-          bottomInfoHideDescripTween =
-              Tween<Offset>(begin: Offset.zero, end: Offset(0, 150));
-        });
-      });
-      Timer(Duration(milliseconds: 150), () {
-        setState(() {
-          bottomInfoHideExposTween =
-              Tween<Offset>(begin: Offset.zero, end: Offset(0, 150));
-        });
-      });
-      isHide = !isHide;
-    } else if (isHide) {
+    });
+    Timer(Duration(milliseconds: 150), () {
       setState(() {
-        hideNextButtonTween =
-            Tween<Offset>(begin: Offset.zero, end: Offset.zero);
-        hidePreviousButtonTween =
-            Tween<Offset>(begin: Offset.zero, end: Offset.zero);
-        bottomInfoHideNumberTween =
-            Tween<Offset>(begin: Offset.zero, end: Offset(0, 0));
+        bottomInfoHideExposTween =
+            Tween<Offset>(begin: Offset.zero, end: Offset(0, 150));
       });
-      Timer(Duration(milliseconds: 100), () {
-        setState(() {
-          bottomInfoHideDescripTween =
-              Tween<Offset>(begin: Offset.zero, end: Offset.zero);
-        });
-      });
-      Timer(Duration(milliseconds: 150), () {
-        setState(() {
-          bottomInfoHideExposTween =
-              Tween<Offset>(begin: Offset.zero, end: Offset.zero);
-        });
-      });
-      isHide = !isHide;
-    }
+    });
+    isHide = !isHide;
   }
 
   var hideNextButtonTween = Tween<Offset>(begin: Offset.zero, end: Offset.zero);
   var hidePreviousButtonTween =
       Tween<Offset>(begin: Offset.zero, end: Offset.zero);
+  var hideBackButtonTween = Tween<Offset>(begin: Offset.zero, end: Offset.zero);
   var bottomInfoHideNumberTween =
       Tween<Offset>(begin: Offset.zero, end: Offset.zero);
   var bottomInfoHideDescripTween =
@@ -99,8 +122,13 @@ class _ViewerState extends State<Viewer> with SingleTickerProviderStateMixin {
     return Stack(
       children: [
         Center(
-            child:
-                InteractiveViewer(child: Image.asset('albums/_DSF1278.jpg'))),
+            child: InteractiveViewer(
+          child: Image.asset('albums/_DSF1278.jpg'),
+          clipBehavior: Clip.none,
+        )),
+        GestureDetector(
+          onTapDown: (details) => toggleUI(),
+        ),
         BottomInfo(
           hideNumberTween: bottomInfoHideNumberTween,
           hideDescripTween: bottomInfoHideDescripTween,
@@ -170,24 +198,35 @@ class _ViewerState extends State<Viewer> with SingleTickerProviderStateMixin {
                 )),
           ),
         ),
-        Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Align(
-              alignment: Alignment.topLeft,
-              child: PhysicalModel(
-                color: Colors.red.shade100,
-                elevation: 16.0,
-                borderRadius: BorderRadius.circular(10),
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 40.0),
-                  child: IconButton(
-                    iconSize: 40,
-                    icon: Icon(Icons.arrow_back_rounded),
-                    onPressed: goBack,
+        TweenAnimationBuilder<Offset>(
+          duration: Duration(milliseconds: 400),
+          curve: Curves.easeInBack,
+          builder: (context, offset, child) {
+            return Transform.translate(
+              offset: offset,
+              child: child,
+            );
+          },
+          tween: hideBackButtonTween,
+          child: Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: PhysicalModel(
+                  color: Colors.red.shade100,
+                  elevation: 16.0,
+                  borderRadius: BorderRadius.circular(100),
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 40.0),
+                    child: IconButton(
+                      iconSize: 40,
+                      icon: Icon(Icons.arrow_back_rounded),
+                      onPressed: goBack,
+                    ),
                   ),
                 ),
-              ),
-            ))
+              )),
+        ),
       ],
     );
   }
@@ -220,7 +259,7 @@ class _BottomInfoState extends State<BottomInfo> {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Flexible(
-              flex: 2,
+              flex: 6,
               fit: FlexFit.loose,
               child: TweenAnimationBuilder<Offset>(
                   duration: Duration(milliseconds: 400),
@@ -247,7 +286,7 @@ class _BottomInfoState extends State<BottomInfo> {
                               Text(
                                 '1',
                                 style: TextStyle(
-                                    fontSize: 60,
+                                    fontSize: 40,
                                     fontFamily: 'HKGrotesk',
                                     color: Colors.black),
                               ),
@@ -267,7 +306,7 @@ class _BottomInfoState extends State<BottomInfo> {
               flex: 2,
             ),
             Flexible(
-                flex: 5,
+                flex: 15,
                 fit: FlexFit.loose,
                 child: TweenAnimationBuilder<Offset>(
                   duration: Duration(milliseconds: 400),
@@ -291,7 +330,7 @@ class _BottomInfoState extends State<BottomInfo> {
                         child: SelectableText(
                           '社會科學院大樓',
                           style: TextStyle(
-                              fontSize: 20,
+                              fontSize: 16,
                               fontFamily: 'NotoSans',
                               color: Colors.black),
                         ),
@@ -299,9 +338,11 @@ class _BottomInfoState extends State<BottomInfo> {
                     ),
                   ),
                 )),
-            Spacer(),
+            Spacer(
+              flex: 1,
+            ),
             Flexible(
-                flex: 3,
+                flex: 9,
                 fit: FlexFit.loose,
                 child: TweenAnimationBuilder<Offset>(
                   duration: Duration(milliseconds: 400),
@@ -325,7 +366,7 @@ class _BottomInfoState extends State<BottomInfo> {
                           child: Text(
                             '1/200, F/5.6',
                             style: TextStyle(
-                                fontSize: 20,
+                                fontSize: 16,
                                 fontFamily: 'HKGrotesk',
                                 color: Colors.black),
                           ),
