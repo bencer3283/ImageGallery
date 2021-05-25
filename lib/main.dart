@@ -148,9 +148,11 @@ class _ViewerState extends State<Viewer> with AfterLayoutMixin<Viewer> {
               child: _loadFullRes ? photos_full[i] : photos[i],
               clipBehavior: Clip.none,
               onInteractionUpdate: (details) {
-                setState(() {
-                  _loadFullRes = true;
-                });
+                if (!_loadFullRes) {
+                  setState(() {
+                    _loadFullRes = true;
+                  });
+                }
               },
             ));
           },
