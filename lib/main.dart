@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:after_layout/after_layout.dart';
 
+import 'load_album.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -129,19 +131,8 @@ class _ViewerState extends State<Viewer> with AfterLayoutMixin<Viewer> {
 
   bool _loadFullRes = false;
 
-  final Image image1 = Image.asset('/albums/ntuclose/_DSF1278.jpg');
-  final Image image2 = Image.asset('/albums/ntuclose/_DSF1346.jpg');
-
-  final Image image1_full = Image.asset('/albums/ntuclose/full/_DSF1278.jpg');
-  final Image image2_full = Image.asset('/albums/ntuclose/full/_DSF1346.jpg');
-
-  final List<Image> photos = [];
-  final List<Image> photos_full = [];
-
   @override
   Widget build(BuildContext context) {
-    final List<Image> photos = [image1, image2];
-    final List<Image> photos_full = [image1_full, image2_full];
     return Stack(
       children: [
         PageView.builder(
