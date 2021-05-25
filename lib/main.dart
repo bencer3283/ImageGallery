@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:after_layout/after_layout.dart';
+import 'package:gallery/album.dart';
 
 import 'load_album.dart';
 
@@ -42,7 +43,9 @@ class _ViewerState extends State<Viewer> with AfterLayoutMixin<Viewer> {
         duration: Duration(milliseconds: 300), curve: Curves.easeIn);
   }
 
-  void goBack() {}
+  void goBack() {
+    Navigator.of(context).maybePop();
+  }
 
   void toggleUI() {
     if (!isHide) {
@@ -131,8 +134,11 @@ class _ViewerState extends State<Viewer> with AfterLayoutMixin<Viewer> {
 
   bool _loadFullRes = false;
 
+  var currentIndex = 0;
+
   @override
   Widget build(BuildContext context) {
+    setStr();
     return Stack(
       children: [
         PageView.builder(
@@ -152,10 +158,11 @@ class _ViewerState extends State<Viewer> with AfterLayoutMixin<Viewer> {
           controller: pagecontrol,
           onPageChanged: (value) {
             setState(() {
+              currentIndex = value;
               _loadFullRes = false;
             });
             if (!isHide) {
-              Timer(Duration(seconds: 2), () {
+              Timer(Duration(milliseconds: 200), () {
                 hideUI();
               });
             }
@@ -168,6 +175,8 @@ class _ViewerState extends State<Viewer> with AfterLayoutMixin<Viewer> {
           hideNumberTween: bottomInfoHideNumberTween,
           hideDescripTween: bottomInfoHideDescripTween,
           hideExposTween: bottomInfoHideExposTween,
+          photoIndex: currentIndex,
+          currentAlbum: ntuclose,
         ),
         TweenAnimationBuilder<Offset>(
           duration: Duration(milliseconds: 400),
@@ -273,11 +282,16 @@ class BottomInfo extends StatefulWidget {
     required this.hideNumberTween,
     required this.hideDescripTween,
     required this.hideExposTween,
+    required this.photoIndex,
+    required this.currentAlbum,
   }) : super(key: key);
 
   var hideNumberTween = Tween<Offset>(begin: Offset.zero, end: Offset.zero);
   var hideDescripTween = Tween<Offset>(begin: Offset.zero, end: Offset.zero);
   var hideExposTween = Tween<Offset>(begin: Offset.zero, end: Offset.zero);
+
+  var photoIndex = 0;
+  Album currentAlbum;
 
   @override
   _BottomInfoState createState() => _BottomInfoState();
@@ -319,14 +333,14 @@ class _BottomInfoState extends State<BottomInfo> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
-                                '1',
+                                '${widget.photoIndex + 1}',
                                 style: TextStyle(
                                     fontSize: 40,
                                     fontFamily: 'HKGrotesk',
                                     color: Colors.black),
                               ),
                               Text(
-                                '/2',
+                                '/${widget.currentAlbum.photosList().length}',
                                 style: TextStyle(
                                     fontSize: 20,
                                     fontFamily: 'HKGrotesk',
@@ -363,7 +377,7 @@ class _BottomInfoState extends State<BottomInfo> {
                       child: Padding(
                         padding: const EdgeInsets.only(top: 16),
                         child: SelectableText(
-                          '社會科學院大樓',
+                          '${widget.currentAlbum.photos[widget.photoIndex].des}',
                           style: TextStyle(
                               fontSize: 16,
                               fontFamily: 'NotoSans',
@@ -399,7 +413,7 @@ class _BottomInfoState extends State<BottomInfo> {
                         child: Padding(
                           padding: const EdgeInsets.only(top: 16.0),
                           child: Text(
-                            '1/200, F/5.6',
+                            '${widget.currentAlbum.photos[widget.photoIndex].exp}',
                             style: TextStyle(
                                 fontSize: 16,
                                 fontFamily: 'HKGrotesk',

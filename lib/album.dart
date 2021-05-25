@@ -37,4 +37,9 @@ class Photo {
   Photo(String path) {
     this.photo = Image.asset(path);
   }
+
+  void setDescipExpos(String d, String e) {
+    this.des = d;
+    this.exp = e;
+  }
 }
