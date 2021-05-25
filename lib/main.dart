@@ -30,8 +30,16 @@ class Viewer extends StatefulWidget {
 }
 
 class _ViewerState extends State<Viewer> with AfterLayoutMixin<Viewer> {
-  void nextImage() {}
-  void previousImage() {}
+  void nextImage() {
+    pagecontrol.nextPage(
+        duration: Duration(milliseconds: 300), curve: Curves.easeIn);
+  }
+
+  void previousImage() {
+    pagecontrol.previousPage(
+        duration: Duration(milliseconds: 300), curve: Curves.easeIn);
+  }
+
   void goBack() {}
 
   void toggleUI() {
@@ -117,17 +125,53 @@ class _ViewerState extends State<Viewer> with AfterLayoutMixin<Viewer> {
       Tween<Offset>(begin: Offset.zero, end: Offset.zero);
   var isHide = false;
 
+  final pagecontrol = PageController();
+
+  bool _loadFullRes = false;
+
+  final Image image1 = Image.asset('/albums/ntuclose/_DSF1278.jpg');
+  final Image image2 = Image.asset('/albums/ntuclose/_DSF1346.jpg');
+
+  final Image image1_full = Image.asset('/albums/ntuclose/full/_DSF1278.jpg');
+  final Image image2_full = Image.asset('/albums/ntuclose/full/_DSF1346.jpg');
+
+  final List<Image> photos = [];
+  final List<Image> photos_full = [];
+
   @override
   Widget build(BuildContext context) {
+    final List<Image> photos = [image1, image2];
+    final List<Image> photos_full = [image1_full, image2_full];
     return Stack(
       children: [
-        Center(
-            child: InteractiveViewer(
-          child: Image.asset('albums/_DSF1278.jpg'),
-          clipBehavior: Clip.none,
-        )),
+        PageView.builder(
+          itemBuilder: (context, i) {
+            return Center(
+                child: InteractiveViewer(
+              child: _loadFullRes ? photos_full[i] : photos[i],
+              clipBehavior: Clip.none,
+              onInteractionUpdate: (details) {
+                setState(() {
+                  _loadFullRes = true;
+                });
+              },
+            ));
+          },
+          itemCount: photos.length,
+          controller: pagecontrol,
+          onPageChanged: (value) {
+            setState(() {
+              _loadFullRes = false;
+            });
+            if (!isHide) {
+              Timer(Duration(seconds: 2), () {
+                hideUI();
+              });
+            }
+          },
+        ),
         GestureDetector(
-          onTapDown: (details) => toggleUI(),
+          onTap: () => toggleUI(),
         ),
         BottomInfo(
           hideNumberTween: bottomInfoHideNumberTween,
