@@ -74,7 +74,7 @@ Album ntuclose = Album([
 final List<Image> photos = ntuclose.photosList();
 final List<Image> photos_full = ntuclose.photosFullList();
 
-void setStr() {
+void ntucloseSetStr() {
   ntuclose.photos[0].setDescipExpos('舟山路口', '1/250, f/5.6, FUJIFILM X-T2');
   ntuclose.photos[1].setDescipExpos('舟山路口', '1/500, f/5.6, FUJIFILM X-T2');
   ntuclose.photos[2].setDescipExpos('社會科學院圖書館', '1/40, f/7.1, FUJIFILM X-T2');
