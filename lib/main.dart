@@ -32,7 +32,8 @@ class Viewer extends StatefulWidget {
   _ViewerState createState() => _ViewerState();
 }
 
-class _ViewerState extends State<Viewer> with AfterLayoutMixin<Viewer> {
+class _ViewerState extends State<Viewer>
+    with AfterLayoutMixin<Viewer>, TickerProviderStateMixin {
   void nextImage() {
     pagecontrol.nextPage(
         duration: Duration(milliseconds: 300), curve: Curves.easeIn);
@@ -131,7 +132,13 @@ class _ViewerState extends State<Viewer> with AfterLayoutMixin<Viewer> {
   var isHide = false;
 
   final pagecontrol = PageController();
-  final _interactiveviewcontrol = TransformationController();
+  var _interactiveviewcontrol = TransformationController();
+
+  //Animation<Matrix4>? doubletapIN;
+  Animation<Matrix4>? doubletap;
+
+  late AnimationController doubletapControl;
+  //late AnimationController outControl;
 
   bool _loadFullRes = false;
   bool _ignoreSlide = false;
@@ -139,6 +146,35 @@ class _ViewerState extends State<Viewer> with AfterLayoutMixin<Viewer> {
   var currentIndex = 0;
 
   late TapDownDetails tapposition;
+
+  @override
+  void initState() {
+    super.initState();
+    doubletapControl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 200),
+    );
+    // outControl = AnimationController(
+    //   vsync: this,
+    //   duration: const Duration(milliseconds: 200),
+    // );
+  }
+
+  @override
+  void dispose() {
+    doubletapControl.dispose();
+    //outControl.dispose();
+    super.dispose();
+  }
+
+  void _onAnimateReset() {
+    _interactiveviewcontrol.value = doubletap!.value;
+    if (!doubletapControl.isAnimating) {
+      doubletap!.removeListener(_onAnimateReset);
+      doubletap = null;
+      doubletapControl.reset();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -153,17 +189,36 @@ class _ViewerState extends State<Viewer> with AfterLayoutMixin<Viewer> {
           onDoubleTap: () {
             if (_interactiveviewcontrol.value.entry(1, 1) != 1 ||
                 _interactiveviewcontrol.value.entry(2, 2) != 1) {
-              setState(() {
-                _interactiveviewcontrol.value
-                  ..translate(0, 0)
-                  ..scale(1.0);
+              doubletapControl.reset();
+              doubletap = Matrix4Tween(
+                      begin: _interactiveviewcontrol.value,
+                      end: Matrix4.identity())
+                  .animate(doubletapControl);
+              doubletap!.addListener(_onAnimateReset);
+              doubletapControl.forward();
+              Timer(Duration(milliseconds: 200), () {
+                setState(() {
+                  _interactiveviewcontrol.value = Matrix4.identity();
+                });
               });
             } else {
-              setState(() {
-                _interactiveviewcontrol.value
-                  ..translate(-tapposition.localPosition.dx * 2,
-                      -tapposition.localPosition.dy * 2)
-                  ..scale(3.0);
+              doubletapControl.reset();
+              doubletap = Matrix4Tween(
+                      begin: Matrix4.identity(),
+                      end: Matrix4.identity()
+                        ..translate(-tapposition.localPosition.dx * 2,
+                            -tapposition.localPosition.dy * 2)
+                        ..scale(3.0))
+                  .animate(doubletapControl);
+              doubletap!.addListener(_onAnimateReset);
+              doubletapControl.forward();
+              Timer(Duration(milliseconds: 200), () {
+                setState(() {
+                  _interactiveviewcontrol.value = Matrix4.identity()
+                    ..translate(-tapposition.localPosition.dx * 2,
+                        -tapposition.localPosition.dy * 2)
+                    ..scale(3.0);
+                });
               });
               if (!_loadFullRes) {
                 setState(() {
@@ -191,37 +246,26 @@ class _ViewerState extends State<Viewer> with AfterLayoutMixin<Viewer> {
                 });
               }
             },
-            child: GestureDetector(
-              onTap: () => toggleUI(),
-              onDoubleTapDown: (details) {
-                setState(() {
-                  _interactiveviewcontrol.value = Matrix4.identity()
-                    ..scale(2.0)
-                    ..translate(
-                        details.localPosition.dx, details.localPosition.dy);
-                });
-              },
-              child: IgnorePointer(
-                ignoring: _ignoreSlide,
-                child: PageView.builder(
-                  itemBuilder: (context, i) {
-                    return Center(
-                        child: _loadFullRes ? photos_full[i] : photos[i]);
-                  },
-                  itemCount: photos.length,
-                  controller: pagecontrol,
-                  onPageChanged: (value) {
-                    setState(() {
-                      currentIndex = value;
-                      _loadFullRes = false;
-                    });
-                    // if (!isHide) {
-                    //   Timer(Duration(seconds: 5), () {
-                    //     hideUI();
-                    //   });
-                    //}
-                  },
-                ),
+            child: IgnorePointer(
+              ignoring: _ignoreSlide,
+              child: PageView.builder(
+                itemBuilder: (context, i) {
+                  return Center(
+                      child: _loadFullRes ? photos_full[i] : photos[i]);
+                },
+                itemCount: photos.length,
+                controller: pagecontrol,
+                onPageChanged: (value) {
+                  setState(() {
+                    currentIndex = value;
+                    _loadFullRes = false;
+                  });
+                  // if (!isHide) {
+                  //   Timer(Duration(seconds: 5), () {
+                  //     hideUI();
+                  //   });
+                  //}
+                },
               ),
             ),
           ),
