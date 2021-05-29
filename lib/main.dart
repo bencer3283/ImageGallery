@@ -2,11 +2,13 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:after_layout/after_layout.dart';
+import 'package:flutter/services.dart';
 import 'package:gallery/album.dart';
 
 import 'load_album.dart';
 
 void main() {
+  SystemChrome.setEnabledSystemUIOverlays([]);
   runApp(MyApp());
 }
 
@@ -15,11 +17,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        body: Viewer(),
-        backgroundColor: Colors.black,
-      ),
-    );
+        home: Scaffold(
+          body: Viewer(),
+          backgroundColor: Colors.black,
+        ),
+        theme: ThemeData(
+          backgroundColor: Colors.black,
+        ));
   }
 }
 
@@ -54,11 +58,11 @@ class _ViewerState extends State<Viewer>
     } else if (isHide) {
       showUI();
     }
-    // if (!isHide) {
-    //   Timer(Duration(seconds: 3), () {
-    //     hideUI();
-    //   });
-    // }
+    if (!isHide) {
+      Timer(Duration(milliseconds: 3000), () {
+        hideUI();
+      });
+    }
   }
 
   @override
@@ -176,201 +180,265 @@ class _ViewerState extends State<Viewer>
     }
   }
 
+  FocusNode keyboardNode = FocusNode();
+
   @override
   Widget build(BuildContext context) {
     setStr();
-    return Stack(
-      children: [
-        GestureDetector(
-          onTap: () => toggleUI(),
-          onDoubleTapDown: (details) {
-            tapposition = details;
-          },
-          onDoubleTap: () {
-            if (_interactiveviewcontrol.value.entry(1, 1) != 1 ||
-                _interactiveviewcontrol.value.entry(2, 2) != 1) {
-              doubletapControl.reset();
-              doubletap = Matrix4Tween(
-                      begin: _interactiveviewcontrol.value,
-                      end: Matrix4.identity())
-                  .animate(doubletapControl);
-              doubletap!.addListener(_onAnimateReset);
-              doubletapControl.forward();
-              Timer(Duration(milliseconds: 200), () {
-                setState(() {
-                  _interactiveviewcontrol.value = Matrix4.identity();
-                });
-              });
-            } else {
-              doubletapControl.reset();
-              doubletap = Matrix4Tween(
-                      begin: Matrix4.identity(),
-                      end: Matrix4.identity()
-                        ..translate(-tapposition.localPosition.dx * 2,
-                            -tapposition.localPosition.dy * 2)
-                        ..scale(3.0))
-                  .animate(doubletapControl);
-              doubletap!.addListener(_onAnimateReset);
-              doubletapControl.forward();
-              Timer(Duration(milliseconds: 200), () {
-                setState(() {
-                  _interactiveviewcontrol.value = Matrix4.identity()
-                    ..translate(-tapposition.localPosition.dx * 2,
-                        -tapposition.localPosition.dy * 2)
-                    ..scale(3.0);
-                });
-              });
-              if (!_loadFullRes) {
-                setState(() {
-                  _loadFullRes = true;
-                });
-              }
-            }
-          },
-          child: InteractiveViewer(
-            transformationController: _interactiveviewcontrol,
-            onInteractionEnd: (details) {
-              if (!_loadFullRes) {
-                setState(() {
-                  _loadFullRes = true;
-                });
-              }
+    return RawKeyboardListener(
+      autofocus: true,
+      focusNode: keyboardNode,
+      onKey: (value) {
+        if (value.logicalKey == LogicalKeyboardKey.arrowRight) {
+          nextImage();
+        } else if (value.logicalKey == LogicalKeyboardKey.arrowLeft) {
+          previousImage();
+        }
+      },
+      child: Stack(
+        children: [
+          GestureDetector(
+            onTap: () => toggleUI(),
+            onDoubleTapDown: (details) {
+              tapposition = details;
+            },
+            onDoubleTap: () {
               if (_interactiveviewcontrol.value.entry(1, 1) != 1 ||
                   _interactiveviewcontrol.value.entry(2, 2) != 1) {
-                setState(() {
-                  _ignoreSlide = true;
-                });
-              } else {
+                doubletapControl.reset();
+                doubletap = Matrix4Tween(
+                        begin: _interactiveviewcontrol.value,
+                        end: Matrix4.identity())
+                    .animate(CurveTween(curve: Curves.easeInOutQuart)
+                        .animate(doubletapControl));
+                doubletap!.addListener(_onAnimateReset);
+                doubletapControl.forward();
                 setState(() {
                   _ignoreSlide = false;
                 });
+                Timer(Duration(milliseconds: 200), () {
+                  setState(() {
+                    _interactiveviewcontrol.value = Matrix4.identity();
+                  });
+                });
+              } else {
+                doubletapControl.reset();
+                doubletap = Matrix4Tween(
+                        begin: Matrix4.identity(),
+                        end: Matrix4.identity()
+                          ..translate(-tapposition.localPosition.dx * 2,
+                              -tapposition.localPosition.dy * 2)
+                          ..scale(3.0))
+                    .animate(CurveTween(curve: Curves.easeInOutQuart)
+                        .animate(doubletapControl));
+                doubletap!.addListener(_onAnimateReset);
+                doubletapControl.forward();
+                setState(() {
+                  _ignoreSlide = true;
+                });
+                Timer(Duration(milliseconds: 200), () {
+                  setState(() {
+                    _interactiveviewcontrol.value = Matrix4.identity()
+                      ..translate(-tapposition.localPosition.dx * 2,
+                          -tapposition.localPosition.dy * 2)
+                      ..scale(3.0);
+                  });
+                });
+                if (!_loadFullRes) {
+                  setState(() {
+                    _loadFullRes = true;
+                  });
+                }
               }
             },
-            child: IgnorePointer(
-              ignoring: _ignoreSlide,
-              child: PageView.builder(
-                itemBuilder: (context, i) {
-                  return Center(
-                      child: _loadFullRes ? photos_full[i] : photos[i]);
-                },
-                itemCount: photos.length,
-                controller: pagecontrol,
-                onPageChanged: (value) {
+            child: InteractiveViewer(
+              transformationController: _interactiveviewcontrol,
+              onInteractionEnd: (details) {
+                if (!_loadFullRes) {
                   setState(() {
-                    currentIndex = value;
-                    _loadFullRes = false;
+                    _loadFullRes = true;
                   });
-                  // if (!isHide) {
-                  //   Timer(Duration(seconds: 5), () {
-                  //     hideUI();
-                  //   });
-                  //}
-                },
+                }
+                if (_interactiveviewcontrol.value.entry(1, 1) != 1 ||
+                    _interactiveviewcontrol.value.entry(2, 2) != 1) {
+                  setState(() {
+                    _ignoreSlide = true;
+                  });
+                } else {
+                  setState(() {
+                    _ignoreSlide = false;
+                  });
+                }
+              },
+              child: IgnorePointer(
+                ignoring: _ignoreSlide,
+                child: PageView.builder(
+                  itemBuilder: (context, i) {
+                    return Center(
+                        child: _loadFullRes ? photos_full[i] : photos[i]);
+                  },
+                  itemCount: photos.length,
+                  controller: pagecontrol,
+                  onPageChanged: (value) {
+                    setState(() {
+                      currentIndex = value;
+                      _loadFullRes = false;
+                    });
+                    // if (!isHide) {
+                    //   Timer(Duration(seconds: 5), () {
+                    //     hideUI();
+                    //   });
+                    //}
+                  },
+                ),
               ),
             ),
           ),
-        ),
-        BottomInfo(
-          hideNumberTween: bottomInfoHideNumberTween,
-          hideDescripTween: bottomInfoHideDescripTween,
-          hideExposTween: bottomInfoHideExposTween,
-          photoIndex: currentIndex,
-          currentAlbum: ntuclose,
-        ),
-        TweenAnimationBuilder<Offset>(
-          duration: Duration(milliseconds: 400),
-          curve: Curves.easeInBack,
-          builder: (context, offset, child) {
-            return Transform.translate(
-              offset: offset,
-              child: child,
-            );
-          },
-          tween: hideNextButtonTween,
-          child: Opacity(
-            opacity: 0.75,
-            child: Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: PhysicalModel(
-                    color: Colors.lightGreen.shade200,
-                    elevation: 16.0,
-                    borderRadius: BorderRadius.circular(10),
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 30.0),
-                      child: IconButton(
-                        iconSize: 40,
-                        icon: Icon(Icons.arrow_forward_ios_rounded),
-                        onPressed: nextImage,
+          Row(
+            children: [
+              Flexible(
+                child: MouseRegion(
+                  onEnter: (event) {
+                    if (isHide) {
+                      showUI();
+                    }
+                  },
+                  onExit: (event) {
+                    if (!isHide) {
+                      Timer(Duration(milliseconds: 0), () {
+                        hideUI();
+                      });
+                    }
+                  },
+                  child: Stack(children: [
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: TweenAnimationBuilder<Offset>(
+                        duration: Duration(milliseconds: 400),
+                        curve: Curves.easeInBack,
+                        builder: (context, offset, child) {
+                          return Transform.translate(
+                            offset: offset,
+                            child: child,
+                          );
+                        },
+                        tween: hideBackButtonTween,
+                        child: Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: PhysicalModel(
+                              color: Colors.red.shade100,
+                              elevation: 16.0,
+                              borderRadius: BorderRadius.circular(100),
+                              child: Padding(
+                                padding: const EdgeInsets.only(right: 40.0),
+                                child: IconButton(
+                                  iconSize: 40,
+                                  icon: Icon(Icons.arrow_back_rounded),
+                                  onPressed: goBack,
+                                ),
+                              ),
+                            )),
                       ),
                     ),
-                  ),
-                )),
-          ),
-        ),
-        TweenAnimationBuilder<Offset>(
-          duration: Duration(milliseconds: 400),
-          curve: Curves.easeInBack,
-          builder: (context, offset, child) {
-            return Transform.translate(
-              offset: offset,
-              child: child,
-            );
-          },
-          tween: hidePreviousButtonTween,
-          child: Opacity(
-            opacity: 0.75,
-            child: Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: PhysicalModel(
-                    color: Colors.lightGreen.shade200,
-                    elevation: 16.0,
-                    borderRadius: BorderRadius.circular(10),
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 30.0),
-                      child: IconButton(
-                        iconSize: 40,
-                        icon: Icon(Icons.arrow_back_ios_rounded),
-                        onPressed: previousImage,
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: TweenAnimationBuilder<Offset>(
+                        duration: Duration(milliseconds: 400),
+                        curve: Curves.easeInBack,
+                        builder: (context, offset, child) {
+                          return Transform.translate(
+                            offset: offset,
+                            child: child,
+                          );
+                        },
+                        tween: hidePreviousButtonTween,
+                        child: Opacity(
+                          opacity: 0.75,
+                          child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: PhysicalModel(
+                                color: Colors.lightGreen.shade200,
+                                elevation: 16.0,
+                                borderRadius: BorderRadius.circular(10),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(top: 30.0),
+                                  child: IconButton(
+                                    iconSize: 40,
+                                    icon: Icon(Icons.arrow_back_ios_rounded),
+                                    onPressed: previousImage,
+                                  ),
+                                ),
+                              )),
+                        ),
                       ),
                     ),
-                  ),
-                )),
-          ),
-        ),
-        TweenAnimationBuilder<Offset>(
-          duration: Duration(milliseconds: 400),
-          curve: Curves.easeInBack,
-          builder: (context, offset, child) {
-            return Transform.translate(
-              offset: offset,
-              child: child,
-            );
-          },
-          tween: hideBackButtonTween,
-          child: Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Align(
-                alignment: Alignment.topLeft,
-                child: PhysicalModel(
-                  color: Colors.red.shade100,
-                  elevation: 16.0,
-                  borderRadius: BorderRadius.circular(100),
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 40.0),
-                    child: IconButton(
-                      iconSize: 40,
-                      icon: Icon(Icons.arrow_back_rounded),
-                      onPressed: goBack,
+                  ]),
+                ),
+                flex: 1,
+              ),
+              Spacer(
+                flex: 8,
+              ),
+              Flexible(
+                child: MouseRegion(
+                  onEnter: (event) {
+                    if (isHide) {
+                      showUI();
+                    }
+                  },
+                  onExit: (event) {
+                    if (!isHide) {
+                      Timer(Duration(milliseconds: 0), () {
+                        hideUI();
+                      });
+                    }
+                  },
+                  child: TweenAnimationBuilder<Offset>(
+                    duration: Duration(milliseconds: 400),
+                    curve: Curves.easeInBack,
+                    builder: (context, offset, child) {
+                      return Transform.translate(
+                        offset: offset,
+                        child: child,
+                      );
+                    },
+                    tween: hideNextButtonTween,
+                    child: Opacity(
+                      opacity: 0.75,
+                      child: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Align(
+                            alignment: Alignment.centerRight,
+                            child: PhysicalModel(
+                              color: Colors.lightGreen.shade200,
+                              elevation: 16.0,
+                              borderRadius: BorderRadius.circular(10),
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 30.0),
+                                child: IconButton(
+                                  iconSize: 40,
+                                  icon: Icon(Icons.arrow_forward_ios_rounded),
+                                  onPressed: nextImage,
+                                ),
+                              ),
+                            ),
+                          )),
                     ),
                   ),
                 ),
-              )),
-        ),
-      ],
+                flex: 1,
+              )
+            ],
+          ),
+          BottomInfo(
+            hideNumberTween: bottomInfoHideNumberTween,
+            hideDescripTween: bottomInfoHideDescripTween,
+            hideExposTween: bottomInfoHideExposTween,
+            photoIndex: currentIndex,
+            currentAlbum: ntuclose,
+          ),
+        ],
+      ),
     );
   }
 }
