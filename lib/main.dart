@@ -62,7 +62,7 @@ class _ViewerState extends State<Viewer> with AfterLayoutMixin<Viewer> {
 
   @override
   void afterFirstLayout(BuildContext context) {
-    Timer(Duration(seconds: 3), () {
+    Timer(Duration(milliseconds: 1500), () {
       hideUI();
     });
   }
@@ -138,54 +138,93 @@ class _ViewerState extends State<Viewer> with AfterLayoutMixin<Viewer> {
 
   var currentIndex = 0;
 
+  late TapDownDetails tapposition;
+
   @override
   Widget build(BuildContext context) {
     setStr();
     return Stack(
       children: [
-        InteractiveViewer(
-          transformationController: _interactiveviewcontrol,
-          onInteractionEnd: (details) {
-            if (!_loadFullRes) {
-              setState(() {
-                _loadFullRes = true;
-              });
-            }
+        GestureDetector(
+          onTap: () => toggleUI(),
+          onDoubleTapDown: (details) {
+            tapposition = details;
+          },
+          onDoubleTap: () {
             if (_interactiveviewcontrol.value.entry(1, 1) != 1 ||
                 _interactiveviewcontrol.value.entry(2, 2) != 1) {
               setState(() {
-                _ignoreSlide = true;
+                _interactiveviewcontrol.value
+                  ..translate(0, 0)
+                  ..scale(1.0);
               });
             } else {
               setState(() {
-                _ignoreSlide = false;
+                _interactiveviewcontrol.value
+                  ..translate(-tapposition.localPosition.dx * 2,
+                      -tapposition.localPosition.dy * 2)
+                  ..scale(3.0);
               });
+              if (!_loadFullRes) {
+                setState(() {
+                  _loadFullRes = true;
+                });
+              }
             }
           },
-          child: IgnorePointer(
-            ignoring: _ignoreSlide,
-            child: PageView.builder(
-              itemBuilder: (context, i) {
-                return Center(child: _loadFullRes ? photos_full[i] : photos[i]);
-              },
-              itemCount: photos.length,
-              controller: pagecontrol,
-              onPageChanged: (value) {
+          child: InteractiveViewer(
+            transformationController: _interactiveviewcontrol,
+            onInteractionEnd: (details) {
+              if (!_loadFullRes) {
                 setState(() {
-                  currentIndex = value;
-                  _loadFullRes = false;
+                  _loadFullRes = true;
                 });
-                // if (!isHide) {
-                //   Timer(Duration(seconds: 5), () {
-                //     hideUI();
-                //   });
-                //}
+              }
+              if (_interactiveviewcontrol.value.entry(1, 1) != 1 ||
+                  _interactiveviewcontrol.value.entry(2, 2) != 1) {
+                setState(() {
+                  _ignoreSlide = true;
+                });
+              } else {
+                setState(() {
+                  _ignoreSlide = false;
+                });
+              }
+            },
+            child: GestureDetector(
+              onTap: () => toggleUI(),
+              onDoubleTapDown: (details) {
+                setState(() {
+                  _interactiveviewcontrol.value = Matrix4.identity()
+                    ..scale(2.0)
+                    ..translate(
+                        details.localPosition.dx, details.localPosition.dy);
+                });
               },
+              child: IgnorePointer(
+                ignoring: _ignoreSlide,
+                child: PageView.builder(
+                  itemBuilder: (context, i) {
+                    return Center(
+                        child: _loadFullRes ? photos_full[i] : photos[i]);
+                  },
+                  itemCount: photos.length,
+                  controller: pagecontrol,
+                  onPageChanged: (value) {
+                    setState(() {
+                      currentIndex = value;
+                      _loadFullRes = false;
+                    });
+                    // if (!isHide) {
+                    //   Timer(Duration(seconds: 5), () {
+                    //     hideUI();
+                    //   });
+                    //}
+                  },
+                ),
+              ),
             ),
           ),
-        ),
-        GestureDetector(
-          onTap: () => toggleUI(),
         ),
         BottomInfo(
           hideNumberTween: bottomInfoHideNumberTween,
