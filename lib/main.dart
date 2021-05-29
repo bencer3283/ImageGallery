@@ -131,8 +131,10 @@ class _ViewerState extends State<Viewer> with AfterLayoutMixin<Viewer> {
   var isHide = false;
 
   final pagecontrol = PageController();
+  final _interactiveviewcontrol = TransformationController();
 
   bool _loadFullRes = false;
+  bool _ignoreSlide = false;
 
   var currentIndex = 0;
 
@@ -141,34 +143,46 @@ class _ViewerState extends State<Viewer> with AfterLayoutMixin<Viewer> {
     setStr();
     return Stack(
       children: [
-        PageView.builder(
-          itemBuilder: (context, i) {
-            return Center(
-                child: InteractiveViewer(
-              child: _loadFullRes ? photos_full[i] : photos[i],
-              clipBehavior: Clip.none,
-              onInteractionUpdate: (details) {
-                if (!_loadFullRes) {
-                  setState(() {
-                    _loadFullRes = true;
-                  });
-                }
+        InteractiveViewer(
+          transformationController: _interactiveviewcontrol,
+          onInteractionEnd: (details) {
+            if (!_loadFullRes) {
+              setState(() {
+                _loadFullRes = true;
+              });
+            }
+            if (_interactiveviewcontrol.value.entry(1, 1) != 1 ||
+                _interactiveviewcontrol.value.entry(2, 2) != 1) {
+              setState(() {
+                _ignoreSlide = true;
+              });
+            } else {
+              setState(() {
+                _ignoreSlide = false;
+              });
+            }
+          },
+          child: IgnorePointer(
+            ignoring: _ignoreSlide,
+            child: PageView.builder(
+              itemBuilder: (context, i) {
+                return Center(child: _loadFullRes ? photos_full[i] : photos[i]);
               },
-            ));
-          },
-          itemCount: photos.length,
-          controller: pagecontrol,
-          onPageChanged: (value) {
-            setState(() {
-              currentIndex = value;
-              _loadFullRes = false;
-            });
-            // if (!isHide) {
-            //   Timer(Duration(seconds: 5), () {
-            //     hideUI();
-            //   });
-            //}
-          },
+              itemCount: photos.length,
+              controller: pagecontrol,
+              onPageChanged: (value) {
+                setState(() {
+                  currentIndex = value;
+                  _loadFullRes = false;
+                });
+                // if (!isHide) {
+                //   Timer(Duration(seconds: 5), () {
+                //     hideUI();
+                //   });
+                //}
+              },
+            ),
+          ),
         ),
         GestureDetector(
           onTap: () => toggleUI(),
