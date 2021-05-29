@@ -59,11 +59,11 @@ class _ViewerState extends State<Viewer>
     } else if (isHide) {
       showUI();
     }
-    if (!isHide) {
-      Timer(Duration(milliseconds: 3000), () {
-        hideUI();
-      });
-    }
+    // if (!isHide) {
+    //   Timer(Duration(milliseconds: 2500), () {
+    //     hideUI();
+    //   });
+    // }
   }
 
   @override
@@ -374,10 +374,18 @@ class _ViewerState extends State<Viewer>
                       ),
                     ]),
                   ),
-                  flex: defaultTargetPlatform == TargetPlatform.windows ? 2 : 5,
+                  flex: defaultTargetPlatform == TargetPlatform.windows ||
+                          defaultTargetPlatform == TargetPlatform.macOS ||
+                          defaultTargetPlatform == TargetPlatform.linux
+                      ? 2
+                      : 5,
                 ),
                 Spacer(
-                  flex: defaultTargetPlatform == TargetPlatform.windows ? 6 : 0,
+                  flex: defaultTargetPlatform == TargetPlatform.windows ||
+                          defaultTargetPlatform == TargetPlatform.macOS ||
+                          defaultTargetPlatform == TargetPlatform.linux
+                      ? 6
+                      : 0,
                 ),
                 Flexible(
                     child: MouseRegion(
@@ -428,8 +436,11 @@ class _ViewerState extends State<Viewer>
                         ),
                       ),
                     ),
-                    flex:
-                        defaultTargetPlatform == TargetPlatform.windows ? 2 : 5)
+                    flex: defaultTargetPlatform == TargetPlatform.windows ||
+                            defaultTargetPlatform == TargetPlatform.macOS ||
+                            defaultTargetPlatform == TargetPlatform.linux
+                        ? 2
+                        : 5)
               ],
             ),
             BottomInfo(
