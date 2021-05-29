@@ -357,7 +357,7 @@ class _BottomInfoState extends State<BottomInfo> {
               flex: 2,
             ),
             Flexible(
-                flex: 15,
+                flex: 9,
                 fit: FlexFit.loose,
                 child: TweenAnimationBuilder<Offset>(
                   duration: Duration(milliseconds: 400),
@@ -393,7 +393,7 @@ class _BottomInfoState extends State<BottomInfo> {
               flex: 1,
             ),
             Flexible(
-                flex: 9,
+                flex: 15,
                 fit: FlexFit.loose,
                 child: TweenAnimationBuilder<Offset>(
                   duration: Duration(milliseconds: 400),
