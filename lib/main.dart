@@ -1,11 +1,9 @@
-import 'dart:async';
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/cupertino.dart';
 
 import 'viewer.dart';
-import 'load_album_ntuclose.dart';
+import 'AlbumGrid.dart';
 
 void main() {
   SystemChrome.setEnabledSystemUIOverlays([]);
@@ -19,230 +17,134 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  GalleryRouterDelegate _routerDelegate = GalleryRouterDelegate();
+  GalleryRouteInformationParser _routeInformationParser =
+      GalleryRouteInformationParser();
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp.router(
+        title: 'Gallery',
+        routeInformationParser: _routeInformationParser,
+        routerDelegate: _routerDelegate);
+  }
+}
+
+class RoutePath {
+  final String name;
+
+  RoutePath.ntuclose() : name = 'ntuclose';
+  RoutePath.ntucloseViewer() : name = 'ntucloseViewer';
+
+  bool get isntuclose => name == 'ntuclose';
+  bool get isntucloseViewer => name == 'ntucloseViewer';
+}
+
+class GalleryRouterDelegate extends RouterDelegate<RoutePath>
+    with ChangeNotifier, PopNavigatorRouterDelegateMixin<RoutePath> {
+  final GlobalKey<NavigatorState> navigatorKey;
+
   int? _selectedAlbum = 0;
   int? _selectedPhoto = null;
 
+  GalleryRouterDelegate() : navigatorKey = GlobalKey<NavigatorState>();
+
+  RoutePath get currentConfiguration {
+    if (_selectedPhoto == null) {
+      return RoutePath.ntuclose();
+    } else {
+      return RoutePath.ntucloseViewer();
+    }
+  }
+
   void _gridToViewer(int i) {
-    setState(() {
-      _selectedPhoto = i;
-    });
+    _selectedPhoto = i;
+    notifyListeners();
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        home: Scaffold(
-          body: Navigator(
-            pages: [
-              if (_selectedAlbum != null)
-                MaterialPage(
-                    child: AlbumGrid(
-                      handleTap: _gridToViewer,
-                    ),
-                    key: ValueKey('album in grid view')),
-              if (_selectedPhoto != null)
-                MaterialPage(
-                  child: Viewer(
-                    initialIndex: _selectedPhoto,
-                  ),
-                  key: ValueKey('photo viewer'),
+    return Scaffold(
+      body: Navigator(
+        key: navigatorKey,
+        pages: [
+          if (_selectedAlbum != null)
+            MaterialPage(
+                child: AlbumGrid(
+                  handleTap: _gridToViewer,
                 ),
-            ],
-            onPopPage: (route, result) {
-              if (!route.didPop(result)) {
-                return false;
-              }
-              setState(() {
-                if (_selectedAlbum != null && _selectedPhoto != null) {
-                  _selectedPhoto = null;
-                } else if (_selectedAlbum != null && _selectedPhoto == null) {
-                  _selectedAlbum = null;
-                }
-              });
-              return true;
-            },
-          ),
-          backgroundColor: Colors.black,
-        ),
-        theme: ThemeData(
-          backgroundColor: Colors.grey,
-        ));
+                key: ValueKey('album in grid view')),
+          if (_selectedPhoto != null)
+            CupertinoPage(
+              child: Viewer(
+                initialIndex: _selectedPhoto,
+              ),
+              key: ValueKey('photo viewer'),
+            ),
+        ],
+        onPopPage: (route, result) {
+          if (!route.didPop(result)) {
+            return false;
+          }
+
+          if (_selectedAlbum != null && _selectedPhoto != null) {
+            _selectedPhoto = null;
+          } else if (_selectedAlbum != null && _selectedPhoto == null) {
+            _selectedAlbum = null;
+          }
+          notifyListeners();
+          return true;
+        },
+      ),
+      backgroundColor: Colors.black,
+    );
+  }
+
+  @override
+  Future<void> setNewRoutePath(RoutePath configuration) async {
+    if (configuration.isntuclose) {
+      _selectedPhoto = null;
+      notifyListeners();
+    } else if (configuration.isntucloseViewer) {
+      _selectedPhoto = 0;
+      notifyListeners();
+    }
+    ;
   }
 }
 
-class AlbumGrid extends StatefulWidget {
-  AlbumGrid({required this.handleTap});
-
-  final ValueChanged<int> handleTap;
-
+class GalleryRouteInformationParser extends RouteInformationParser<RoutePath> {
   @override
-  _AlbumGridState createState() => _AlbumGridState();
-}
+  Future<RoutePath> parseRouteInformation(
+      RouteInformation routeInformation) async {
+    final uri = Uri.parse(routeInformation.location!);
+    // Handle '/'
 
-class _AlbumGridState extends State<AlbumGrid> {
-  List<double> _elevation = [];
+    // if (uri.pathSegments.length == 0) {
+    //   return BookRoutePath.home();
+    // }
 
-  Gradient linearGradient = SweepGradient(colors: [
-    Colors.grey.shade500,
-    Colors.green.shade200,
-    Colors.amber.shade200,
-    Colors.grey.shade500,
-  ], stops: [
-    0.1,
-    0.3,
-    0.8,
-    1.0
-  ], center: Alignment(-0.9, 0));
-
-  Gradient linearGradient3 = LinearGradient(colors: [
-    Colors.grey.shade500,
-    Colors.blueGrey.shade200,
-    Colors.pink.shade100
-  ], stops: [
-    0.3,
-    0.9,
-    1.0
-  ]);
-
-  List<Color> _greenradius = [];
-
-  @override
-  Widget build(BuildContext context) {
-    for (int i = 0; i < ntuclose.photosList().length; i++) {
-      _elevation.add(16.0);
-      _greenradius.add(Colors.grey.shade500);
+    // Handle '/ntuclose/'
+    if (uri.pathSegments.toString() == '/ntuclose/') {
+      return RoutePath.ntuclose();
     }
 
-    ntucloseSetStr();
+    if (uri.pathSegments.toString() == '/ntuclose/viewer/') {
+      return RoutePath.ntucloseViewer();
+    }
 
-    return Container(
-      color: Colors.grey.shade600,
-      child: Stack(children: [
-        GridView.builder(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: MediaQuery.of(context).size.width >
-                      MediaQuery.of(context).size.height
-                  ? 3
-                  : 2,
-              mainAxisSpacing: 0,
-              crossAxisSpacing: 7.5,
-              childAspectRatio: 1),
-          itemCount: ntuclose.photosList().length,
-          padding: EdgeInsets.only(top: 80, right: 8.0, bottom: 8.0, left: 8.0),
-          itemBuilder: (context, index) {
-            return Column(children: [
-              AnimatedPhysicalModel(
-                  duration: Duration(milliseconds: 300),
-                  shape: BoxShape.rectangle,
-                  shadowColor: Colors.black,
-                  color: Colors.transparent,
-                  elevation: _elevation[index],
-                  borderRadius: BorderRadius.circular(20),
-                  child: GestureDetector(
-                    onTapDown: (details) {
-                      setState(() {
-                        _elevation[index] = 0;
-                        _greenradius[index] = Colors.green.shade200;
-                      });
-                      Timer(Duration(milliseconds: 400), () {
-                        setState(() {
-                          _elevation[index] = 16;
-                          _greenradius[index] = Colors.grey.shade500;
-                        });
-                      });
-                      Timer(Duration(milliseconds: 700), () {
-                        widget.handleTap(index);
-                      });
-                    },
-                    child: Hero(
-                      tag: index,
-                      child: AnimatedContainer(
-                          duration: Duration(milliseconds: 300),
-                          height: MediaQuery.of(context).size.width /
-                              (MediaQuery.of(context).size.width >
-                                      MediaQuery.of(context).size.height
-                                  ? 3
-                                  : 2) *
-                              0.75,
-                          decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: ntuclose.photosList()[index].image,
-                                fit: BoxFit.contain,
-                              ),
-                              gradient: RadialGradient(colors: [
-                                _greenradius[index],
-                                Colors.grey.shade500,
-                              ], stops: [
-                                0.8,
-                                1.0
-                              ]),
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(
-                                  color: Colors.grey.shade500, width: 8.0))),
-                    ),
-                  )),
-              Opacity(
-                opacity: 0.75,
-                child: AnimatedPhysicalModel(
-                  duration: Duration(milliseconds: 200),
-                  shape: BoxShape.rectangle,
-                  shadowColor: Colors.black,
-                  color: Colors.transparent,
-                  elevation: _elevation[index],
-                  borderRadius: BorderRadius.circular(20),
-                  child: Container(
-                    alignment: Alignment.bottomLeft,
-                    margin: EdgeInsets.only(top: 5),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      gradient: linearGradient,
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        "${ntuclose.photos[index].des}",
-                        style: TextStyle(
-                            fontSize: 12,
-                            fontFamily: 'NotoSans',
-                            color: Colors.black),
-                      ),
-                    ),
-                  ),
-                ),
-              )
-            ]);
-          },
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Align(
-            alignment: Alignment.topCenter,
-            child: PhysicalModel(
-              color: Colors.transparent,
-              elevation: 18,
-              borderRadius: BorderRadius.circular(10),
-              child: Container(
-                width: double.maxFinite,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  gradient: linearGradient3,
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                      top: 10.0, bottom: 10.0, right: 10, left: 100),
-                  child: Text(
-                    "臺大封校影像紀錄",
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontFamily: 'NotoSans',
-                        color: Colors.black),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ]),
-    );
+    // Handle unknown routes
+    return RoutePath.ntuclose();
+  }
+
+  @override
+  RouteInformation restoreRouteInformation(RoutePath path) {
+    if (path.isntuclose) {
+      return RouteInformation(location: '/ntuclose/');
+    }
+    if (path.isntucloseViewer) {
+      return RouteInformation(location: '/ntuclose/viewer/');
+    }
+    return RouteInformation(location: '/');
   }
 }

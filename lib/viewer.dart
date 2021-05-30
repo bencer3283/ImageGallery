@@ -253,10 +253,10 @@ class _ViewerState extends State<Viewer>
                   itemBuilder: (context, i) {
                     return Center(
                         child: _loadFullRes
-                            ? photos_full[i]
-                            : Hero(tag: i, child: photos[i]));
+                            ? ntuclose.photosFullList()[i]
+                            : Hero(tag: i, child: ntuclose.photosList()[i]));
                   },
-                  itemCount: photos.length,
+                  itemCount: ntuclose.photosList().length,
                   controller: pagecontrol,
                   onPageChanged: (value) {
                     setState(() {
