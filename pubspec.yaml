@@ -63,6 +63,12 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
+    - family: HanaMin
+      fonts:
+        - asset: assets/fonts/HanaMinA.ttf
+    - family: NotoSerif
+      fonts:
+        - asset: assets/fonts/NotoSerifCJKtc-SemiBold.otf
     - family: HKGrotesk
       fonts:
         - asset: assets/fonts/HKGrotesk-Bold.otf

@@ -139,6 +139,7 @@ class _ViewerState extends State<Viewer>
       duration: const Duration(milliseconds: 200),
     );
     pagecontrol = PageController(initialPage: widget.initialIndex);
+    currentIndex = widget.initialIndex;
   }
 
   @override
@@ -228,6 +229,9 @@ class _ViewerState extends State<Viewer>
         },
         child: Stack(
           children: [
+            Container(
+              color: Colors.black,
+            ),
             InteractiveViewer(
               transformationController: _interactiveviewcontrol,
               onInteractionEnd: (details) {
@@ -452,7 +456,7 @@ class BottomInfo extends StatefulWidget {
   var hideDescripTween = Tween<Offset>(begin: Offset.zero, end: Offset.zero);
   var hideExposTween = Tween<Offset>(begin: Offset.zero, end: Offset.zero);
 
-  var photoIndex = 0;
+  var photoIndex;
   Album currentAlbum;
 
   @override
