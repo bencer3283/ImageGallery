@@ -11,13 +11,56 @@ void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   // This widget is the root of your application.
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  int? _selectedAlbum = 0;
+  int? _selectedPhoto = null;
+
+  void _gridToViewer(int i) {
+    setState(() {
+      _selectedPhoto = i;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
         home: Scaffold(
-          body: AlbumGrid(),
+          body: Navigator(
+            pages: [
+              if (_selectedAlbum != null)
+                MaterialPage(
+                    child: AlbumGrid(
+                      handleTap: _gridToViewer,
+                    ),
+                    key: ValueKey('album in grid view')),
+              if (_selectedPhoto != null)
+                MaterialPage(
+                  child: Viewer(
+                    initialIndex: _selectedPhoto,
+                  ),
+                  key: ValueKey('photo viewer'),
+                ),
+            ],
+            onPopPage: (route, result) {
+              if (!route.didPop(result)) {
+                return false;
+              }
+              setState(() {
+                if (_selectedAlbum != null && _selectedPhoto != null) {
+                  _selectedPhoto = null;
+                } else if (_selectedAlbum != null && _selectedPhoto == null) {
+                  _selectedAlbum = null;
+                }
+              });
+              return true;
+            },
+          ),
           backgroundColor: Colors.black,
         ),
         theme: ThemeData(
@@ -27,6 +70,10 @@ class MyApp extends StatelessWidget {
 }
 
 class AlbumGrid extends StatefulWidget {
+  AlbumGrid({required this.handleTap});
+
+  final ValueChanged<int> handleTap;
+
   @override
   _AlbumGridState createState() => _AlbumGridState();
 }
@@ -49,10 +96,10 @@ class _AlbumGridState extends State<AlbumGrid> {
   Gradient linearGradient3 = LinearGradient(colors: [
     Colors.grey.shade400,
     Colors.blueGrey.shade200,
-    Colors.red.shade200
+    Colors.pink.shade100
   ], stops: [
     0.3,
-    0.8,
+    0.9,
     1.0
   ]);
 
@@ -103,6 +150,9 @@ class _AlbumGridState extends State<AlbumGrid> {
                             _elevation[index] = 16;
                             _greenradius[index] = Colors.grey.shade400;
                           });
+                        });
+                        Timer(Duration(milliseconds: 700), () {
+                          widget.handleTap(index);
                         });
                       },
                       child: AnimatedContainer(

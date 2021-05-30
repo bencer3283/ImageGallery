@@ -9,9 +9,9 @@ import 'package:flutter/foundation.dart';
 import 'load_album_ntuclose.dart';
 
 class Viewer extends StatefulWidget {
-  const Viewer({
-    Key? key,
-  }) : super(key: key);
+  Viewer({Key? key, required this.initialIndex}) : super(key: key);
+
+  var initialIndex;
 
   @override
   _ViewerState createState() => _ViewerState();
@@ -30,7 +30,7 @@ class _ViewerState extends State<Viewer>
   }
 
   void goBack() {
-    Navigator.of(context).maybePop();
+    Navigator.of(context).pop();
   }
 
   void toggleUI() {
@@ -116,7 +116,6 @@ class _ViewerState extends State<Viewer>
       Tween<Offset>(begin: Offset.zero, end: Offset.zero);
   var isHide = false;
 
-  final pagecontrol = PageController();
   var _interactiveviewcontrol = TransformationController();
 
   //Animation<Matrix4>? doubletapIN;
@@ -132,6 +131,8 @@ class _ViewerState extends State<Viewer>
 
   late TapDownDetails tapposition;
 
+  late final pagecontrol;
+
   @override
   void initState() {
     super.initState();
@@ -139,16 +140,13 @@ class _ViewerState extends State<Viewer>
       vsync: this,
       duration: const Duration(milliseconds: 200),
     );
-    // outControl = AnimationController(
-    //   vsync: this,
-    //   duration: const Duration(milliseconds: 200),
-    // );
+    pagecontrol = PageController(initialPage: widget.initialIndex);
   }
 
   @override
   void dispose() {
     doubletapControl.dispose();
-    //outControl.dispose();
+
     super.dispose();
   }
 
@@ -166,6 +164,7 @@ class _ViewerState extends State<Viewer>
   @override
   Widget build(BuildContext context) {
     ntucloseSetStr();
+
     return GestureDetector(
       onTap: () => toggleUI(),
       onDoubleTapDown: (details) {
@@ -275,7 +274,8 @@ class _ViewerState extends State<Viewer>
             ),
             Row(
               children: [
-                Flexible(
+                Container(
+                  alignment: Alignment.centerLeft,
                   child: MouseRegion(
                     opaque: false,
                     onEnter: (event) {
@@ -354,73 +354,74 @@ class _ViewerState extends State<Viewer>
                       ),
                     ]),
                   ),
-                  flex: defaultTargetPlatform == TargetPlatform.windows ||
-                          defaultTargetPlatform == TargetPlatform.macOS ||
-                          defaultTargetPlatform == TargetPlatform.linux
-                      ? 2
-                      : 5,
+                  // flex: defaultTargetPlatform == TargetPlatform.windows ||
+                  //         defaultTargetPlatform == TargetPlatform.macOS ||
+                  //         defaultTargetPlatform == TargetPlatform.linux
+                  //     ? 2
+                  //     : 5,
                 ),
                 Spacer(
-                  flex: defaultTargetPlatform == TargetPlatform.windows ||
-                          defaultTargetPlatform == TargetPlatform.macOS ||
-                          defaultTargetPlatform == TargetPlatform.linux
-                      ? 6
-                      : 0,
-                ),
-                Flexible(
-                    child: MouseRegion(
-                      opaque: false,
-                      onEnter: (event) {
-                        if (isHide) {
-                          showUI();
-                        }
+                    // flex: defaultTargetPlatform == TargetPlatform.windows ||
+                    //         defaultTargetPlatform == TargetPlatform.macOS ||
+                    //         defaultTargetPlatform == TargetPlatform.linux
+                    //     ? 6
+                    //     : 0,
+                    ),
+                Container(
+                  alignment: Alignment.centerRight,
+                  child: MouseRegion(
+                    opaque: false,
+                    onEnter: (event) {
+                      if (isHide) {
+                        showUI();
+                      }
+                    },
+                    onExit: (event) {
+                      if (!isHide) {
+                        Timer(Duration(milliseconds: 0), () {
+                          hideUI();
+                        });
+                      }
+                    },
+                    child: TweenAnimationBuilder<Offset>(
+                      duration: Duration(milliseconds: 400),
+                      curve: Curves.easeInBack,
+                      builder: (context, offset, child) {
+                        return Transform.translate(
+                          offset: offset,
+                          child: child,
+                        );
                       },
-                      onExit: (event) {
-                        if (!isHide) {
-                          Timer(Duration(milliseconds: 0), () {
-                            hideUI();
-                          });
-                        }
-                      },
-                      child: TweenAnimationBuilder<Offset>(
-                        duration: Duration(milliseconds: 400),
-                        curve: Curves.easeInBack,
-                        builder: (context, offset, child) {
-                          return Transform.translate(
-                            offset: offset,
-                            child: child,
-                          );
-                        },
-                        tween: hideNextButtonTween,
-                        child: Opacity(
-                          opacity: 0.75,
-                          child: Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Align(
-                                alignment: Alignment.centerRight,
-                                child: PhysicalModel(
-                                  color: Colors.lightGreen.shade200,
-                                  elevation: 16.0,
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(top: 30.0),
-                                    child: IconButton(
-                                      iconSize: 40,
-                                      icon:
-                                          Icon(Icons.arrow_forward_ios_rounded),
-                                      onPressed: nextImage,
-                                    ),
+                      tween: hideNextButtonTween,
+                      child: Opacity(
+                        opacity: 0.75,
+                        child: Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Align(
+                              alignment: Alignment.centerRight,
+                              child: PhysicalModel(
+                                color: Colors.lightGreen.shade200,
+                                elevation: 16.0,
+                                borderRadius: BorderRadius.circular(10),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(top: 30.0),
+                                  child: IconButton(
+                                    iconSize: 40,
+                                    icon: Icon(Icons.arrow_forward_ios_rounded),
+                                    onPressed: nextImage,
                                   ),
                                 ),
-                              )),
-                        ),
+                              ),
+                            )),
                       ),
                     ),
-                    flex: defaultTargetPlatform == TargetPlatform.windows ||
-                            defaultTargetPlatform == TargetPlatform.macOS ||
-                            defaultTargetPlatform == TargetPlatform.linux
-                        ? 2
-                        : 5)
+                  ),
+                  // flex: defaultTargetPlatform == TargetPlatform.windows ||
+                  //         defaultTargetPlatform == TargetPlatform.macOS ||
+                  //         defaultTargetPlatform == TargetPlatform.linux
+                  //     ? 2
+                  //     : 5
+                )
               ],
             ),
             BottomInfo(
