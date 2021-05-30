@@ -118,11 +118,9 @@ class _ViewerState extends State<Viewer>
 
   var _interactiveviewcontrol = TransformationController();
 
-  //Animation<Matrix4>? doubletapIN;
   Animation<Matrix4>? doubletap;
 
   late AnimationController doubletapControl;
-  //late AnimationController outControl;
 
   bool _loadFullRes = false;
   bool _ignoreSlide = false;
@@ -254,7 +252,9 @@ class _ViewerState extends State<Viewer>
                 child: PageView.builder(
                   itemBuilder: (context, i) {
                     return Center(
-                        child: _loadFullRes ? photos_full[i] : photos[i]);
+                        child: _loadFullRes
+                            ? photos_full[i]
+                            : Hero(tag: i, child: photos[i]));
                   },
                   itemCount: photos.length,
                   controller: pagecontrol,
