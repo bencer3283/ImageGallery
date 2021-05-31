@@ -61,13 +61,14 @@ class _AlbumGridState extends State<AlbumGrid> {
       child: Stack(children: [
         CustomScrollView(slivers: [
           SliverPadding(
-            padding: EdgeInsets.only(top: 60, left: 8, right: 8),
+            padding: EdgeInsets.only(top: 60, left: 16, right: 16, bottom: 8),
             sliver: SliverToBoxAdapter(
               child: PhysicalModel(
+                borderRadius: BorderRadius.circular(20),
                 color: Colors.transparent,
                 elevation: 16,
                 child: Container(
-                  margin: EdgeInsets.all(8),
+                  //margin: EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     gradient: linearGradient,
                     borderRadius: BorderRadius.circular(20),
@@ -94,7 +95,7 @@ class _AlbumGridState extends State<AlbumGrid> {
                           Container(
                             alignment: Alignment.centerRight,
                             child: Text(
-                              '2021年5月，新冠肺炎在臺灣重新肆虐，\n臺大宣布該學期全面遠距教學，\n所有同學不必再到學校上課。\n這系列影像希望呈現出空無一人的校園，\n如何在疫情之下守護所有同學的安全，也希望能表現出校園的韌性。',
+                              '2021年5月，新冠肺炎在臺灣重新肆虐，\n臺大宣布該學期全面遠距教學，\n所有同學不必再到學校上課。\n這系列影像希望呈現出空無一人的校園，\n如何在疫情之下守護所有同學的安全，展現韌性與堅毅。',
                               style: TextStyle(
                                   fontSize: 14, fontFamily: "NotoSans"),
                               textAlign: TextAlign.end,
@@ -186,7 +187,7 @@ class _AlbumGridState extends State<AlbumGrid> {
                       ),
                     )
                   ]);
-                }),
+                }, childCount: ntuclose.photosList().length),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: MediaQuery.of(context).size.width >
                           MediaQuery.of(context).size.height
