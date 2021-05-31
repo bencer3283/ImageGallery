@@ -15,17 +15,23 @@ class AlbumGrid extends StatefulWidget {
 class _AlbumGridState extends State<AlbumGrid> {
   List<double> _elevation = [];
 
-  Gradient linearGradient = SweepGradient(colors: [
-    Colors.grey.shade500,
-    Colors.green.shade200,
-    Colors.amber.shade200,
-    Colors.grey.shade500,
-  ], stops: [
-    0.3,
-    0.5,
-    0.7,
-    1.0
-  ], center: Alignment(-0.5, 0));
+  Gradient linearGradient = SweepGradient(
+      colors: [
+        Colors.grey.shade500,
+        Colors.green.shade200,
+        Colors.amber.shade200,
+        Colors.grey.shade500,
+      ],
+      stops: [
+        0.3,
+        0.5,
+        0.7,
+        1.0
+      ],
+      center: defaultTargetPlatform == TargetPlatform.android ||
+              defaultTargetPlatform == TargetPlatform.iOS
+          ? Alignment(0, 0)
+          : Alignment(-0.5, 0));
 
   Gradient linearGradient3 = LinearGradient(colors: [
     Colors.grey.shade500,
