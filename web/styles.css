@@ -13,6 +13,17 @@ body {
     width: 100%;
 }
 
+.title {
+  padding-bottom: 5%;
+  font-family: 'Poppins', 'georgia';
+  font-size: x-large;
+  position: fixed;
+  bottom: 0px;
+  color: black;
+  width: 100%;
+  text-align: center;
+}
+
 @keyframes ldio-i57kphoj4t {
     0% { transform: translate(19.8px,94.60000000000001px) scale(0); }
    25% { transform: translate(19.8px,94.60000000000001px) scale(0); }
@@ -21,7 +32,7 @@ body {
   100% { transform: translate(169.4px,94.60000000000001px) scale(1); }
  }
  @keyframes ldio-i57kphoj4t-r {
-    0% { transform: translate(169.4px,94.60000000000001px) scale(1): }
+    0% { transform: translate(169.4px,94.60000000000001px) scale(1); }
   100% { transform: translate(169.4px,94.60000000000001px) scale(0); }
  }
  @keyframes ldio-i57kphoj4t-c {

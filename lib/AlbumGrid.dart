@@ -64,7 +64,7 @@ class _AlbumGridState extends State<AlbumGrid> {
       _greenradius.add(imagepanelcolor);
     }
 
-    ntucloseSetStr();
+    //ntucloseSetStr();
 
     return Container(
       color: Colors.grey.shade500,

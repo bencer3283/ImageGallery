@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/cupertino.dart';
 
-import 'viewer.dart';
+import 'Viewer.dart';
 import 'AlbumGrid.dart';
 
 void main() {
@@ -24,7 +24,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-        title: 'Gallery',
+        title: 'Gallery of Cheng Po Sheng\'s photography',
         routeInformationParser: _routeInformationParser,
         routerDelegate: _routerDelegate);
   }
