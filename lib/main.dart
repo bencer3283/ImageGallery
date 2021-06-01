@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/cupertino.dart';
 
+import 'load_album_ntuclose.dart';
+import 'load_album_penghu.dart';
+
 import 'Viewer.dart';
 import 'AlbumGrid.dart';
 
@@ -72,12 +75,14 @@ class GalleryRouterDelegate extends RouterDelegate<RoutePath>
             MaterialPage(
                 child: AlbumGrid(
                   handleTap: _gridToViewer,
+                  album: ntuclose,
                 ),
                 key: ValueKey('album in grid view')),
           if (_selectedPhoto != null)
             CupertinoPage(
               child: Viewer(
                 initialIndex: _selectedPhoto,
+                album: ntuclose,
               ),
               key: ValueKey('photo viewer'),
             ),

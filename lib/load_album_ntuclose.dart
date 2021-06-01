@@ -104,6 +104,3 @@ Album ntuclose = Album([
   ['水源市場', '1/125, f/1.8, Google Pixel 3'],
   ['公館，全家便利商店', '1/125, f/1.8, Google Pixel 3']
 ]);
-
-final List<Image> photos = ntuclose.photosList();
-final List<Image> photos_full = ntuclose.photosFullList();

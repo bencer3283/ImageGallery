@@ -1,12 +1,13 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'load_album_ntuclose.dart';
 import 'package:flutter/foundation.dart';
+import 'album.dart';
 
 class AlbumGrid extends StatefulWidget {
-  AlbumGrid({required this.handleTap});
+  AlbumGrid({required this.handleTap, required this.album});
 
   final ValueChanged<int> handleTap;
+  final Album album;
 
   @override
   _AlbumGridState createState() => _AlbumGridState();
@@ -59,12 +60,12 @@ class _AlbumGridState extends State<AlbumGrid> {
 
   @override
   Widget build(BuildContext context) {
-    for (int i = 0; i < ntuclose.photosList().length; i++) {
+    for (int i = 0; i < widget.album.photosList().length; i++) {
       _elevation.add(16.0);
       _greenradius.add(imagepanelcolor);
     }
 
-    //ntucloseSetStr();
+    //widget.albumSetStr();
 
     return Container(
       color: Colors.grey.shade500,
@@ -78,7 +79,6 @@ class _AlbumGridState extends State<AlbumGrid> {
                 color: Colors.transparent,
                 elevation: 16,
                 child: Container(
-                  //margin: EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     gradient: defaultTargetPlatform == TargetPlatform.android ||
                             defaultTargetPlatform == TargetPlatform.iOS
@@ -166,7 +166,8 @@ class _AlbumGridState extends State<AlbumGrid> {
                                     0.75,
                                 decoration: BoxDecoration(
                                   image: DecorationImage(
-                                    image: ntuclose.photosList()[index].image,
+                                    image:
+                                        widget.album.photosList()[index].image,
                                     fit: BoxFit.contain,
                                   ),
                                   gradient: RadialGradient(colors: [
@@ -191,7 +192,7 @@ class _AlbumGridState extends State<AlbumGrid> {
                       child: Padding(
                         padding: const EdgeInsets.only(bottom: 2.5),
                         child: Text(
-                          "${ntuclose.photos[index].des}",
+                          "${widget.album.photos[index].des}",
                           style: TextStyle(
                               fontSize: defaultTargetPlatform ==
                                           TargetPlatform.android ||
@@ -205,7 +206,7 @@ class _AlbumGridState extends State<AlbumGrid> {
                       ),
                     )
                   ]);
-                }, childCount: ntuclose.photosList().length),
+                }, childCount: widget.album.photosList().length),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: MediaQuery.of(context).size.width >
                           MediaQuery.of(context).size.height

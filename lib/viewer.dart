@@ -4,14 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:after_layout/after_layout.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
-
-import 'load_album_ntuclose.dart';
 import 'BottomInfo.dart';
+import 'album.dart';
 
 class Viewer extends StatefulWidget {
-  Viewer({Key? key, required this.initialIndex}) : super(key: key);
+  Viewer({Key? key, required this.initialIndex, required this.album})
+      : super(key: key);
 
-  var initialIndex;
+  final initialIndex;
+  final Album album;
 
   @override
   _ViewerState createState() => _ViewerState();
@@ -39,11 +40,6 @@ class _ViewerState extends State<Viewer>
     } else if (isHide) {
       showUI();
     }
-    // if (!isHide) {
-    //   Timer(Duration(milliseconds: 2500), () {
-    //     hideUI();
-    //   });
-    // }
   }
 
   @override
@@ -162,8 +158,6 @@ class _ViewerState extends State<Viewer>
 
   @override
   Widget build(BuildContext context) {
-    //ntucloseSetStr();
-
     return GestureDetector(
       onTap: () => toggleUI(),
       onDoubleTapDown: (details) {
@@ -233,6 +227,7 @@ class _ViewerState extends State<Viewer>
               color: Colors.black,
             ),
             InteractiveViewer(
+              maxScale: 5.0,
               transformationController: _interactiveviewcontrol,
               onInteractionEnd: (details) {
                 if (!_loadFullRes) {
@@ -257,10 +252,11 @@ class _ViewerState extends State<Viewer>
                   itemBuilder: (context, i) {
                     return Center(
                         child: _loadFullRes
-                            ? ntuclose.photosFullList()[i]
-                            : Hero(tag: i, child: ntuclose.photosList()[i]));
+                            ? widget.album.photosFullList()[i]
+                            : Hero(
+                                tag: i, child: widget.album.photosList()[i]));
                   },
-                  itemCount: ntuclose.photosList().length,
+                  itemCount: widget.album.photosList().length,
                   controller: pagecontrol,
                   onPageChanged: (value) {
                     setState(() {
@@ -358,19 +354,8 @@ class _ViewerState extends State<Viewer>
                       ),
                     ]),
                   ),
-                  // flex: defaultTargetPlatform == TargetPlatform.windows ||
-                  //         defaultTargetPlatform == TargetPlatform.macOS ||
-                  //         defaultTargetPlatform == TargetPlatform.linux
-                  //     ? 2
-                  //     : 5,
                 ),
-                Spacer(
-                    // flex: defaultTargetPlatform == TargetPlatform.windows ||
-                    //         defaultTargetPlatform == TargetPlatform.macOS ||
-                    //         defaultTargetPlatform == TargetPlatform.linux
-                    //     ? 6
-                    //     : 0,
-                    ),
+                Spacer(),
                 Container(
                   alignment: Alignment.centerRight,
                   child: MouseRegion(
@@ -420,11 +405,6 @@ class _ViewerState extends State<Viewer>
                       ),
                     ),
                   ),
-                  // flex: defaultTargetPlatform == TargetPlatform.windows ||
-                  //         defaultTargetPlatform == TargetPlatform.macOS ||
-                  //         defaultTargetPlatform == TargetPlatform.linux
-                  //     ? 2
-                  //     : 5
                 )
               ],
             ),
@@ -433,7 +413,7 @@ class _ViewerState extends State<Viewer>
               hideDescripTween: bottomInfoHideDescripTween,
               hideExposTween: bottomInfoHideExposTween,
               photoIndex: currentIndex,
-              currentAlbum: ntuclose,
+              currentAlbum: widget.album,
             ),
           ],
         ),
