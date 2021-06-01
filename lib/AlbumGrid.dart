@@ -16,23 +16,17 @@ class AlbumGrid extends StatefulWidget {
 class _AlbumGridState extends State<AlbumGrid> {
   List<double> _elevation = [];
 
-  Gradient linearGradient = SweepGradient(
-      colors: [
-        Colors.grey.shade500,
-        Colors.green.shade200,
-        Colors.amber.shade200,
-        Colors.grey.shade500,
-      ],
-      stops: [
-        0.3,
-        0.5,
-        0.7,
-        1.0
-      ],
-      center: defaultTargetPlatform == TargetPlatform.android ||
-              defaultTargetPlatform == TargetPlatform.iOS
-          ? Alignment(0, 0)
-          : Alignment(-0.5, 0));
+  Gradient linearGradient = SweepGradient(colors: [
+    Colors.grey.shade500,
+    Colors.green.shade200,
+    Colors.amber.shade200,
+    Colors.grey.shade500,
+  ], stops: [
+    0.2,
+    0.5,
+    0.8,
+    1.0
+  ], center: Alignment(-0.5, 0));
 
   Gradient linearGradient2 = LinearGradient(colors: [
     Colors.green.shade200,
@@ -44,19 +38,15 @@ class _AlbumGridState extends State<AlbumGrid> {
     0.5
   ], begin: Alignment.topLeft, end: Alignment.bottomRight);
 
-  Gradient linearGradient3 = LinearGradient(colors: [
-    Colors.grey.shade500,
-    Colors.blueGrey.shade200,
-    Colors.pink.shade100
-  ], stops: [
-    0.3,
-    0.9,
-    1.0
-  ], begin: Alignment.topLeft, end: Alignment.bottomRight);
+  Gradient linearGradient3 = LinearGradient(
+      colors: [Colors.blueGrey.shade200, Colors.pink.shade100],
+      stops: [0.4, 0.6],
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight);
 
   List<Color> _greenradius = [];
 
-  var imagepanelcolor = Colors.grey.shade500.withOpacity(0.5);
+  var imagepanelcolor = Colors.blueGrey.shade400;
 
   @override
   Widget build(BuildContext context) {
@@ -65,10 +55,8 @@ class _AlbumGridState extends State<AlbumGrid> {
       _greenradius.add(imagepanelcolor);
     }
 
-    //widget.albumSetStr();
-
     return Container(
-      color: Colors.grey.shade500,
+      color: Colors.blueGrey.shade300,
       child: Stack(children: [
         CustomScrollView(slivers: [
           SliverPadding(
@@ -93,14 +81,14 @@ class _AlbumGridState extends State<AlbumGrid> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            '#上學計畫',
+                            widget.album.title,
                             style:
                                 TextStyle(fontSize: 40, fontFamily: "NotoSans"),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(bottom: 40),
                             child: Text(
-                              'The GoToSchool Project',
+                              widget.album.titleEng,
                               style: TextStyle(
                                   fontSize: 24, fontFamily: "HKGrotesk"),
                             ),
@@ -108,7 +96,7 @@ class _AlbumGridState extends State<AlbumGrid> {
                           Container(
                             alignment: Alignment.centerRight,
                             child: Text(
-                              '2021年5月，新冠肺炎在臺灣重新肆虐，\n臺大宣布該學期全面遠距教學，\n所有同學不必再到學校上課。\n這系列影像希望呈現出空無一人的校園，\n如何在疫情之下守護所有同學的安全，展現韌性與堅毅。',
+                              widget.album.description,
                               style: TextStyle(
                                   fontSize: defaultTargetPlatform ==
                                               TargetPlatform.android ||
@@ -231,21 +219,35 @@ class _AlbumGridState extends State<AlbumGrid> {
                   borderRadius: BorderRadius.circular(10),
                   gradient: linearGradient3,
                 ),
-                child: Align(
-                  heightFactor: 1.0,
-                  alignment: Alignment.centerRight,
-                  child: Padding(
-                    padding:
-                        EdgeInsets.only(top: 6, bottom: 6, left: 6, right: 40),
-                    child: Text(
-                      "臺大封校影像紀錄",
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontFamily: 'NotoSans',
-                          color: Colors.black),
+                child: Row(children: [
+                  Align(
+                      heightFactor: 1.0,
+                      alignment: Alignment.centerLeft,
+                      child: IconButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        icon: Icon(
+                          Icons.arrow_back_rounded,
+                          size: 30,
+                        ),
+                        padding: EdgeInsets.only(left: 20),
+                      )),
+                  Spacer(),
+                  Align(
+                    heightFactor: 1.0,
+                    alignment: Alignment.centerRight,
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                          top: 6, bottom: 6, left: 6, right: 40),
+                      child: Text(
+                        widget.album.subtitle,
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontFamily: 'NotoSans',
+                            color: Colors.black),
+                      ),
                     ),
                   ),
-                ),
+                ]),
               ),
             ),
           ),
