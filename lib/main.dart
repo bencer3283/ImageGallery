@@ -143,7 +143,7 @@ class GalleryRouterDelegate extends RouterDelegate<RoutePath>
                                 image: DecorationImage(
                                   image: ntuclose.photosList()[14].image,
                                   fit: BoxFit.contain,
-                                  alignment: Alignment.centerRight,
+                                  alignment: Alignment.bottomRight,
                                 )),
                             child: Column(
                               mainAxisSize: MainAxisSize.max,
@@ -155,7 +155,12 @@ class GalleryRouterDelegate extends RouterDelegate<RoutePath>
                                     child: Text(
                                       'NTU\nUnder Covid',
                                       style: TextStyle(
-                                        fontSize: 70,
+                                        fontSize: defaultTargetPlatform ==
+                                                    TargetPlatform.android ||
+                                                defaultTargetPlatform ==
+                                                    TargetPlatform.iOS
+                                            ? 30
+                                            : 70,
                                         fontFamily: 'HKGrotesk',
                                         color: Colors.grey.shade400,
                                       ),
@@ -170,7 +175,12 @@ class GalleryRouterDelegate extends RouterDelegate<RoutePath>
                                     child: Text('#上學計畫: 臺大封校的疫情紀實',
                                         style: TextStyle(
                                           fontFamily: 'NotoSans',
-                                          fontSize: 30,
+                                          fontSize: defaultTargetPlatform ==
+                                                      TargetPlatform.android ||
+                                                  defaultTargetPlatform ==
+                                                      TargetPlatform.iOS
+                                              ? 24
+                                              : 30,
                                           color: Colors.grey.shade400,
                                         )),
                                   ),
@@ -205,7 +215,12 @@ class GalleryRouterDelegate extends RouterDelegate<RoutePath>
                                       child: Text(
                                         'Peng-Hu, 2021',
                                         style: TextStyle(
-                                          fontSize: 70,
+                                          fontSize: defaultTargetPlatform ==
+                                                      TargetPlatform.android ||
+                                                  defaultTargetPlatform ==
+                                                      TargetPlatform.iOS
+                                              ? 30
+                                              : 70,
                                           fontFamily: 'HKGrotesk',
                                           color: Colors.grey.shade400,
                                         ),
@@ -220,7 +235,13 @@ class GalleryRouterDelegate extends RouterDelegate<RoutePath>
                                       child: Text('冬天的澎湖: 漁獲與風沙',
                                           style: TextStyle(
                                             fontFamily: 'NotoSans',
-                                            fontSize: 30,
+                                            fontSize: defaultTargetPlatform ==
+                                                        TargetPlatform
+                                                            .android ||
+                                                    defaultTargetPlatform ==
+                                                        TargetPlatform.iOS
+                                                ? 24
+                                                : 30,
                                             color: Colors.grey.shade400,
                                           )),
                                     ),
