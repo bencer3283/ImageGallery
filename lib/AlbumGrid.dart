@@ -33,6 +33,16 @@ class _AlbumGridState extends State<AlbumGrid> {
           ? Alignment(0, 0)
           : Alignment(-0.5, 0));
 
+  Gradient linearGradient2 = LinearGradient(colors: [
+    Colors.green.shade200,
+    Colors.amber.shade200,
+    Colors.grey.shade500,
+  ], stops: [
+    0.0,
+    0.25,
+    0.5
+  ], begin: Alignment.topLeft, end: Alignment.bottomRight);
+
   Gradient linearGradient3 = LinearGradient(colors: [
     Colors.grey.shade500,
     Colors.blueGrey.shade200,
@@ -70,7 +80,10 @@ class _AlbumGridState extends State<AlbumGrid> {
                 child: Container(
                   //margin: EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    gradient: linearGradient,
+                    gradient: defaultTargetPlatform == TargetPlatform.android ||
+                            defaultTargetPlatform == TargetPlatform.iOS
+                        ? linearGradient2
+                        : linearGradient,
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Padding(
@@ -97,7 +110,13 @@ class _AlbumGridState extends State<AlbumGrid> {
                             child: Text(
                               '2021年5月，新冠肺炎在臺灣重新肆虐，\n臺大宣布該學期全面遠距教學，\n所有同學不必再到學校上課。\n這系列影像希望呈現出空無一人的校園，\n如何在疫情之下守護所有同學的安全，展現韌性與堅毅。',
                               style: TextStyle(
-                                  fontSize: 14, fontFamily: "NotoSans"),
+                                  fontSize: defaultTargetPlatform ==
+                                              TargetPlatform.android ||
+                                          defaultTargetPlatform ==
+                                              TargetPlatform.iOS
+                                      ? 12
+                                      : 14,
+                                  fontFamily: "NotoSans"),
                               textAlign: TextAlign.end,
                             ),
                           ),
@@ -146,20 +165,19 @@ class _AlbumGridState extends State<AlbumGrid> {
                                         : 2) *
                                     0.75,
                                 decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                      image: ntuclose.photosList()[index].image,
-                                      fit: BoxFit.contain,
-                                    ),
-                                    gradient: RadialGradient(colors: [
-                                      _greenradius[index],
-                                      imagepanelcolor,
-                                    ], stops: [
-                                      0.8,
-                                      1.0
-                                    ]),
-                                    borderRadius: BorderRadius.circular(10),
-                                    border: Border.all(
-                                        color: imagepanelcolor, width: 0.0))),
+                                  image: DecorationImage(
+                                    image: ntuclose.photosList()[index].image,
+                                    fit: BoxFit.contain,
+                                  ),
+                                  gradient: RadialGradient(colors: [
+                                    _greenradius[index],
+                                    imagepanelcolor,
+                                  ], stops: [
+                                    0.8,
+                                    1.0
+                                  ]),
+                                  borderRadius: BorderRadius.circular(10),
+                                )),
                           ),
                         )),
                     Container(
