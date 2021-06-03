@@ -33,8 +33,12 @@ Album ntuclose = Album([
   'albums/ntuclose/_DSF1830.jpg',
   'albums/ntuclose/_DSF1834.jpg',
   'albums/ntuclose/_DSF1843.jpg',
-  'albums/ntuclose/PXL_20210526_082927718.jpg',
-  'albums/ntuclose/PXL_20210526_083343341.MP.jpg'
+  'albums/ntuclose/PXL_20210526_083343341.MP.jpg',
+  'albums/ntuclose/_DSF1854.jpg',
+  'albums/ntuclose/_DSF1866.jpg',
+  'albums/ntuclose/_DSF1875.jpg',
+  'albums/ntuclose/_DSF1880.jpg',
+  'albums/ntuclose/_DSF1883.jpg'
 ], [
   'albums/ntuclose/full/_DSF1221.jpg',
   'albums/ntuclose/full/_DSF1229.jpg',
@@ -67,8 +71,12 @@ Album ntuclose = Album([
   'albums/ntuclose/full/_DSF1830.jpg',
   'albums/ntuclose/full/_DSF1834.jpg',
   'albums/ntuclose/full/_DSF1843.jpg',
-  'albums/ntuclose/PXL_20210526_082927718.jpg',
-  'albums/ntuclose/PXL_20210526_083343341.MP.jpg'
+  'albums/ntuclose/PXL_20210526_083343341.MP.jpg',
+  'albums/ntuclose/full/_DSF1854.jpg',
+  'albums/ntuclose/full/_DSF1866.jpg',
+  'albums/ntuclose/full/_DSF1875.jpg',
+  'albums/ntuclose/full/_DSF1880.jpg',
+  'albums/ntuclose/full/_DSF1883.jpg'
 ], [
   ['舟山路口', '1/250, f/5.6, FUJIFILM X-T2'],
   ['舟山路口', '1/500, f/5.6, FUJIFILM X-T2'],
@@ -101,7 +109,11 @@ Album ntuclose = Album([
   ['水源市場', '1/50, f/4.5, FUJIFILM X-T2'],
   ['水源市場', '1/25, f/4.5, FUJIFILM X-T2'],
   ['水源市場', '1/30, f/4.5, FUJIFILM X-T2'],
-  ['水源市場', '1/125, f/1.8, Google Pixel 3'],
-  ['公館，全家便利商店', '1/125, f/1.8, Google Pixel 3']
+  ['公館，全家便利商店', '1/125, f/1.8, Google Pixel 3'],
+  ['小小福用餐區', '1/125, f/5.6, FUJIFILM X-T2'],
+  ['水源市場', '1/125, f/8, FUJIFILM X-T2'],
+  ['公館，鴉片粉圓', '1/125, f/8, FUJIFILM X-T2'],
+  ['捷運公館站，一號出口', '1/125, f/8, FUJIFILM X-T2'],
+  ['社會科學院', '1/125, f/8, FUJIFILM X-T2'],
 ], '#上學計畫', 'The GoToSchool Project', "臺大封校影像紀錄",
     '2021年5月，新冠肺炎在臺灣重新肆虐，\n臺大宣布該學期全面遠距教學，\n所有同學不必再到學校上課。\n這系列影像希望呈現出空無一人的校園，\n如何在疫情之下守護所有同學的安全，展現韌性與堅毅。');

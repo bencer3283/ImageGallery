@@ -5,7 +5,7 @@ import 'package:after_layout/after_layout.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
 import 'BottomInfo.dart';
-import 'album.dart';
+import 'albums/album.dart';
 
 class Viewer extends StatefulWidget {
   Viewer({Key? key, required this.initialIndex, required this.album})

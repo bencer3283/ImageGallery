@@ -1,0 +1,51 @@
+import 'package:flutter/material.dart';
+import 'album.dart';
+var photoPath_turkey = [ 
+"albums/turkey/DSCF4487.JPG",
+"albums/turkey/DSCF4510.JPG",
+"albums/turkey/DSCF4633.RAF",
+"albums/turkey/DSCF4640.RAF",
+"albums/turkey/DSCF4765.JPG",
+"albums/turkey/DSCF4810.JPG",
+"albums/turkey/DSCF4861.JPG",
+"albums/turkey/DSCF4996.JPG",
+"albums/turkey/DSCF5122.JPG",
+"albums/turkey/DSCF5200.JPG",
+"albums/turkey/DSCF5219.JPG",
+"albums/turkey/DSCF5222.JPG",
+"albums/turkey/DSCF5332.JPG",
+"albums/turkey/image08.jpg",
+];
+var photoFullPath_turkey = [ 
+"albums/turkey/full/DSCF4487.JPG",
+"albums/turkey/full/DSCF4510.JPG",
+"albums/turkey/full/DSCF4633.RAF",
+"albums/turkey/full/DSCF4640.RAF",
+"albums/turkey/full/DSCF4765.JPG",
+"albums/turkey/full/DSCF4810.JPG",
+"albums/turkey/full/DSCF4861.JPG",
+"albums/turkey/full/DSCF4996.JPG",
+"albums/turkey/full/DSCF5122.JPG",
+"albums/turkey/full/DSCF5200.JPG",
+"albums/turkey/full/DSCF5219.JPG",
+"albums/turkey/full/DSCF5222.JPG",
+"albums/turkey/full/DSCF5332.JPG",
+"albums/turkey/full/image08.jpg",
+];
+var info_turkey = [ 
+[ ' ', ' ' ],
+[ ' ', ' ' ],
+[ ' ', ' ' ],
+[ ' ', ' ' ],
+[ ' ', ' ' ],
+[ ' ', ' ' ],
+[ ' ', ' ' ],
+[ ' ', ' ' ],
+[ ' ', ' ' ],
+[ ' ', ' ' ],
+[ ' ', ' ' ],
+[ ' ', ' ' ],
+[ ' ', ' ' ],
+[ ' ', ' ' ],
+];
+Album turkey = Album(photoPath_turkey, photoFullPath_turkey, info_turkey, 'turkey', 'turkey', 'turkey', 'turkey');

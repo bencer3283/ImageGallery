@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gallery/album.dart';
+import 'albums/album.dart';
 import 'package:flutter/foundation.dart';
 
 class BottomInfo extends StatefulWidget {

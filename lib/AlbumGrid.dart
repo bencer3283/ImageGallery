@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import 'album.dart';
+import 'albums/album.dart';
 
 class AlbumGrid extends StatefulWidget {
   AlbumGrid({required this.handleTap, required this.album});

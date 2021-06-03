@@ -4,13 +4,26 @@ import 'package:flutter/services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'load_album_ntuclose.dart';
-import 'load_album_penghu.dart';
+import 'albums/load_album_ntuclose.dart';
+import 'albums/load_album_penghu.dart';
+import 'albums/load_album_airport.dart';
+import 'albums/load_album_ckconstruction.dart';
+import 'albums/load_album_ckpcevent.dart';
+import 'albums/load_album_ckpcsport.dart';
+import 'albums/load_album_ckpcstage.dart';
+import 'albums/load_album_ckshow.dart';
+import 'albums/load_album_huweitrain.dart';
+import 'albums/load_album_portugal.dart';
+import 'albums/load_album_russia.dart';
+import 'albums/load_album_taitungLibrary.dart';
+import 'albums/load_album_thai.dart';
+import 'albums/load_album_turkey.dart';
+import 'albums/load_album_uk.dart';
 
 import 'Viewer.dart';
 import 'AlbumGrid.dart';
 
-import 'album.dart';
+import 'albums/album.dart';
 
 void main() {
   SystemChrome.setEnabledSystemUIOverlays([]);
@@ -74,12 +87,31 @@ class GalleryRouterDelegate extends RouterDelegate<RoutePath>
     notifyListeners();
   }
 
-  final List<Album> albums = [ntuclose, penghu];
+  final List<Album> albums = [
+    //featured
+    ntuclose,
+    penghu,
+    airport,
+    huweitrain,
+    taitungLibrary,
+    //ckpc
+    ckshow,
+    ckconstruction,
+    ckpcsport,
+    ckpcstage,
+    ckpcevent,
+    //traval
+    uk,
+    portugal,
+    turkey,
+    russia,
+    thai
+  ];
 
   final _entryControl = PageController();
   final _albumControl = PageController();
-
-  double _upOpa = 0;
+  final _album2Control = PageController();
+  final _album3Control = PageController();
 
   @override
   Widget build(BuildContext context) {
@@ -135,7 +167,7 @@ class GalleryRouterDelegate extends RouterDelegate<RoutePath>
                           child: Container(
                             margin: EdgeInsets.all(8),
                             width: MediaQuery.of(context).size.width * 0.6,
-                            height: MediaQuery.of(context).size.height,
+                            height: MediaQuery.of(context).size.height * 0.8,
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
                                 border: Border.all(
@@ -159,7 +191,7 @@ class GalleryRouterDelegate extends RouterDelegate<RoutePath>
                                                     TargetPlatform.android ||
                                                 defaultTargetPlatform ==
                                                     TargetPlatform.iOS
-                                            ? 30
+                                            ? 36
                                             : 70,
                                         fontFamily: 'HKGrotesk',
                                         color: Colors.grey.shade400,
@@ -219,7 +251,7 @@ class GalleryRouterDelegate extends RouterDelegate<RoutePath>
                                                       TargetPlatform.android ||
                                                   defaultTargetPlatform ==
                                                       TargetPlatform.iOS
-                                              ? 30
+                                              ? 36
                                               : 70,
                                           fontFamily: 'HKGrotesk',
                                           color: Colors.grey.shade400,

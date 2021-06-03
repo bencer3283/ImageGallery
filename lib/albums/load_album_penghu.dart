@@ -106,4 +106,4 @@ Album penghu = Album([
   ['澎湖魚市場，馬公', '29 FEB 2021, FUJIFILM X-T2'],
   ['澎湖魚市場，馬公', '29 FEB 2021, FUJIFILM X-T2'],
   ['第三漁港，馬公', '29 FEB 2021, FUJIFILM X-T2'],
-], '澎湖: 風海沙塵', 'PengHu: Wind, Sand and Sea.', '2021澎湖印象', ' ');
+], '澎湖: 以海為家', 'Peng-Hu: all around the Sea', '2021澎湖印象', ' ');
