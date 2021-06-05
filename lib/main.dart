@@ -112,8 +112,6 @@ class GalleryRouterDelegate extends RouterDelegate<RoutePath>
 
   final _entryControl = PageController();
   final _albumControl = ScrollController();
-  final _album2Control = ScrollController();
-  final _album3Control = ScrollController();
 
   final textStyle_albumTitle = TextStyle(
     fontSize: defaultTargetPlatform == TargetPlatform.android ||
@@ -216,11 +214,25 @@ class GalleryRouterDelegate extends RouterDelegate<RoutePath>
                       ],
                     ),
                     LastPage(entryControl: _entryControl),
-                    LastAlbum(
-                      albumControl: _albumControl,
+                    Opacity(
+                      opacity:
+                          defaultTargetPlatform == TargetPlatform.android ||
+                                  defaultTargetPlatform == TargetPlatform.iOS
+                              ? 0
+                              : 1.0,
+                      child: LastAlbum(
+                        albumControl: _albumControl,
+                      ),
                     ),
-                    NextAlbum(
-                      albumControl: _albumControl,
+                    Opacity(
+                      opacity:
+                          defaultTargetPlatform == TargetPlatform.android ||
+                                  defaultTargetPlatform == TargetPlatform.iOS
+                              ? 0
+                              : 1.0,
+                      child: NextAlbum(
+                        albumControl: _albumControl,
+                      ),
                     ),
                     NextPage(entryControl: _entryControl),
                   ]),
@@ -264,11 +276,25 @@ class GalleryRouterDelegate extends RouterDelegate<RoutePath>
                       ],
                     ),
                     LastPage(entryControl: _entryControl),
-                    LastAlbum(
-                      albumControl: _albumControl,
+                    Opacity(
+                      opacity:
+                          defaultTargetPlatform == TargetPlatform.android ||
+                                  defaultTargetPlatform == TargetPlatform.iOS
+                              ? 0
+                              : 1.0,
+                      child: LastAlbum(
+                        albumControl: _albumControl,
+                      ),
                     ),
-                    NextAlbum(
-                      albumControl: _albumControl,
+                    Opacity(
+                      opacity:
+                          defaultTargetPlatform == TargetPlatform.android ||
+                                  defaultTargetPlatform == TargetPlatform.iOS
+                              ? 0
+                              : 1.0,
+                      child: NextAlbum(
+                        albumControl: _albumControl,
+                      ),
                     ),
                     NextPage(entryControl: _entryControl),
                   ]),
@@ -312,11 +338,25 @@ class GalleryRouterDelegate extends RouterDelegate<RoutePath>
                       ],
                     ),
                     LastPage(entryControl: _entryControl),
-                    LastAlbum(
-                      albumControl: _albumControl,
+                    Opacity(
+                      opacity:
+                          defaultTargetPlatform == TargetPlatform.android ||
+                                  defaultTargetPlatform == TargetPlatform.iOS
+                              ? 0
+                              : 1.0,
+                      child: LastAlbum(
+                        albumControl: _albumControl,
+                      ),
                     ),
-                    NextAlbum(
-                      albumControl: _albumControl,
+                    Opacity(
+                      opacity:
+                          defaultTargetPlatform == TargetPlatform.android ||
+                                  defaultTargetPlatform == TargetPlatform.iOS
+                              ? 0
+                              : 1.0,
+                      child: NextAlbum(
+                        albumControl: _albumControl,
+                      ),
                     ),
                   ]),
                 ]),
@@ -364,7 +404,6 @@ class GalleryRouterDelegate extends RouterDelegate<RoutePath>
       _selectedPhoto = 0;
       notifyListeners();
     }
-    ;
   }
 }
 

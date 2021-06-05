@@ -229,7 +229,7 @@ class _AlbumGridState extends State<AlbumGrid> {
                           Icons.arrow_back_rounded,
                           size: 30,
                         ),
-                        padding: EdgeInsets.only(left: 20),
+                        padding: EdgeInsets.only(left: 10),
                       )),
                   Spacer(),
                   Align(

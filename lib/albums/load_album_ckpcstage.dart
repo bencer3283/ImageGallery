@@ -11,7 +11,7 @@ var photoPath_ckpcstage = [
   "albums/ckpcstage/R00057.jpg",
   "albums/ckpcstage/R00119.jpg",
   "albums/ckpcstage/R00198.jpg",
-  "albums/ckpcstage/R00200 1.jpg",
+  "albums/ckpcstage/R00200_1.jpg",
   "albums/ckpcstage/R00218.jpg",
 ];
 var photoFullPath_ckpcstage = [
@@ -24,7 +24,7 @@ var photoFullPath_ckpcstage = [
   "albums/ckpcstage/full/R00057.jpg",
   "albums/ckpcstage/full/R00119.jpg",
   "albums/ckpcstage/full/R00198.jpg",
-  "albums/ckpcstage/full/R00200 1.jpg",
+  "albums/ckpcstage/full/R00200_1.jpg",
   "albums/ckpcstage/full/R00218.jpg",
 ];
 var info_ckpcstage = [
