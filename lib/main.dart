@@ -104,6 +104,7 @@ class GalleryRouterDelegate extends RouterDelegate<RoutePath>
   }
 
   final List<Album> albums = [
+    //also declare a string in GalleryRouteInformationParser
     //featured
     ntuclose,
     penghu,
