@@ -60,7 +60,7 @@ class _AlbumGridState extends State<AlbumGrid> {
       child: Stack(children: [
         CustomScrollView(slivers: [
           SliverPadding(
-            padding: EdgeInsets.only(top: 60, left: 16, right: 16, bottom: 8),
+            padding: EdgeInsets.only(top: 70, left: 16, right: 16, bottom: 8),
             sliver: SliverToBoxAdapter(
               child: PhysicalModel(
                 borderRadius: BorderRadius.circular(20),
@@ -229,7 +229,7 @@ class _AlbumGridState extends State<AlbumGrid> {
                           Icons.arrow_back_rounded,
                           size: 30,
                         ),
-                        padding: EdgeInsets.only(left: 10),
+                        padding: EdgeInsets.only(left: 20),
                       )),
                   Spacer(),
                   Align(

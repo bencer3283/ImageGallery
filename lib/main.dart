@@ -53,13 +53,10 @@ class _MyAppState extends State<MyApp> {
 }
 
 class RoutePath {
-  final String name;
+  final int? albumIndex;
+  final bool isViewer;
 
-  RoutePath.ntuclose() : name = 'ntuclose';
-  RoutePath.ntucloseViewer() : name = 'ntucloseViewer';
-
-  bool get isntuclose => name == 'ntuclose';
-  bool get isntucloseViewer => name == 'ntucloseViewer';
+  RoutePath({this.albumIndex, required this.isViewer});
 }
 
 class GalleryRouterDelegate extends RouterDelegate<RoutePath>
@@ -73,9 +70,26 @@ class GalleryRouterDelegate extends RouterDelegate<RoutePath>
 
   RoutePath get currentConfiguration {
     if (_selectedPhoto == null) {
-      return RoutePath.ntuclose();
+      return RoutePath(albumIndex: _selectedAlbum, isViewer: false);
     } else {
-      return RoutePath.ntucloseViewer();
+      return RoutePath(albumIndex: _selectedAlbum, isViewer: true);
+    }
+  }
+
+  @override
+  Future<void> setNewRoutePath(RoutePath configuration) async {
+    if (configuration.albumIndex == null) {
+      _selectedPhoto = null;
+      _selectedAlbum = null;
+      notifyListeners();
+    } else if (!configuration.isViewer) {
+      _selectedAlbum = configuration.albumIndex;
+      _selectedPhoto = null;
+      notifyListeners();
+    } else {
+      _selectedAlbum = configuration.albumIndex;
+      _selectedPhoto = 0;
+      notifyListeners();
     }
   }
 
@@ -394,16 +408,58 @@ class GalleryRouterDelegate extends RouterDelegate<RoutePath>
       backgroundColor: Colors.black,
     );
   }
+}
+
+class GalleryRouteInformationParser extends RouteInformationParser<RoutePath> {
+  final List<String> albums = [
+    //featured
+    'ntuclose',
+    'penghu',
+    'airport',
+    'huweitrain',
+    'taitungLibrary',
+    //ckpc
+    'ckshow',
+    'ckconstruction',
+    'ckpcsport',
+    'ckpcstage',
+    'ckpcevent',
+    //traval
+    'uk',
+    'portugal',
+    'turkey',
+    'russia',
+    'thai'
+  ];
+  @override
+  Future<RoutePath> parseRouteInformation(
+      RouteInformation routeInformation) async {
+    final uri = Uri.parse(routeInformation.location!).pathSegments;
+    // Handle '/'
+
+    // if (uri.pathSegments.length == 0) {
+    //   return BookRoutePath.home();
+    // }
+
+    // Handle '/ntuclose/'
+    if (uri.length == 0) {
+      return RoutePath(isViewer: false);
+    } else if (uri.last == 'viewer') {
+      return RoutePath(
+          isViewer: true, albumIndex: albums.indexOf(uri[uri.length - 2]));
+    } else {
+      return RoutePath(isViewer: false, albumIndex: albums.indexOf(uri.last));
+    }
+  }
 
   @override
-  Future<void> setNewRoutePath(RoutePath configuration) async {
-    if (configuration.isntuclose) {
-      _selectedPhoto = null;
-      notifyListeners();
-    } else if (configuration.isntucloseViewer) {
-      _selectedPhoto = 0;
-      notifyListeners();
-    }
+  RouteInformation restoreRouteInformation(RoutePath path) {
+    if (path.isViewer) {
+      return RouteInformation(location: '/${albums[path.albumIndex!]}/viewer');
+    } else if (path.albumIndex != null) {
+      return RouteInformation(location: '/${albums[path.albumIndex!]}');
+    } else
+      return RouteInformation(location: '/');
   }
 }
 
@@ -518,41 +574,5 @@ class NextPage extends StatelessWidget {
               duration: Duration(milliseconds: 450), curve: Curves.easeInOut),
           padding: EdgeInsets.only(bottom: 40),
         ));
-  }
-}
-
-class GalleryRouteInformationParser extends RouteInformationParser<RoutePath> {
-  @override
-  Future<RoutePath> parseRouteInformation(
-      RouteInformation routeInformation) async {
-    final uri = Uri.parse(routeInformation.location!);
-    // Handle '/'
-
-    // if (uri.pathSegments.length == 0) {
-    //   return BookRoutePath.home();
-    // }
-
-    // Handle '/ntuclose/'
-    if (uri.pathSegments.toString() == '/ntuclose/') {
-      return RoutePath.ntuclose();
-    }
-
-    if (uri.pathSegments.toString() == '/ntuclose/viewer/') {
-      return RoutePath.ntucloseViewer();
-    }
-
-    // Handle unknown routes
-    return RoutePath.ntuclose();
-  }
-
-  @override
-  RouteInformation restoreRouteInformation(RoutePath path) {
-    if (path.isntuclose) {
-      return RouteInformation(location: '/ntuclose/');
-    }
-    if (path.isntucloseViewer) {
-      return RouteInformation(location: '/ntuclose/viewer/');
-    }
-    return RouteInformation(location: '/');
   }
 }
