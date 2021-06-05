@@ -117,3 +117,50 @@ Album ntuclose = Album([
   ['社會科學院', '1/125, f/8, FUJIFILM X-T2'],
 ], '#上學計畫', 'The GoToSchool Project', "臺大封校影像紀錄",
     '2021年5月，新冠肺炎在臺灣重新肆虐，\n臺大宣布該學期全面遠距教學，\n所有同學不必再到學校上課。\n這系列影像希望呈現出空無一人的校園，\n如何在疫情之下守護所有同學的安全，展現韌性與堅毅。');
+
+class NtuClose extends StatelessWidget {
+  const NtuClose({
+    Key? key,
+    required this.textStyle_albumTitle,
+    required this.textStyle_albumSubtitle,
+  }) : super(key: key);
+
+  final TextStyle textStyle_albumTitle;
+  final TextStyle textStyle_albumSubtitle;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.all(8),
+      width: MediaQuery.of(context).size.width * 0.6,
+      height: MediaQuery.of(context).size.height * 0.8,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: Colors.blueGrey.shade500, width: 10),
+          image: DecorationImage(
+            image: ntuclose.photosList()[14].image,
+            fit: BoxFit.contain,
+            alignment: Alignment.bottomRight,
+          )),
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Align(
+            alignment: Alignment.topLeft,
+            child: Padding(
+              padding: EdgeInsets.all(20),
+              child: Text('NTU\nUnder Covid', style: textStyle_albumTitle),
+            ),
+          ),
+          Align(
+            alignment: Alignment.topLeft,
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Text('#上學計畫: 臺大封校的疫情紀實', style: textStyle_albumSubtitle),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

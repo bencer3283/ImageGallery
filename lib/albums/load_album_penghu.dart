@@ -107,3 +107,67 @@ Album penghu = Album([
   ['澎湖魚市場，馬公', '29 FEB 2021, FUJIFILM X-T2'],
   ['第三漁港，馬公', '29 FEB 2021, FUJIFILM X-T2'],
 ], '澎湖: 以海為家', 'Peng-Hu: all around the Sea', '2021澎湖印象', ' ');
+
+class PengHu extends StatelessWidget {
+  const PengHu({
+    Key? key,
+    required this.textStyle_albumTitle,
+    required this.textStyle_albumSubtitle,
+  }) : super(key: key);
+
+  final TextStyle textStyle_albumTitle;
+  final TextStyle textStyle_albumSubtitle;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.all(8),
+      width: MediaQuery.of(context).size.width * 0.6,
+      height: MediaQuery.of(context).size.height,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: Colors.blueGrey.shade500, width: 10),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Flexible(
+            child: Align(
+                alignment: Alignment.topRight, child: penghu.photosList()[14]),
+            fit: FlexFit.tight,
+            flex: 5,
+          ),
+          Flexible(
+            flex: 3,
+            child: Align(
+              alignment: Alignment.topLeft,
+              child: Padding(
+                padding: EdgeInsets.all(20),
+                child: Text(
+                  'Peng-Hu in Winter',
+                  style: textStyle_albumTitle,
+                ),
+              ),
+            ),
+          ),
+          Flexible(
+            child: Align(
+              alignment: Alignment.topLeft,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Text('冬天的澎湖: 漁獲與風沙', style: textStyle_albumSubtitle),
+              ),
+            ),
+          ),
+          Flexible(
+            child: Align(
+                alignment: Alignment.bottomRight,
+                child: penghu.photosList()[10]),
+            fit: FlexFit.tight,
+            flex: 5,
+          )
+        ],
+      ),
+    );
+  }
+}
