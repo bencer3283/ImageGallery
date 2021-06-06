@@ -128,6 +128,7 @@ class _ViewerState extends State<Viewer>
   late final pagecontrol;
 
   @override
+  @override
   void initState() {
     super.initState();
     doubletapControl = AnimationController(
@@ -141,6 +142,8 @@ class _ViewerState extends State<Viewer>
   @override
   void dispose() {
     doubletapControl.dispose();
+    pagecontrol.dispose();
+    _interactiveviewcontrol.dispose();
 
     super.dispose();
   }

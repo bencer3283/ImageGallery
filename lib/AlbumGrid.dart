@@ -51,7 +51,7 @@ class _AlbumGridState extends State<AlbumGrid> {
   @override
   Widget build(BuildContext context) {
     for (int i = 0; i < widget.album.photosList().length; i++) {
-      _elevation.add(16.0);
+      _elevation.add(24.0);
       _greenradius.add(imagepanelcolor);
     }
 
