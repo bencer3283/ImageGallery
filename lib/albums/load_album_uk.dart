@@ -135,8 +135,7 @@ class UK extends StatelessWidget {
               alignment: Alignment.topLeft,
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20),
-                child:
-                    Text('旅行英國:\n天空島、蘇格蘭、倫敦', style: textStyle_albumSubtitle),
+                child: Text('旅行英國:天空島、蘇格蘭、倫敦', style: textStyle_albumSubtitle),
               ),
             ),
           ),

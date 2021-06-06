@@ -1,4 +1,4 @@
-import 'dart:math';
+import 'dart:js' as js;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -192,6 +192,22 @@ class GalleryRouterDelegate extends RouterDelegate<RoutePath>
                       stretch: false,
                       floating: false,
                       pinned: true,
+                      actions: [
+                        Padding(
+                          padding: const EdgeInsets.only(right: 20, top: 8),
+                          child: Container(
+                            alignment: Alignment.center,
+                            child: TextButton(
+                              onPressed: () => js.context.callMethod(
+                                  'open', ['https://bencer3283.github.io/']),
+                              child: Text('Learn more',
+                                  style: TextStyle(
+                                      fontFamily: "HKGrotesk",
+                                      color: Colors.grey.shade400)),
+                            ),
+                          ),
+                        )
+                      ],
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)),
                       backgroundColor: Colors.blueGrey.shade800,
@@ -202,6 +218,7 @@ class GalleryRouterDelegate extends RouterDelegate<RoutePath>
                           var h = constraints.maxHeight;
                           if (MediaQuery.of(context).size.height >
                               MediaQuery.of(context).size.width) h = h * 0.75;
+
                           return FlexibleSpaceBar(
                             background: Container(
                               color: Colors.black,
@@ -209,7 +226,7 @@ class GalleryRouterDelegate extends RouterDelegate<RoutePath>
                             collapseMode: CollapseMode.pin,
                             centerTitle: false,
                             titlePadding:
-                                EdgeInsets.only(left: 40.0, bottom: 8),
+                                EdgeInsets.only(left: 20.0, bottom: 12),
                             title: Text(
                               'Galley of\nCheng Po Sheng\'s\nPhotography',
                               style: GoogleFonts.playfairDisplay(
@@ -236,7 +253,7 @@ class GalleryRouterDelegate extends RouterDelegate<RoutePath>
                         ),
                       ),
                       Container(
-                        height: MediaQuery.of(context).size.height,
+                        height: MediaQuery.of(context).size.height * 0.9,
                         width: MediaQuery.of(context).size.width,
                         color: Colors.black,
                         child: Stack(children: [
@@ -308,7 +325,7 @@ class GalleryRouterDelegate extends RouterDelegate<RoutePath>
                         ]),
                       ),
                       Container(
-                        height: MediaQuery.of(context).size.height,
+                        height: MediaQuery.of(context).size.height * 0.9,
                         width: MediaQuery.of(context).size.width,
                         color: Colors.black,
                         child: Stack(children: [
@@ -380,7 +397,7 @@ class GalleryRouterDelegate extends RouterDelegate<RoutePath>
                         ]),
                       ),
                       Container(
-                        height: MediaQuery.of(context).size.height,
+                        height: MediaQuery.of(context).size.height * 0.9,
                         width: MediaQuery.of(context).size.width,
                         color: Colors.black,
                         child: Stack(children: [
