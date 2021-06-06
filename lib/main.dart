@@ -494,12 +494,13 @@ class GalleryRouterDelegate extends RouterDelegate<RoutePath>
                 ]),
           ),
           if (_selectedAlbum != null)
-            MaterialPage(
-                child: AlbumGrid(
-                  handleTap: _gridToViewer,
-                  album: albums[_selectedAlbum ?? 0],
-                ),
-                key: ValueKey('album in grid view')),
+            AlbumGridPage(
+              childWidget: AlbumGrid(
+                handleTap: _gridToViewer,
+                album: albums[_selectedAlbum ?? 0],
+              ),
+              //key: ValueKey('album in grid view')
+            ),
           if (_selectedPhoto != null)
             CupertinoPage(
               child: Viewer(
@@ -702,18 +703,18 @@ class NextPage extends StatelessWidget {
   }
 }
 
-// class AlbumGridPage extends Page {
-//   AlbumGridPage({required this.childWidget});
-//   final childWidget;
-//   @override
-//   Route createRoute(BuildContext context) {
-//     return PageRouteBuilder(
-//         pageBuilder: (context, animation1, animation2) {
-//           return FadeScaleTransition(
-//             animation: animation,
-//             child: childWidget,
-//           );
-//         },
-//         settings: this);
-//   }
-// }
+class AlbumGridPage extends Page {
+  AlbumGridPage({required this.childWidget});
+  final childWidget;
+  @override
+  Route createRoute(BuildContext context) {
+    return PageRouteBuilder(
+        pageBuilder: (context, animation1, animation2) {
+          return FadeScaleTransition(
+            animation: animation1,
+            child: childWidget,
+          );
+        },
+        settings: this);
+  }
+}
