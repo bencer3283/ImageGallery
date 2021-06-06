@@ -238,7 +238,7 @@ class GalleryRouterDelegate extends RouterDelegate<RoutePath>
                           var h = constraints.maxHeight;
                           if (MediaQuery.of(context).size.height >
                               MediaQuery.of(context).size.width)
-                            h = h / constraints.maxWidth * 360;
+                            h = h / constraints.maxWidth * 240;
 
                           return FlexibleSpaceBar(
                             background: Container(
