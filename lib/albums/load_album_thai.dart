@@ -53,6 +53,13 @@ class Thai extends StatelessWidget {
             alignment: Alignment.topLeft,
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Text('Thailand', style: textStyle_albumTitle),
+            ),
+          ),
+          Align(
+            alignment: Alignment.topLeft,
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
               child: Text('旅行泰國', style: textStyle_albumSubtitle),
             ),
           ),

@@ -72,37 +72,48 @@ class Turkey extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: Colors.blueGrey.shade500, width: 10),
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          Flexible(
-            child: Align(
-                alignment: Alignment.topRight, child: turkey.photosList()[2]),
-            fit: FlexFit.tight,
-            flex: 5,
+      child: Stack(children: [
+        Column(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Flexible(
+              child: Align(
+                  alignment: Alignment.topRight, child: turkey.photosList()[2]),
+              fit: FlexFit.tight,
+              flex: 5,
+            ),
+            Spacer(
+              flex: 1,
+            ),
+            Flexible(
+              child: Align(
+                  alignment: Alignment.bottomRight,
+                  child: turkey.photosList()[0]),
+              fit: FlexFit.tight,
+              flex: 3,
+            )
+          ],
+        ),
+        Column(children: [
+          Align(
+            alignment: Alignment.topLeft,
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Text('Turkey', style: textStyle_albumTitle),
+            ),
           ),
-          Flexible(
-            flex: 3,
-            child: Align(
-              alignment: Alignment.topLeft,
-              child: Padding(
-                padding: EdgeInsets.all(20),
-                child: Text(
-                  '旅行土耳其',
-                  style: textStyle_albumSubtitle,
-                ),
+          Align(
+            alignment: Alignment.topLeft,
+            child: Padding(
+              padding: EdgeInsets.all(20),
+              child: Text(
+                '旅行土耳其',
+                style: textStyle_albumSubtitle,
               ),
             ),
           ),
-          Flexible(
-            child: Align(
-                alignment: Alignment.bottomRight,
-                child: turkey.photosList()[0]),
-            fit: FlexFit.tight,
-            flex: 3,
-          )
-        ],
-      ),
+        ]),
+      ]),
     );
   }
 }

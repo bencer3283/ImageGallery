@@ -59,6 +59,13 @@ class Russia extends StatelessWidget {
             alignment: Alignment.topLeft,
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Text('Russia', style: textStyle_albumTitle),
+            ),
+          ),
+          Align(
+            alignment: Alignment.topLeft,
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
               child: Text('旅行俄羅斯', style: textStyle_albumSubtitle),
             ),
           ),

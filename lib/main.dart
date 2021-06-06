@@ -149,6 +149,8 @@ class GalleryRouterDelegate extends RouterDelegate<RoutePath>
           offset: Offset(0.1, -0.1),
           blurRadius: 10)
     ],
+    height: 1.15,
+    leadingDistribution: TextLeadingDistribution.proportional,
   );
 
   final textStyle_albumSubtitle = TextStyle(
@@ -164,6 +166,8 @@ class GalleryRouterDelegate extends RouterDelegate<RoutePath>
           offset: Offset(0.1, -0.1),
           blurRadius: 10)
     ],
+    height: 1.15,
+    leadingDistribution: TextLeadingDistribution.proportional,
   );
 
   @override
@@ -203,7 +207,7 @@ class GalleryRouterDelegate extends RouterDelegate<RoutePath>
                               child: Text('Learn more',
                                   style: TextStyle(
                                       fontFamily: "HKGrotesk",
-                                      color: Colors.grey.shade400)),
+                                      color: Colors.grey.shade700)),
                             ),
                           ),
                         )
@@ -217,7 +221,8 @@ class GalleryRouterDelegate extends RouterDelegate<RoutePath>
                         builder: (context, constraints) {
                           var h = constraints.maxHeight;
                           if (MediaQuery.of(context).size.height >
-                              MediaQuery.of(context).size.width) h = h * 0.75;
+                              MediaQuery.of(context).size.width)
+                            h = constraints.maxWidth / 1.75;
 
                           return FlexibleSpaceBar(
                             background: Container(
@@ -231,7 +236,8 @@ class GalleryRouterDelegate extends RouterDelegate<RoutePath>
                               'Galley of\nCheng Po Sheng\'s\nPhotography',
                               style: GoogleFonts.playfairDisplay(
                                   textStyle: TextStyle(
-                                fontSize: h < 100 ? 13.1 : h / 6.5,
+                                fontSize:
+                                    constraints.maxHeight < 80 ? 13.1 : h / 6.5,
                                 fontWeight: FontWeight.w600,
                                 color: Colors.grey.shade400,
                               )),

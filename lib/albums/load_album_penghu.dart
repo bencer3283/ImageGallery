@@ -135,10 +135,10 @@ class PengHu extends StatelessWidget {
             child: Align(
                 alignment: Alignment.topRight, child: penghu.photosList()[14]),
             fit: FlexFit.tight,
-            flex: 5,
+            flex: 6,
           ),
           Flexible(
-            flex: 3,
+            flex: 5,
             child: Align(
               alignment: Alignment.topLeft,
               child: Padding(
@@ -151,6 +151,7 @@ class PengHu extends StatelessWidget {
             ),
           ),
           Flexible(
+            flex: 3,
             child: Align(
               alignment: Alignment.topLeft,
               child: Padding(
@@ -164,7 +165,7 @@ class PengHu extends StatelessWidget {
                 alignment: Alignment.bottomRight,
                 child: penghu.photosList()[10]),
             fit: FlexFit.tight,
-            flex: 5,
+            flex: 6,
           )
         ],
       ),

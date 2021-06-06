@@ -97,7 +97,7 @@ class CkConstrution extends StatelessWidget {
           Align(
             alignment: Alignment.topLeft,
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
+              padding: EdgeInsets.all(20),
               child: Text('建中工程紀實', style: textStyle_albumSubtitle),
             ),
           ),

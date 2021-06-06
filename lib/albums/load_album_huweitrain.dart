@@ -87,38 +87,41 @@ class HuWeiTrain extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: Colors.blueGrey.shade500, width: 10),
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          Flexible(
-            child: Align(
-                alignment: Alignment.topRight,
-                child: huweitrain.photosList()[11]),
-            fit: FlexFit.tight,
-            flex: 5,
-          ),
-          Flexible(
-            flex: 3,
-            child: Align(
-              alignment: Alignment.topLeft,
-              child: Padding(
-                padding: EdgeInsets.all(20),
-                child: Text(
-                  '虎尾糖廠\n五分車',
-                  style: textStyle_albumSubtitle,
-                ),
-              ),
+      child: Stack(children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Flexible(
+              child: Align(
+                  alignment: Alignment.topRight,
+                  child: huweitrain.photosList()[11]),
+              fit: FlexFit.tight,
+              flex: 5,
+            ),
+            Spacer(
+              flex: 1,
+            ),
+            Flexible(
+              child: Align(
+                  alignment: Alignment.bottomRight,
+                  child: huweitrain.photosList().last),
+              fit: FlexFit.tight,
+              flex: 3,
+            )
+          ],
+        ),
+        Align(
+          alignment: Alignment.topLeft,
+          child: Padding(
+            padding: EdgeInsets.all(20),
+            child: Text(
+              '虎尾糖廠\n五分車',
+              style: textStyle_albumSubtitle,
             ),
           ),
-          Flexible(
-            child: Align(
-                alignment: Alignment.bottomRight,
-                child: huweitrain.photosList().last),
-            fit: FlexFit.tight,
-            flex: 3,
-          )
-        ],
-      ),
+        ),
+      ]),
     );
   }
 }

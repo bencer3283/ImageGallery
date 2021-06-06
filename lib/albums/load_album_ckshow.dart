@@ -112,7 +112,7 @@ class CkShow extends StatelessWidget {
             flex: 4,
           ),
           Flexible(
-            flex: 3,
+            flex: 2,
             child: Align(
               alignment: Alignment.topLeft,
               child: Padding(
@@ -129,7 +129,7 @@ class CkShow extends StatelessWidget {
                 alignment: Alignment.bottomRight,
                 child: ckshow.photosList()[4]),
             fit: FlexFit.tight,
-            flex: 5,
+            flex: 6,
           )
         ],
       ),
