@@ -50,6 +50,21 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp.router(
         title: 'Gallery of Cheng Po Sheng\'s photography',
+        theme: ThemeData(
+          pageTransitionsTheme: PageTransitionsTheme(
+            builders: {
+              TargetPlatform.android: SharedAxisPageTransitionsBuilder(
+                  transitionType: SharedAxisTransitionType.scaled,
+                  fillColor: Colors.black),
+              TargetPlatform.iOS: SharedAxisPageTransitionsBuilder(
+                  transitionType: SharedAxisTransitionType.scaled,
+                  fillColor: Colors.black),
+              TargetPlatform.windows: SharedAxisPageTransitionsBuilder(
+                  transitionType: SharedAxisTransitionType.scaled,
+                  fillColor: Colors.black),
+            },
+          ),
+        ),
         routeInformationParser: _routeInformationParser,
         routerDelegate: _routerDelegate);
   }
@@ -686,3 +701,19 @@ class NextPage extends StatelessWidget {
         ));
   }
 }
+
+// class AlbumGridPage extends Page {
+//   AlbumGridPage({required this.childWidget});
+//   final childWidget;
+//   @override
+//   Route createRoute(BuildContext context) {
+//     return PageRouteBuilder(
+//         pageBuilder: (context, animation1, animation2) {
+//           return FadeScaleTransition(
+//             animation: animation,
+//             child: childWidget,
+//           );
+//         },
+//         settings: this);
+//   }
+// }
