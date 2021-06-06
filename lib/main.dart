@@ -139,8 +139,8 @@ class GalleryRouterDelegate extends RouterDelegate<RoutePath>
   final textStyle_albumTitle = TextStyle(
     fontSize: defaultTargetPlatform == TargetPlatform.android ||
             defaultTargetPlatform == TargetPlatform.iOS
-        ? 36
-        : 70,
+        ? 24
+        : 50,
     fontFamily: 'HKGrotesk',
     color: Colors.grey.shade400,
     shadows: [
@@ -543,9 +543,10 @@ class GalleryRouteInformationParser extends RouteInformationParser<RoutePath> {
     } else if (uri.last == 'viewer') {
       return RoutePath(
           isViewer: true, albumIndex: albums.indexOf(uri[uri.length - 2]));
-    } else {
+    } else if (albums.contains(uri.last)) {
       return RoutePath(isViewer: false, albumIndex: albums.indexOf(uri.last));
-    }
+    } else
+      return RoutePath(isViewer: false);
   }
 
   @override
