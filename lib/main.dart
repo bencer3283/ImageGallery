@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:animations/animations.dart';
 
 import 'albums/load_album_ntuclose.dart';
 import 'albums/load_album_penghu.dart';
@@ -222,7 +223,7 @@ class GalleryRouterDelegate extends RouterDelegate<RoutePath>
                           var h = constraints.maxHeight;
                           if (MediaQuery.of(context).size.height >
                               MediaQuery.of(context).size.width)
-                            h = constraints.maxWidth / 1.75;
+                            h = h / constraints.maxWidth * 360;
 
                           return FlexibleSpaceBar(
                             background: Container(
