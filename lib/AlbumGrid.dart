@@ -46,7 +46,7 @@ class _AlbumGridState extends State<AlbumGrid> {
 
   List<Color> _greenradius = [];
 
-  var imagepanelcolor = Colors.blueGrey.shade400;
+  var imagepanelcolor = Colors.black; //Colors.blueGrey.shade400;
 
   @override
   Widget build(BuildContext context) {
@@ -56,16 +56,17 @@ class _AlbumGridState extends State<AlbumGrid> {
     }
 
     return Container(
-      color: Colors.blueGrey.shade300,
+      color: Colors.black, //Colors.blueGrey.shade300,
       child: Stack(children: [
         CustomScrollView(slivers: [
           SliverPadding(
-            padding: EdgeInsets.only(top: 70, left: 16, right: 16, bottom: 8),
+            padding: EdgeInsets.only(top: 70, left: 16, right: 16, bottom: 20),
             sliver: SliverToBoxAdapter(
               child: PhysicalModel(
                 borderRadius: BorderRadius.circular(20),
                 color: Colors.transparent,
-                elevation: 16,
+                shadowColor: Colors.grey.shade300,
+                elevation: 24,
                 child: Container(
                   decoration: BoxDecoration(
                     gradient: defaultTargetPlatform == TargetPlatform.android ||
@@ -122,7 +123,8 @@ class _AlbumGridState extends State<AlbumGrid> {
                     AnimatedPhysicalModel(
                         duration: Duration(milliseconds: 300),
                         shape: BoxShape.rectangle,
-                        shadowColor: Colors.black,
+                        shadowColor: Colors.green
+                            .shade100, //Colors.grey.shade400, //Colors.black,
                         color: Colors.transparent,
                         elevation: _elevation[index],
                         borderRadius: BorderRadius.circular(10),
@@ -145,13 +147,15 @@ class _AlbumGridState extends State<AlbumGrid> {
                           child: Hero(
                             tag: index,
                             child: AnimatedContainer(
-                                duration: Duration(milliseconds: 300),
+                                duration: Duration(milliseconds: 250),
                                 height: MediaQuery.of(context).size.width /
                                     (MediaQuery.of(context).size.width >
                                             MediaQuery.of(context).size.height
                                         ? 3
                                         : 2) *
-                                    0.75,
+                                    0.75 /
+                                    3 *
+                                    2.5,
                                 decoration: BoxDecoration(
                                   image: DecorationImage(
                                     image:
@@ -162,7 +166,7 @@ class _AlbumGridState extends State<AlbumGrid> {
                                     _greenradius[index],
                                     imagepanelcolor,
                                   ], stops: [
-                                    0.8,
+                                    0.65,
                                     1.0
                                   ]),
                                   borderRadius: BorderRadius.circular(10),
@@ -174,8 +178,8 @@ class _AlbumGridState extends State<AlbumGrid> {
                       margin: EdgeInsets.only(top: 1.5, left: 5),
                       decoration: BoxDecoration(
                         border: Border(
-                            bottom:
-                                BorderSide(color: Colors.black, width: 1.5)),
+                            bottom: BorderSide(
+                                color: Colors.grey.shade400, width: 1.5)),
                       ),
                       child: Padding(
                         padding: const EdgeInsets.only(bottom: 2.5),
@@ -189,20 +193,20 @@ class _AlbumGridState extends State<AlbumGrid> {
                                   ? 8
                                   : 12,
                               fontFamily: 'NotoSans',
-                              color: Colors.black),
+                              color: Colors.grey.shade400),
                         ),
                       ),
                     )
                   ]);
                 }, childCount: widget.album.photosList().length),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: MediaQuery.of(context).size.width >
-                          MediaQuery.of(context).size.height
-                      ? 3
-                      : 2,
-                  mainAxisSpacing: 0,
-                  crossAxisSpacing: 5,
-                )),
+                    crossAxisCount: MediaQuery.of(context).size.width >
+                            MediaQuery.of(context).size.height
+                        ? 3
+                        : 2,
+                    mainAxisSpacing: 0,
+                    crossAxisSpacing: 5,
+                    childAspectRatio: 3 / 2.3)),
           ),
         ]),
         Padding(
