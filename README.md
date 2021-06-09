@@ -7,6 +7,7 @@ A Flutter project to develope a responsive and modern image gallery mainly for t
 Under the `lib` directory, the `main.dart` contains the code of the app's main body, basically the flutter navigation routing system. The project currently has only two parts:
 1. The image viewer coded in `viewer.dart`.
 2. The grid view of a full album in `AlbumGrid.dart`.  
+
 Other files in the dicertory are used to define the data stucture of displayed albums.
 
 ## Getting Started
