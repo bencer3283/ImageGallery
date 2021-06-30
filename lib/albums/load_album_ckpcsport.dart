@@ -32,22 +32,28 @@ var photoFullPath_ckpcsport = [
   "albums/ckpcsport/full/RW3A0540.jpg",
 ];
 var info_ckpcsport = [
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
+  ['網球，2017年全中運', 'Nikon D500, Agency: 建中攝影 CKPC'],
+  ['游泳，2020年全中運', 'Nikon D4, Agency: 建中攝影 CKPC'],
+  ['游泳，2020年全中運', 'Nikon D4, Agency: 建中攝影 CKPC'],
+  ['游泳，2020年全中運', 'Nikon D4, Agency: 建中攝影 CKPC'],
+  ['田徑，2020年全中運', 'Nikon D4, Agency: 建中攝影 CKPC'],
+  ['田徑，2020年全中運', 'Nikon D4, Agency: 建中攝影 CKPC'],
+  ['田徑，2020年全中運', 'Nikon D4, Agency: 建中攝影 CKPC'],
+  ['2016中山盃全國橄欖球', 'Nikon D4s, Agency: 建中攝影 CKPC'],
+  ['游泳', 'Nikon D4s'],
+  ['游泳，2017年全中運', 'Nikon D500, Agency: 建中攝影 CKPC'],
+  ['田徑，2017年全中運', 'Nikon D500, Agency: 建中攝影 CKPC'],
+  ['田徑，2017年全中運', 'Nikon D500, Agency: 建中攝影 CKPC'],
+  ['羽球，2017建中歡樂杯', 'Canon 7DII, Agency: 建中攝影 CKPC'],
 ];
-Album ckpcsport = Album(photoPath_ckpcsport, photoFullPath_ckpcsport,
-    info_ckpcsport, 'ckpcsport', 'ckpcsport', 'ckpcsport', 'ckpcsport');
+Album ckpcsport = Album(
+    photoPath_ckpcsport,
+    photoFullPath_ckpcsport,
+    info_ckpcsport,
+    '體育攝影合集',
+    'Collection of Sport Photography',
+    '建中攝影: 體育合集',
+    '在建中攝影的時期，我也有幸跟拍不少建中校隊參加的大型體育賽事。\n本系列選出各種不同體育競賽的影像。');
 
 class CkpcSport extends StatelessWidget {
   const CkpcSport({
@@ -87,7 +93,7 @@ class CkpcSport extends StatelessWidget {
             alignment: Alignment.topLeft,
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
-              child: Text('建中攝影: 體育', style: textStyle_albumSubtitle),
+              child: Text('建中攝影: 體育合集', style: textStyle_albumSubtitle),
             ),
           ),
         ],

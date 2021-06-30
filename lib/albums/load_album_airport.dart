@@ -16,14 +16,20 @@ var photoFullPath_airport = [
   "albums/airport/full/image06.jpg",
 ];
 var info_airport = [
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
+  ['香港國際機場', 'FUJIFILM X-T2'],
+  ['香港國際機場', 'FUJIFILM X-T2'],
+  ['卡達，哈瑪德國際機場', 'FUJIFILM X-T2'],
+  ['卡達，哈瑪德國際機場', 'FUJIFILM X-T2'],
+  ['卡達，哈瑪德國際機場', 'FUJIFILM X-T2'],
 ];
-Album airport = Album(photoPath_airport, photoFullPath_airport, info_airport,
-    'airport', 'airport', 'airport', 'airport');
+Album airport = Album(
+    photoPath_airport,
+    photoFullPath_airport,
+    info_airport,
+    '機場剪影',
+    'Illustration of airport',
+    '機場剪影',
+    '其實機場裡面的旅人也是這樣吧，重重關卡，複雜的路線，\n但總是上的了飛機。\n對我而言，機場是一個無論旁觀俯視，\n或身陷其中，都特別有趣的地方。');
 
 class Airport extends StatelessWidget {
   const Airport({

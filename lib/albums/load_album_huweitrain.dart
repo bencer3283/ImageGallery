@@ -44,28 +44,34 @@ var photoFullPath_huweitrain = [
   "albums/huweitrain/full/DSCF4627.jpg",
 ];
 var info_huweitrain = [
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
+  ['十一番裝車場', 'FUJIFILM X-T2'],
+  ['十一番裝車場', 'FUJIFILM X-T2'],
+  ['十一番裝車場', 'FUJIFILM X-T2'],
+  ['十一番裝車場', 'FUJIFILM X-T2'],
+  ['十一番裝車場', 'FUJIFILM X-T2'],
+  ['十一番裝車場', 'FUJIFILM X-T2'],
+  ['十一番裝車場', 'FUJIFILM X-T2'],
+  ['十一番裝車場', 'FUJIFILM X-T2'],
+  ['十一番裝車場', 'FUJIFILM X-T2'],
+  ['十一番裝車場', 'FUJIFILM X-T2'],
+  ['虎尾糖鐵沿線(往龍岩方向)', 'FUJIFILM X-T2'],
+  ['虎尾糖鐵沿線(往龍岩方向)', 'FUJIFILM X-T2'],
+  ['虎尾糖鐵沿線(往龍岩方向)', 'FUJIFILM X-T2'],
+  ['虎尾糖鐵沿線(往龍岩方向)', 'FUJIFILM X-T2'],
+  ['虎尾糖鐵沿線(往龍岩方向)', 'FUJIFILM X-T2'],
+  ['虎尾糖鐵沿線(往龍岩方向)', 'FUJIFILM X-T2'],
+  ['虎尾糖鐵沿線(往龍岩方向)', 'FUJIFILM X-T2'],
+  ['虎尾糖鐵沿線(往龍岩方向)', 'FUJIFILM X-T2'],
+  ['虎尾糖鐵沿線(往龍岩方向)', 'FUJIFILM X-T2'],
 ];
-Album huweitrain = Album(photoPath_huweitrain, photoFullPath_huweitrain,
-    info_huweitrain, 'huweitrain', 'huweitrain', 'huweitrain', 'huweitrain');
+Album huweitrain = Album(
+    photoPath_huweitrain,
+    photoFullPath_huweitrain,
+    info_huweitrain,
+    '虎尾糖廠五分車與十一番裝車場',
+    'The Line:\nRailway of Hu-Wei Sugar Refinery',
+    '虎尾糖鐵',
+    '小小的車頭，卻可以拉動54節車廂，滿載甘蔗，從蔗田拉進糖廠。\n特別謝謝那天開車的家父。');
 
 class HuWeiTrain extends StatelessWidget {
   const HuWeiTrain({
@@ -116,7 +122,7 @@ class HuWeiTrain extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.all(20),
             child: Text(
-              '虎尾糖廠\n五分車',
+              '虎尾糖廠鐵路',
               style: textStyle_albumSubtitle,
             ),
           ),

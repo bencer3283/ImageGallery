@@ -204,7 +204,7 @@ class _AlbumGridState extends State<AlbumGrid> {
                             MediaQuery.of(context).size.height
                         ? 3
                         : 2,
-                    mainAxisSpacing: 0,
+                    mainAxisSpacing: 5,
                     crossAxisSpacing: 5,
                     childAspectRatio: 3 / 2.3)),
           ),

@@ -14,13 +14,13 @@ var photoFullPath_thai = [
   "albums/thai/full/DSCF4059.JPG",
 ];
 var info_thai = [
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
+  ['清邁', 'FUJIFILM X-T2'],
+  ['清邁', 'FUJIFILM X-T2'],
+  ['清邁', 'FUJIFILM X-T2'],
+  ['清邁', 'FUJIFILM X-T2'],
 ];
-Album thai = Album(photoPath_thai, photoFullPath_thai, info_thai, 'thai',
-    'thai', 'thai', 'thai');
+Album thai = Album(photoPath_thai, photoFullPath_thai, info_thai, '旅行泰國',
+    'Traveling Thailand', '旅行泰國', '2019');
 
 class Thai extends StatelessWidget {
   const Thai({

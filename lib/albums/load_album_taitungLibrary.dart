@@ -38,31 +38,31 @@ var photoFullPath_taitungLibrary = [
   "albums/taitungLibrary/full/DSCF5137.JPG",
 ];
 var info_taitungLibrary = [
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
+  ['圖書館內部', 'FUJIFILM X-T2'],
+  ['圖書館內部', 'FUJIFILM X-T2'],
+  ['圖書館內部', 'FUJIFILM X-T2'],
+  ['圖書館內部', 'FUJIFILM X-T2'],
+  ['圖書館內部', 'FUJIFILM X-T2'],
+  ['圖書館內部', 'FUJIFILM X-T2'],
+  ['建築外觀', 'FUJIFILM X-T2'],
+  ['建築外觀', 'FUJIFILM X-T2'],
+  ['建築外觀', 'FUJIFILM X-T2'],
+  ['建築外觀', 'FUJIFILM X-T2'],
+  ['建築外觀', 'FUJIFILM X-T2'],
+  ['建築外觀', 'FUJIFILM X-T2'],
+  ['天台', 'FUJIFILM X-T2'],
+  ['天台', 'FUJIFILM X-T2'],
+  ['天台', 'FUJIFILM X-T2'],
+  ['建築外觀', 'FUJIFILM X-T2'],
 ];
 Album taitungLibrary = Album(
     photoPath_taitungLibrary,
     photoFullPath_taitungLibrary,
     info_taitungLibrary,
-    'taitungLibrary',
-    'taitungLibrary',
-    'taitungLibrary',
-    'taitungLibrary');
+    '看海的圖書館',
+    'Library of\nNational Taitung University',
+    '國立台東大學圖書館',
+    '建築一直是我很愛拍攝的主題，相較於人像攝影對於表情、動作的複雜詮釋，\n我對於建築攝影中純然對光影與幾何的拿捏更有信心。\n我們在暑假一個人跡稀少的下午到訪這座圖書館，\n台東的曠野上，僅五層樓高的建築就能遠眺海平線。');
 
 class TaitungLibrary extends StatelessWidget {
   const TaitungLibrary({

@@ -18,15 +18,15 @@ var photoFullPath_russia = [
   "albums/russia/full/DSCF3700.JPG",
 ];
 var info_russia = [
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
+  ['莫斯科', 'FUJIFILM X-T2'],
+  ['莫斯科', 'FUJIFILM X-T2'],
+  ['莫斯科', 'FUJIFILM X-T2'],
+  ['瓦爾代', 'FUJIFILM X-T2'],
+  ['瓦爾代', 'FUJIFILM X-T2'],
+  ['聖彼得堡', 'FUJIFILM X-T2'],
 ];
 Album russia = Album(photoPath_russia, photoFullPath_russia, info_russia,
-    'russia', 'russia', 'russia', 'russia');
+    '旅行俄羅斯', 'Traveling Russia', '旅行俄羅斯', '2019');
 
 class Russia extends StatelessWidget {
   const Russia({

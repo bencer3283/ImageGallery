@@ -26,19 +26,19 @@ var photoFullPath_portugal = [
   "albums/portugal/full/image07.jpg",
 ];
 var info_portugal = [
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
+  ['Lisbon', 'FUJIFILM X-T2'],
+  ['Lisbon', 'FUJIFILM X-T2'],
+  ['Lisbon', 'FUJIFILM X-T2'],
+  ['Lisbon', 'FUJIFILM X-T2'],
+  ['Lisbon', 'FUJIFILM X-T2'],
+  ['Lisbon', 'FUJIFILM X-T2'],
+  ['Braga', 'FUJIFILM X-T2'],
+  ['Porto', 'FUJIFILM X-T2'],
+  ['Transfer at Amsterdam', 'FUJIFILM X-T2'],
+  ['Porto', 'FUJIFILM X-T2'],
 ];
 Album portugal = Album(photoPath_portugal, photoFullPath_portugal,
-    info_portugal, 'portugal', 'portugal', 'portugal', 'portugal');
+    info_portugal, '旅行葡萄牙', 'Traveling Portugal', '旅行葡萄牙', '2020');
 
 class Portugal extends StatelessWidget {
   const Portugal({

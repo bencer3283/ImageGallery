@@ -34,23 +34,23 @@ var photoFullPath_turkey = [
   "albums/turkey/full/image08.jpg",
 ];
 var info_turkey = [
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
+  ['Cappatokia', 'FUJIFILM X-T2'],
+  ['Cappatokia', 'FUJIFILM X-T2'],
+  ['Cappatokia', 'FUJIFILM X-T2'],
+  ['Cappatokia', 'FUJIFILM X-T2'],
+  ['Cappatokia', 'FUJIFILM X-T2'],
+  ['Cappatokia', 'FUJIFILM X-T2'],
+  ['Cappatokia', 'FUJIFILM X-T2'],
+  ['Istanbul', 'FUJIFILM X-T2'],
+  ['Istanbul', 'FUJIFILM X-T2'],
+  ['Istanbul', 'FUJIFILM X-T2'],
+  ['Istanbul', 'FUJIFILM X-T2'],
+  ['Istanbul', 'FUJIFILM X-T2'],
+  ['Transfer at Doha', 'FUJIFILM X-T2'],
+  ['Cappatokia', 'FUJIFILM X-T2'],
 ];
 Album turkey = Album(photoPath_turkey, photoFullPath_turkey, info_turkey,
-    'turkey', 'turkey', 'turkey', 'turkey');
+    '旅行土耳其: 景致與人', 'Traveling Turkey: Scenery and Portrait', '旅行土耳其', '2018');
 
 class Turkey extends StatelessWidget {
   const Turkey({

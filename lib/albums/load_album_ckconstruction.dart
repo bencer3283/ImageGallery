@@ -40,32 +40,32 @@ var photoFullPath_ckconstruction = [
   "albums/ckconstruction/full/DSCF9101.jpg",
 ];
 var info_ckconstruction = [
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
+  ['臺北市立建國中學', 'FUJIFILM X-T2, Agency: 建中攝影 CKPC'],
+  ['臺北市立建國中學', 'FUJIFILM X-T2, Agency: 建中攝影 CKPC'],
+  ['臺北市立建國中學', 'FUJIFILM X-T2, Agency: 建中攝影 CKPC'],
+  ['臺北市立建國中學', 'FUJIFILM X-T2, Agency: 建中攝影 CKPC'],
+  ['臺北市立建國中學', 'FUJIFILM X-T2, Agency: 建中攝影 CKPC'],
+  ['臺北市立建國中學', 'FUJIFILM X-T2, Agency: 建中攝影 CKPC'],
+  ['臺北市立建國中學', 'FUJIFILM X-T2, Agency: 建中攝影 CKPC'],
+  ['臺北市立建國中學', 'FUJIFILM X-T2, Agency: 建中攝影 CKPC'],
+  ['臺北市立建國中學', 'FUJIFILM X-T2, Agency: 建中攝影 CKPC'],
+  ['臺北市立建國中學', 'FUJIFILM X-T2, Agency: 建中攝影 CKPC'],
+  ['臺北市立建國中學', 'FUJIFILM X-T2, Agency: 建中攝影 CKPC'],
+  ['臺北市立建國中學', 'FUJIFILM X-T2, Agency: 建中攝影 CKPC'],
+  ['臺北市立建國中學', 'FUJIFILM X-T2, Agency: 建中攝影 CKPC'],
+  ['臺北市立建國中學', 'FUJIFILM X-T2, Agency: 建中攝影 CKPC'],
+  ['臺北市立建國中學', 'FUJIFILM X-T2, Agency: 建中攝影 CKPC'],
+  ['臺北市立建國中學', 'FUJIFILM X-T2, Agency: 建中攝影 CKPC'],
+  ['臺北市立建國中學', 'FUJIFILM X-T2, Agency: 建中攝影 CKPC'],
 ];
 Album ckconstruction = Album(
     photoPath_ckconstruction,
     photoFullPath_ckconstruction,
     info_ckconstruction,
-    'ckconstruction',
-    'ckconstruction',
-    'ckconstruction',
-    'ckconstruction');
+    '2018 建中工程影像紀實',
+    'Documentary: Construction of CK High',
+    '紀實攝影: 建中工程',
+    '本系列影像紀錄建中在2018年時的高二教室大樓整修工程，作為紀實攝影的代表，\n呈現了對工人的作業樣貌呈現，以及工地現場的幾何形貌。');
 
 class CkConstrution extends StatelessWidget {
   const CkConstrution({
@@ -98,7 +98,7 @@ class CkConstrution extends StatelessWidget {
             alignment: Alignment.topLeft,
             child: Padding(
               padding: EdgeInsets.all(20),
-              child: Text('建中工程紀實', style: textStyle_albumSubtitle),
+              child: Text('紀實攝影:\n建中工程紀實', style: textStyle_albumSubtitle),
             ),
           ),
         ],

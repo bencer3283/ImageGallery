@@ -28,20 +28,26 @@ var photoFullPath_ckpcstage = [
   "albums/ckpcstage/full/R00218.jpg",
 ];
 var info_ckpcstage = [
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
-  [' ', ' '],
+  ['周興哲，2017建中舞會', 'FUJIFILM X-T2, Agency: 建中攝影 CKPC'],
+  ['社團表演，2017建中舞會', 'FUJIFILM X-T2, Agency: 建中攝影 CKPC'],
+  ['蕭敬騰，2017建中舞會', 'FUJIFILM X-T2, Agency: 建中攝影 CKPC'],
+  ['蕭敬騰，2017建中舞會', 'FUJIFILM X-T2, Agency: 建中攝影 CKPC'],
+  ['獅子合唱團，2017建中舞會', 'FUJIFILM X-T2, Agency: 建中攝影 CKPC'],
+  ['20校聯合舞展,2017', 'FUJIFILM X-T2, Agency: 建中攝影 CKPC'],
+  ['20校聯合舞展,2017', 'FUJIFILM X-T2, Agency: 建中攝影 CKPC'],
+  ['20校聯合舞展,2017', 'FUJIFILM X-T2, Agency: 建中攝影 CKPC'],
+  ['20校聯合舞展,2017', 'FUJIFILM X-T2, Agency: 建中攝影 CKPC'],
+  ['20校聯合舞展,2017', 'FUJIFILM X-T2, Agency: 建中攝影 CKPC'],
+  ['20校聯合舞展,2017', 'FUJIFILM X-T2, Agency: 建中攝影 CKPC'],
 ];
-Album ckpcstage = Album(photoPath_ckpcstage, photoFullPath_ckpcstage,
-    info_ckpcstage, 'ckpcstage', 'ckpcstage', 'ckpcstage', 'ckpcstage');
+Album ckpcstage = Album(
+    photoPath_ckpcstage,
+    photoFullPath_ckpcstage,
+    info_ckpcstage,
+    '舞台攝影合集',
+    'Collection of Performance Photography',
+    '建中攝影: 舞台合集',
+    ' ');
 
 class CkpcStage extends StatelessWidget {
   const CkpcStage({
@@ -91,7 +97,7 @@ class CkpcStage extends StatelessWidget {
               alignment: Alignment.topLeft,
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20),
-                child: Text('建中攝影: 舞台', style: textStyle_albumSubtitle),
+                child: Text('建中攝影: 舞台合集', style: textStyle_albumSubtitle),
               ),
             ),
           ),
