@@ -252,7 +252,7 @@ class GalleryRouterDelegate extends RouterDelegate<RoutePath>
                             titlePadding:
                                 EdgeInsets.only(left: 20.0, bottom: 12),
                             title: Text(
-                              'Galley of\nCheng Po Sheng\'s\nPhotography',
+                              'Gallery of\nCheng Po Sheng\'s\nPhotography',
                               style: GoogleFonts.playfairDisplay(
                                   textStyle: TextStyle(
                                 fontSize:
