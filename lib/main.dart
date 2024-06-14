@@ -556,7 +556,7 @@ class GalleryRouteInformationParser extends RouteInformationParser<RoutePath> {
   @override
   Future<RoutePath> parseRouteInformation(
       RouteInformation routeInformation) async {
-    final uri = Uri.parse(routeInformation.location!).pathSegments;
+    final uri = Uri.parse(routeInformation.uri.toString()).pathSegments;
     // Handle '/'
 
     // if (uri.pathSegments.length == 0) {
@@ -578,11 +578,12 @@ class GalleryRouteInformationParser extends RouteInformationParser<RoutePath> {
   @override
   RouteInformation restoreRouteInformation(RoutePath path) {
     if (path.isViewer) {
-      return RouteInformation(location: '/${albums[path.albumIndex!]}/viewer');
+      return RouteInformation(
+          uri: Uri.parse('/${albums[path.albumIndex!]}/viewer'));
     } else if (path.albumIndex != null) {
-      return RouteInformation(location: '/${albums[path.albumIndex!]}');
+      return RouteInformation(uri: Uri.parse('/${albums[path.albumIndex!]}'));
     } else
-      return RouteInformation(location: '/');
+      return RouteInformation(uri: Uri.parse('/'));
   }
 }
 

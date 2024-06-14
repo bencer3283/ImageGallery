@@ -214,10 +214,10 @@ class _ViewerState extends State<Viewer>
           }
         }
       },
-      child: RawKeyboardListener(
+      child: KeyboardListener(
         autofocus: true,
         focusNode: keyboardNode,
-        onKey: (value) {
+        onKeyEvent: (value) {
           if (value.logicalKey == LogicalKeyboardKey.arrowRight) {
             nextImage();
           } else if (value.logicalKey == LogicalKeyboardKey.arrowLeft) {
