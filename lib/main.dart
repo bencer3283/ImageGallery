@@ -31,7 +31,7 @@ import 'albums/album.dart';
 var _currentOffset = 0.0;
 
 void main() {
-  SystemChrome.setEnabledSystemUIOverlays([]);
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual);
   runApp(MyApp());
 }
 

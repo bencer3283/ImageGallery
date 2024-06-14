@@ -29,7 +29,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   after_layout: ^1.1.0
-  google_fonts: ^2.1.0
+  google_fonts: ^6.2.1
   animations: ^2.0.0
 
 dev_dependencies:
