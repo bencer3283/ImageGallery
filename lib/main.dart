@@ -31,7 +31,7 @@ import 'albums/album.dart';
 import 'gdrive.dart';
 
 var _currentOffset = 0.0;
-late Future<String> imageID;
+late Future<dynamic> imageID;
 
 void main() {
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual);
