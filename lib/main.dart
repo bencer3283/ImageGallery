@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:animations/animations.dart';
 
@@ -27,8 +28,10 @@ import 'Viewer.dart';
 import 'AlbumGrid.dart';
 
 import 'albums/album.dart';
+import 'gdrive.dart';
 
 var _currentOffset = 0.0;
+late Future<String> imageID;
 
 void main() {
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual);
@@ -47,26 +50,33 @@ class _MyAppState extends State<MyApp> {
       GalleryRouteInformationParser();
 
   @override
+  void initState() {
+    super.initState();
+    imageID = GetSmapleImage();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-        title: 'Gallery of Cheng Po Sheng\'s photography',
-        theme: ThemeData(
-          pageTransitionsTheme: PageTransitionsTheme(
-            builders: {
-              TargetPlatform.android: SharedAxisPageTransitionsBuilder(
-                  transitionType: SharedAxisTransitionType.scaled,
-                  fillColor: Colors.black),
-              TargetPlatform.iOS: SharedAxisPageTransitionsBuilder(
-                  transitionType: SharedAxisTransitionType.scaled,
-                  fillColor: Colors.black),
-              TargetPlatform.windows: SharedAxisPageTransitionsBuilder(
-                  transitionType: SharedAxisTransitionType.scaled,
-                  fillColor: Colors.black),
-            },
-          ),
+      title: 'Gallery of Cheng Po Sheng\'s photography',
+      theme: ThemeData(
+        pageTransitionsTheme: PageTransitionsTheme(
+          builders: {
+            TargetPlatform.android: SharedAxisPageTransitionsBuilder(
+                transitionType: SharedAxisTransitionType.scaled,
+                fillColor: Colors.black),
+            TargetPlatform.iOS: SharedAxisPageTransitionsBuilder(
+                transitionType: SharedAxisTransitionType.scaled,
+                fillColor: Colors.black),
+            TargetPlatform.windows: SharedAxisPageTransitionsBuilder(
+                transitionType: SharedAxisTransitionType.scaled,
+                fillColor: Colors.black),
+          },
         ),
-        routeInformationParser: _routeInformationParser,
-        routerDelegate: _routerDelegate);
+      ),
+      routeInformationParser: _routeInformationParser,
+      routerDelegate: _routerDelegate,
+    );
   }
 }
 
@@ -268,6 +278,19 @@ class GalleryRouterDelegate extends RouterDelegate<RoutePath>
                   ),
                   SliverList(
                     delegate: SliverChildListDelegate([
+                      FutureBuilder(
+                        future: imageID,
+                        builder: ((context, snapshot) {
+                          if (snapshot.hasData) {
+                            return Image.network(
+                                'https://www.googleapis.com/drive/v3/files/${snapshot.data}?alt=media&key=${apiKey}');
+                          } else if (snapshot.hasError) {
+                            return Text('${snapshot.error}');
+                          }
+
+                          return CircularProgressIndicator();
+                        }),
+                      ),
                       Container(
                         height: MediaQuery.of(context).size.height / 2,
                         width: MediaQuery.of(context).size.width,
