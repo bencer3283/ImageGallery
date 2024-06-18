@@ -10,7 +10,7 @@ class Album {
       photosFull.add(Photo(p));
     }
     for (int i = 0; i < des_exp.length; i++) {
-      photos[i].setDescipExpos(des_exp[i][0], des_exp[i][1]);
+      photos[i].setDescripExpos(des_exp[i][0], des_exp[i][1]);
     }
     title = t;
     titleEng = te;
@@ -52,7 +52,7 @@ class Photo {
     this.photo = Image.asset(path);
   }
 
-  void setDescipExpos(String d, String e) {
+  void setDescripExpos(String d, String e) {
     this.des = d;
     this.exp = e;
   }

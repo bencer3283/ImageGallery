@@ -32,9 +32,11 @@ import 'gdrive.dart';
 
 var _currentOffset = 0.0;
 late Future<dynamic> imageID;
+late final List albumList;
 
-void main() {
+void main() async {
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual);
+  albumList = await ListAlbums();
   runApp(MyApp());
 }
 
@@ -52,7 +54,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    imageID = GetSmapleImage();
+    imageID = GetSampleImage();
   }
 
   @override
@@ -556,26 +558,15 @@ class GalleryRouterDelegate extends RouterDelegate<RoutePath>
 }
 
 class GalleryRouteInformationParser extends RouteInformationParser<RoutePath> {
-  final List<String> albums = [
-    //featured
-    'ntuclose',
-    'penghu',
-    'airport',
-    'huweitrain',
-    'taitungLibrary',
-    //ckpc
-    'ckshow',
-    'ckconstruction',
-    'ckpcsport',
-    'ckpcstage',
-    'ckpcevent',
-    //traval
-    'uk',
-    'portugal',
-    'turkey',
-    'russia',
-    'thai'
-  ];
+  late final List<String> albums;
+
+  @override
+  GalleryRouteInformationParser() {
+    this.albums = [
+      for (var i = 0; i < albumList.length; i++) albumList[i]['name']
+    ];
+  }
+
   @override
   Future<RoutePath> parseRouteInformation(
       RouteInformation routeInformation) async {
