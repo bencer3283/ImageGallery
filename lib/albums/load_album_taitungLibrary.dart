@@ -84,7 +84,7 @@ class TaitungLibrary extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
           border: Border.all(color: Colors.blueGrey.shade500, width: 10),
           image: DecorationImage(
-            image: taitungLibrary.photosList()[7].image,
+            image: taitungLibrary.photosList[7].image,
             fit: BoxFit.contain,
             alignment: Alignment.bottomRight,
           )),

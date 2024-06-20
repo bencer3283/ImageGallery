@@ -74,8 +74,7 @@ class CkpcStage extends StatelessWidget {
         children: [
           Flexible(
             child: Align(
-                alignment: Alignment.topRight,
-                child: ckpcstage.photosList()[6]),
+                alignment: Alignment.topRight, child: ckpcstage.photosList[6]),
             fit: FlexFit.tight,
             flex: 5,
           ),
@@ -104,7 +103,7 @@ class CkpcStage extends StatelessWidget {
           Flexible(
             child: Align(
                 alignment: Alignment.bottomRight,
-                child: ckpcstage.photosList()[4]),
+                child: ckpcstage.photosList[4]),
             fit: FlexFit.tight,
             flex: 5,
           )

@@ -118,8 +118,8 @@ class UK extends StatelessWidget {
         mainAxisSize: MainAxisSize.max,
         children: [
           Flexible(
-            child: Align(
-                alignment: Alignment.topRight, child: uk.photosList()[17]),
+            child:
+                Align(alignment: Alignment.topRight, child: uk.photosList[17]),
             fit: FlexFit.tight,
             flex: 5,
           ),
@@ -148,7 +148,7 @@ class UK extends StatelessWidget {
           ),
           Flexible(
             child: Align(
-                alignment: Alignment.bottomRight, child: uk.photosList()[19]),
+                alignment: Alignment.bottomRight, child: uk.photosList[19]),
             fit: FlexFit.tight,
             flex: 5,
           )

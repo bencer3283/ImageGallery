@@ -6,9 +6,9 @@ import 'dart:convert';
 final apiKey = '***REMOVED***';
 final galleryID = "'1n1-oZ9kcTpojhOizqLD-nZ5guaOdDLUq'";
 
-Future<List> ListAlbums() async {
+Future<List<Map<String, String>>> listAlbums() async {
   List<dynamic> contentList;
-  var url = Uri.parse(
+  final url = Uri.parse(
       'https://www.googleapis.com/drive/v3/files?q=${galleryID}%20in%20parents&key=${apiKey}');
   var response = await http.get(url);
   if (response.statusCode == 200) {
@@ -31,27 +31,50 @@ Future<List> ListAlbums() async {
       .whereNotNull()
       .toList(growable: false);
 
-  return await albumList;
+  return await albumList.cast<Map<String, String>>();
 }
 
-Future<List<dynamic>> ListImages(String ID) async {
-  var url = Uri.parse(
-      'https://www.googleapis.com/drive/v3/files?q=${ID}%20in%20parents&key=${apiKey}');
+Future<String> getAlbumInfo(String id) async {
+  final url = Uri.parse(
+      'https://www.googleapis.com/drive/v3/files/${id}?fields=description&key=${apiKey}');
   var response = await http.get(url);
-  final Map<String, dynamic> imagefolder = jsonDecode(await response.body);
-  final List<dynamic> imagelist = await imagefolder['files'];
+  if (response.statusCode == 200) {
+    return jsonDecode(response.body)['description'] ?? 'na';
+  } else {
+    throw Error.throwWithStackTrace(
+        'Failed to fetch album description: ${id}', StackTrace.current);
+  }
+}
 
-  // print('Response status: ${response.statusCode}');
-  // print('Response body: ${response.body}');
-
-  return await imagelist;
+Future<List<Map<String, dynamic>>> listFolderContents(String id) async {
+  final String ID = "'${id}'";
+  final url = Uri.parse(
+      'https://www.googleapis.com/drive/v3/files?q=${ID}%20in%20parents&fields=files(id%2Cname%2Cdescription%2CmimeType%2CimageMediaMetadata(time%2CcameraMake%2CcameraModel%2CexposureTime%2Caperture%2CisoSpeed%2Clens))&key=${apiKey}');
+  var response = await http.get(url);
+  if (response.statusCode == 200) {
+    final Map<String, dynamic> folder = jsonDecode(await response.body);
+    List<Map<String, dynamic>> files = List.generate(
+        folder['files'].length,
+        (index) => {
+              'mimeType': folder['files'][index]['mimeType'],
+              'id': folder['files'][index]['id'],
+              'name': folder['files'][index]['name'],
+              'description': folder['files'][index]['description'] ?? '',
+              'metadata': folder['files'][index]['imageMediaMetadata'] ?? 'na'
+            });
+    return await files;
+  } else {
+    throw Error.throwWithStackTrace(
+        'Unable to fetch contents of folder ${ID}', StackTrace.current);
+  }
 }
 
 Future<String> GetSampleImage() async {
-  final albums = await ListAlbums();
-  final images = await ListImages("'${albums[0]['id']}'");
+  final albums = await listAlbums();
+  print(await getAlbumInfo(albums[0]['id'] as String));
+  final images = await listFolderContents(albums[0]['id'] as String);
   final idx = Random().nextInt(images.length);
-  return images[idx]['id'];
+  return images[idx]['id']!;
 }
 
 void main() async {

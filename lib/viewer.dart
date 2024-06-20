@@ -255,11 +255,10 @@ class _ViewerState extends State<Viewer>
                   itemBuilder: (context, i) {
                     return Center(
                         child: _loadFullRes
-                            ? widget.album.photosFullList()[i]
-                            : Hero(
-                                tag: i, child: widget.album.photosList()[i]));
+                            ? widget.album.photosFullList[i]
+                            : Hero(tag: i, child: widget.album.photosList[i]));
                   },
-                  itemCount: widget.album.photosList().length,
+                  itemCount: widget.album.photosList.length,
                   controller: pagecontrol,
                   onPageChanged: (value) {
                     setState(() {

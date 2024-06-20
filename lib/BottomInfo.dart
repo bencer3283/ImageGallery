@@ -66,7 +66,7 @@ class _BottomInfoState extends State<BottomInfo> {
                                     color: Colors.black),
                               ),
                               Text(
-                                '/${widget.currentAlbum.photosList().length}',
+                                '/${widget.currentAlbum.photosList.length}',
                                 style: TextStyle(
                                     fontSize: 16,
                                     fontFamily: 'HKGrotesk',
@@ -139,7 +139,7 @@ class _BottomInfoState extends State<BottomInfo> {
                         child: Padding(
                           padding: const EdgeInsets.only(top: 16.0),
                           child: Text(
-                            '${widget.currentAlbum.photos[widget.photoIndex].exp}',
+                            '${widget.currentAlbum.photos[widget.photoIndex].par}',
                             style: TextStyle(
                                 fontSize: 16,
                                 fontFamily: 'HKGrotesk',

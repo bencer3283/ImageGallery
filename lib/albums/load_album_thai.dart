@@ -42,7 +42,7 @@ class Thai extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
           border: Border.all(color: Colors.blueGrey.shade500, width: 10),
           image: DecorationImage(
-            image: thai.photosList()[0].image,
+            image: thai.photosList[0].image,
             fit: BoxFit.contain,
             alignment: Alignment.bottomRight,
           )),

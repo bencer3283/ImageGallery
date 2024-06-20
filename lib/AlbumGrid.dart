@@ -50,7 +50,7 @@ class _AlbumGridState extends State<AlbumGrid> {
 
   @override
   Widget build(BuildContext context) {
-    for (int i = 0; i < widget.album.photosList().length; i++) {
+    for (int i = 0; i < widget.album.photosList.length; i++) {
       _elevation.add(24.0);
       _greenradius.add(imagepanelcolor);
     }
@@ -158,8 +158,7 @@ class _AlbumGridState extends State<AlbumGrid> {
                                     2.5,
                                 decoration: BoxDecoration(
                                   image: DecorationImage(
-                                    image:
-                                        widget.album.photosList()[index].image,
+                                    image: widget.album.photosList[index].image,
                                     fit: BoxFit.contain,
                                   ),
                                   gradient: RadialGradient(colors: [
@@ -198,7 +197,7 @@ class _AlbumGridState extends State<AlbumGrid> {
                       ),
                     )
                   ]);
-                }, childCount: widget.album.photosList().length),
+                }, childCount: widget.album.photosList.length),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: MediaQuery.of(context).size.width >
                             MediaQuery.of(context).size.height

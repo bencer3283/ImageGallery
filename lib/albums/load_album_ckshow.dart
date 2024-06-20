@@ -114,7 +114,7 @@ class CkShow extends StatelessWidget {
         children: [
           Flexible(
             child: Align(
-                alignment: Alignment.topRight, child: ckshow.photosList()[0]),
+                alignment: Alignment.topRight, child: ckshow.photosList[0]),
             fit: FlexFit.tight,
             flex: 4,
           ),
@@ -133,8 +133,7 @@ class CkShow extends StatelessWidget {
           ),
           Flexible(
             child: Align(
-                alignment: Alignment.bottomRight,
-                child: ckshow.photosList()[4]),
+                alignment: Alignment.bottomRight, child: ckshow.photosList[4]),
             fit: FlexFit.tight,
             flex: 6,
           )

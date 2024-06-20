@@ -75,7 +75,7 @@ class CkpcSport extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
           border: Border.all(color: Colors.blueGrey.shade500, width: 10),
           image: DecorationImage(
-            image: ckpcsport.photosList()[6].image,
+            image: ckpcsport.photosList[6].image,
             fit: BoxFit.contain,
             alignment: Alignment.bottomRight,
           )),

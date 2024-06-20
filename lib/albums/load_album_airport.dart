@@ -51,7 +51,7 @@ class Airport extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
           border: Border.all(color: Colors.blueGrey.shade500, width: 10),
           image: DecorationImage(
-            image: airport.photosList()[0].image,
+            image: airport.photosList[0].image,
             fit: BoxFit.contain,
             alignment: Alignment.bottomRight,
           )),

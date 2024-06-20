@@ -101,7 +101,7 @@ class HuWeiTrain extends StatelessWidget {
             Flexible(
               child: Align(
                   alignment: Alignment.topRight,
-                  child: huweitrain.photosList()[11]),
+                  child: huweitrain.photosList[11]),
               fit: FlexFit.tight,
               flex: 5,
             ),
@@ -111,7 +111,7 @@ class HuWeiTrain extends StatelessWidget {
             Flexible(
               child: Align(
                   alignment: Alignment.bottomRight,
-                  child: huweitrain.photosList().last),
+                  child: huweitrain.photosList.last),
               fit: FlexFit.tight,
               flex: 3,
             )

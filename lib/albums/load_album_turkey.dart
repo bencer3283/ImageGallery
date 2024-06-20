@@ -78,7 +78,7 @@ class Turkey extends StatelessWidget {
           children: [
             Flexible(
               child: Align(
-                  alignment: Alignment.topRight, child: turkey.photosList()[2]),
+                  alignment: Alignment.topRight, child: turkey.photosList[2]),
               fit: FlexFit.tight,
               flex: 5,
             ),
@@ -88,7 +88,7 @@ class Turkey extends StatelessWidget {
             Flexible(
               child: Align(
                   alignment: Alignment.bottomRight,
-                  child: turkey.photosList()[0]),
+                  child: turkey.photosList[0]),
               fit: FlexFit.tight,
               flex: 3,
             )

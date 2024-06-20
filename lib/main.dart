@@ -32,11 +32,16 @@ import 'gdrive.dart';
 
 var _currentOffset = 0.0;
 late Future<dynamic> imageID;
-late final List albumList;
+late final List<Map<String, String>> albumList;
+List<Album> gallery = [];
 
 void main() async {
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual);
-  albumList = await ListAlbums();
+  albumList = await listAlbums();
+  final albumsStream = constructAlbumStream(albumList);
+  await for (final album in albumsStream) {
+    gallery.add(album);
+  }
   runApp(MyApp());
 }
 
@@ -49,7 +54,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   GalleryRouterDelegate _routerDelegate = GalleryRouterDelegate();
   GalleryRouteInformationParser _routeInformationParser =
-      GalleryRouteInformationParser();
+      GalleryRouteInformationParser(albumList);
 
   @override
   void initState() {
@@ -561,10 +566,8 @@ class GalleryRouteInformationParser extends RouteInformationParser<RoutePath> {
   late final List<String> albums;
 
   @override
-  GalleryRouteInformationParser() {
-    this.albums = [
-      for (var i = 0; i < albumList.length; i++) albumList[i]['name']
-    ];
+  GalleryRouteInformationParser(list) {
+    this.albums = [for (var i = 0; i < list.length; i++) list[i]['name']!];
   }
 
   @override

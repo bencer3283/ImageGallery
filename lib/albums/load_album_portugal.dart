@@ -60,7 +60,7 @@ class Portugal extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
           border: Border.all(color: Colors.blueGrey.shade500, width: 10),
           image: DecorationImage(
-            image: portugal.photosList()[5].image,
+            image: portugal.photosList[5].image,
             fit: BoxFit.contain,
             alignment: Alignment.bottomRight,
           )),

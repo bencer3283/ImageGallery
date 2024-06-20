@@ -133,7 +133,7 @@ class PengHu extends StatelessWidget {
         children: [
           Flexible(
             child: Align(
-                alignment: Alignment.topRight, child: penghu.photosList()[14]),
+                alignment: Alignment.topRight, child: penghu.photosList[14]),
             fit: FlexFit.tight,
             flex: 6,
           ),
@@ -162,8 +162,7 @@ class PengHu extends StatelessWidget {
           ),
           Flexible(
             child: Align(
-                alignment: Alignment.bottomRight,
-                child: penghu.photosList()[10]),
+                alignment: Alignment.bottomRight, child: penghu.photosList[10]),
             fit: FlexFit.tight,
             flex: 6,
           )
