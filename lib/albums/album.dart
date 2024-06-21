@@ -42,7 +42,7 @@ class Album {
       photos.add(Photo(p));
     }
     for (String p in pathFull) {
-      photosFull.add(Photo(p));
+      //photosFull.add(Photo(p));
     }
     for (int i = 0; i < des_exp.length; i++) {
       photos[i].des = des_exp[i][0];
@@ -90,7 +90,6 @@ class Album {
   }
 
   List<Photo> photos = [];
-  List<Photo> photosFull = [];
   List<List<String>> strings = [];
 
   String title = '';
@@ -109,7 +108,7 @@ class Album {
   List<Image> get photosFullList {
     List<Image> image = [];
     for (int i = 0; i < photos.length; i++) {
-      image.add(photosFull[i].photo);
+      image.add(photos[i].fullResPhoto);
     }
     return image;
   }
@@ -117,6 +116,7 @@ class Album {
 
 class Photo {
   late Image photo;
+  late Image fullResPhoto;
   String des = ' ';
   String par = ' ';
 
@@ -125,22 +125,9 @@ class Photo {
   }
 
   Photo.gdrive(String id) {
-    this.photo = Image.network(
-      'https://www.googleapis.com/drive/v3/files/${id}?alt=media&key=${apiKey}',
-      loadingBuilder: (BuildContext context, Widget child,
-          ImageChunkEvent? loadingProgress) {
-        if (loadingProgress == null) {
-          return child;
-        }
-        return Center(
-          child: CircularProgressIndicator(
-            value: loadingProgress.expectedTotalBytes != null
-                ? loadingProgress.cumulativeBytesLoaded /
-                    loadingProgress.expectedTotalBytes!
-                : null,
-          ),
-        );
-      },
-    );
+    this.photo =
+        Image.network('https://drive.google.com/thumbnail?id=${id}&sz=w2000');
+    this.fullResPhoto =
+        Image.network('https://drive.google.com/thumbnail?id=${id}&sz=w8000');
   }
 }

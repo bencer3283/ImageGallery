@@ -218,6 +218,7 @@ class _ViewerState extends State<Viewer>
         autofocus: true,
         focusNode: keyboardNode,
         onKeyEvent: (value) {
+          print(value);
           if (value.logicalKey == LogicalKeyboardKey.arrowRight) {
             nextImage();
           } else if (value.logicalKey == LogicalKeyboardKey.arrowLeft) {
