@@ -21,11 +21,13 @@ class Viewer extends StatefulWidget {
 class _ViewerState extends State<Viewer>
     with AfterLayoutMixin<Viewer>, TickerProviderStateMixin {
   void nextImage() {
+    _loadFullRes = false;
     pagecontrol.nextPage(
         duration: Duration(milliseconds: 300), curve: Curves.easeIn);
   }
 
   void previousImage() {
+    _loadFullRes = false;
     pagecontrol.previousPage(
         duration: Duration(milliseconds: 300), curve: Curves.easeIn);
   }
@@ -218,7 +220,6 @@ class _ViewerState extends State<Viewer>
         autofocus: true,
         focusNode: keyboardNode,
         onKeyEvent: (value) {
-          print(value);
           if (value.logicalKey == LogicalKeyboardKey.arrowRight) {
             nextImage();
           } else if (value.logicalKey == LogicalKeyboardKey.arrowLeft) {
