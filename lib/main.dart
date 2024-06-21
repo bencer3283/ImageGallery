@@ -96,12 +96,15 @@ class RoutePath {
 
 class GalleryRouterDelegate extends RouterDelegate<RoutePath>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<RoutePath> {
-  final GlobalKey<NavigatorState> navigatorKey;
+  late final GlobalKey<NavigatorState> navigatorKey;
 
   int? _selectedAlbum = null;
   int? _selectedPhoto = null;
 
-  GalleryRouterDelegate() : navigatorKey = GlobalKey<NavigatorState>();
+  GalleryRouterDelegate() {
+    this.navigatorKey = GlobalKey<NavigatorState>();
+    this.albums = gallery;
+  }
 
   RoutePath get currentConfiguration {
     if (_selectedPhoto == null) {
@@ -138,27 +141,28 @@ class GalleryRouterDelegate extends RouterDelegate<RoutePath>
     notifyListeners();
   }
 
-  final List<Album> albums = [
-    //also declare a string in GalleryRouteInformationParser
-    //featured
-    ntuclose,
-    penghu,
-    airport,
-    huweitrain,
-    taitungLibrary,
-    //ckpc
-    ckshow,
-    ckconstruction,
-    ckpcsport,
-    ckpcstage,
-    ckpcevent,
-    //traval
-    uk,
-    portugal,
-    turkey,
-    russia,
-    thai
-  ];
+  late final List<Album> albums;
+  //  = [
+  //   //also declare a string in GalleryRouteInformationParser
+  //   //featured
+  //   ntuclose,
+  //   penghu,
+  //   airport,
+  //   huweitrain,
+  //   taitungLibrary,
+  //   //ckpc
+  //   ckshow,
+  //   ckconstruction,
+  //   ckpcsport,
+  //   ckpcstage,
+  //   ckpcevent,
+  //   //traval
+  //   uk,
+  //   portugal,
+  //   turkey,
+  //   russia,
+  //   thai
+  // ];
 
   void _listener() {
     _currentOffset = 0.0;
@@ -285,19 +289,6 @@ class GalleryRouterDelegate extends RouterDelegate<RoutePath>
                   ),
                   SliverList(
                     delegate: SliverChildListDelegate([
-                      FutureBuilder(
-                        future: imageID,
-                        builder: ((context, snapshot) {
-                          if (snapshot.hasData) {
-                            return Image.network(
-                                'https://www.googleapis.com/drive/v3/files/${snapshot.data}?alt=media&key=${apiKey}');
-                          } else if (snapshot.hasError) {
-                            return Text('${snapshot.error}');
-                          }
-
-                          return CircularProgressIndicator();
-                        }),
-                      ),
                       Container(
                         height: MediaQuery.of(context).size.height / 2,
                         width: MediaQuery.of(context).size.width,

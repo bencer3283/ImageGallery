@@ -1,14 +1,11 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import '../gdrive.dart';
 
 Stream<Album> constructAlbumStream(list) async* {
-  print(list);
   for (final album in list) {
-    print(album['id']);
     final folderContent = await listFolderContents(album['id']);
-    print(folderContent);
     final albumInfo = await getAlbumInfo(album['id']);
-    print(albumInfo);
     yield Album.gdrive(folderContent, albumInfo);
   }
   return; //throw UnimplementedError();
@@ -19,7 +16,7 @@ void main() async {
   final albumList = await listAlbums();
   final albumsStream = constructAlbumStream(albumList);
   await for (final album in albumsStream) {
-    print("event: " + album.title);
+    print("event: " + album.title + ' added');
     gallery.add(album);
   }
   final uk = gallery[0];
@@ -68,11 +65,16 @@ class Album {
     for (final file in folderContent) {
       if (file['mimeType'] == 'image/jpeg' || file['mimeType'] == 'image/jpg') {
         if (file['metadata'] != 'na') {
-          var shutter =
-              1 / double.parse(file['metadata']['exposureTime'].toString());
+          final exposureTime = file['metadata']['exposureTime'] ?? '';
+          double shutter;
+          try {
+            shutter = 1 / double.parse(exposureTime.toString());
+          } catch (e) {
+            shutter = 0.1;
+          }
           final shutterStr = "1/${shutter.round()}";
-          final apertureStr = "f/${file['metadata']['aperture']}";
-          final cameraStr = "${file['metadata']['cameraMake']}" +
+          final apertureStr = "f/${file['metadata']['aperture'] ?? ''}";
+          final cameraStr = "${file['metadata']['cameraMake'] ?? ''}" +
               ' ' +
               "${file['metadata']['cameraModel']}";
           this.photos.add(Photo.gdrive(file['id'])
@@ -124,6 +126,21 @@ class Photo {
 
   Photo.gdrive(String id) {
     this.photo = Image.network(
-        'https://www.googleapis.com/drive/v3/files/${id}?alt=media&key=${apiKey}');
+      'https://www.googleapis.com/drive/v3/files/${id}?alt=media&key=${apiKey}',
+      loadingBuilder: (BuildContext context, Widget child,
+          ImageChunkEvent? loadingProgress) {
+        if (loadingProgress == null) {
+          return child;
+        }
+        return Center(
+          child: CircularProgressIndicator(
+            value: loadingProgress.expectedTotalBytes != null
+                ? loadingProgress.cumulativeBytesLoaded /
+                    loadingProgress.expectedTotalBytes!
+                : null,
+          ),
+        );
+      },
+    );
   }
 }

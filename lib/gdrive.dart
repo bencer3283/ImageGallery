@@ -60,7 +60,8 @@ Future<List<Map<String, dynamic>>> listFolderContents(String id) async {
               'id': folder['files'][index]['id'],
               'name': folder['files'][index]['name'],
               'description': folder['files'][index]['description'] ?? '',
-              'metadata': folder['files'][index]['imageMediaMetadata'] ?? 'na'
+              'metadata':
+                  folder['files'][index]['imageMediaMetadata'] ?? {'type': 'na'}
             });
     return await files;
   } else {
@@ -71,12 +72,18 @@ Future<List<Map<String, dynamic>>> listFolderContents(String id) async {
 
 Future<String> GetSampleImage() async {
   final albums = await listAlbums();
-  print(await getAlbumInfo(albums[0]['id'] as String));
   final images = await listFolderContents(albums[0]['id'] as String);
   final idx = Random().nextInt(images.length);
   return images[idx]['id']!;
 }
 
 void main() async {
-  print("Sample image id:" + await GetSampleImage());
+  Map<String, dynamic> file = {
+    'metadata': {'type': 'na'},
+    'id': '000'
+  };
+  print(file['metadata'].toString() + '\n');
+  print(file['id'] as String);
+  print(file['metadata']['aperture']);
+  // print("Sample image id:" + await GetSampleImage());
 }
