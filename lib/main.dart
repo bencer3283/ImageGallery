@@ -31,13 +31,16 @@ import 'albums/album.dart';
 import 'gdrive.dart';
 
 var _currentOffset = 0.0;
-late Future<dynamic> imageID;
 late final List<Map<String, String>> albumList;
 List<Album> gallery = [];
 
 void main() async {
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual);
+  if (defaultTargetPlatform == TargetPlatform.android ||
+      defaultTargetPlatform == TargetPlatform.iOS) {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
+  }
   albumList = await listAlbums();
+  print(albumList);
   final albumsStream = constructAlbumStream(albumList);
   await for (final album in albumsStream) {
     gallery.add(album);
@@ -59,7 +62,6 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    imageID = GetSampleImage();
   }
 
   @override
@@ -287,17 +289,67 @@ class GalleryRouterDelegate extends RouterDelegate<RoutePath>
                       ),
                     ),
                   ),
+                  SliverToBoxAdapter(
+                    child: Container(
+                      height: MediaQuery.of(context).size.height / 2,
+                      width: MediaQuery.of(context).size.width,
+                      color: Colors.black,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: NextPage(entryControl: _entryControl),
+                      ),
+                    ),
+                  ),
+                  SliverPadding(
+                    padding: EdgeInsets.only(right: 16, left: 16),
+                    sliver: SliverGrid.count(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 16,
+                        mainAxisSpacing: 16,
+                        children: List.generate(
+                            albums.length,
+                            (index) => GestureDetector(
+                                  onTapUp: (details) {
+                                    _homeToAlbum(index);
+                                  },
+                                  child: Container(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.9,
+                                    width: MediaQuery.of(context).size.width,
+                                    padding: EdgeInsets.all(20),
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                            color: Colors.blueGrey.shade500,
+                                            width: 8),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(20)),
+                                        image: DecorationImage(
+                                            image: albums[index]
+                                                .photos[0]
+                                                .thumbnail
+                                                .image,
+                                            fit: BoxFit.contain,
+                                            alignment: Alignment.bottomRight)),
+                                    child: Align(
+                                      alignment: Alignment.topLeft,
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            albums[index].title,
+                                            style: textStyle_albumSubtitle,
+                                          ),
+                                          Text(albums[index].titleEng,
+                                              style: textStyle_albumTitle)
+                                        ],
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                      ),
+                                    ),
+                                  ),
+                                ))),
+                  ),
                   SliverList(
                     delegate: SliverChildListDelegate([
-                      Container(
-                        height: MediaQuery.of(context).size.height / 2,
-                        width: MediaQuery.of(context).size.width,
-                        color: Colors.black,
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: NextPage(entryControl: _entryControl),
-                        ),
-                      ),
                       Container(
                         height: MediaQuery.of(context).size.height * 0.9,
                         width: MediaQuery.of(context).size.width,

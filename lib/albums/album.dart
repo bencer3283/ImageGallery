@@ -99,7 +99,7 @@ class Album {
   List<Image> get photosList {
     List<Image> image = [];
     for (int i = 0; i < photos.length; i++) {
-      image.add(photos[i].photo);
+      image.add(photos[i].thumbnail);
     }
     return image;
   }
@@ -114,29 +114,31 @@ class Album {
 }
 
 class Photo {
-  late Image photo;
+  late Image thumbnail;
   late FadeInImage fullResPhoto;
   String des = ' ';
   String par = ' ';
 
   Photo(String path) {
-    this.photo = Image.asset(path);
+    this.thumbnail = Image.asset(path);
   }
 
   Photo.gdrive(String id, String thumbnailLink) {
     final thumbnailLinkSegments = thumbnailLink.split('s220');
-    this.photo = Image.network(
+    this.thumbnail = Image.network(
       thumbnailLinkSegments[0] + 's2160',
       fit: BoxFit.contain,
       alignment: Alignment.center,
     );
     this.fullResPhoto = FadeInImage(
-      placeholder: this.photo.image,
+      placeholder: this.thumbnail.image,
       image: Image.network(
         'https://www.googleapis.com/drive/v3/files/${id}?alt=media&key=${apiKey}',
       ).image,
       fit: BoxFit.contain,
       alignment: Alignment.center,
+      fadeInDuration: Duration(milliseconds: 400),
+      fadeOutDuration: Duration(milliseconds: 200),
     );
   }
 }

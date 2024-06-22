@@ -9,7 +9,7 @@ final galleryID = "'1n1-oZ9kcTpojhOizqLD-nZ5guaOdDLUq'";
 Future<List<Map<String, String>>> listAlbums() async {
   List<dynamic> contentList;
   final url = Uri.parse(
-      'https://www.googleapis.com/drive/v3/files?orderBy=createdTime%20desc&q=${galleryID}%20in%20parents&key=${apiKey}');
+      'https://www.googleapis.com/drive/v3/files?orderBy=modifiedTime%20desc&q=${galleryID}%20in%20parents&key=${apiKey}');
   var response = await http.get(url);
   if (response.statusCode == 200) {
     contentList = jsonDecode(await response.body)['files'];

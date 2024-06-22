@@ -38,7 +38,7 @@ var info_portugal = [
   ['Porto', 'FUJIFILM X-T2'],
 ];
 Album portugal = Album(photoPath_portugal, photoFullPath_portugal,
-    info_portugal, '旅行葡萄牙', 'Traveling Portugal', '旅行葡萄牙', '2020');
+    info_portugal, '旅行葡萄牙', 'Traveling to Portugal', '旅行葡萄牙', '2020');
 
 class Portugal extends StatelessWidget {
   const Portugal({
