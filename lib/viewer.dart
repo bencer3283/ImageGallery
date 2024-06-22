@@ -255,10 +255,9 @@ class _ViewerState extends State<Viewer>
                 ignoring: _ignoreSlide,
                 child: PageView.builder(
                   itemBuilder: (context, i) {
-                    return Center(
-                        child: _loadFullRes
-                            ? widget.album.photosFullList[i]
-                            : Hero(tag: i, child: widget.album.photosList[i]));
+                    return _loadFullRes
+                        ? widget.album.photosFullList[i]
+                        : Hero(tag: i, child: widget.album.photosList[i]);
                   },
                   itemCount: widget.album.photosList.length,
                   controller: pagecontrol,

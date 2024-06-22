@@ -49,7 +49,7 @@ Future<String> getAlbumInfo(String id) async {
 Future<List<Map<String, dynamic>>> listFolderContents(String id) async {
   final String ID = "'${id}'";
   final url = Uri.parse(
-      'https://www.googleapis.com/drive/v3/files?q=${ID}%20in%20parents&fields=files(id%2Cname%2Cdescription%2CmimeType%2CimageMediaMetadata(time%2CcameraMake%2CcameraModel%2CexposureTime%2Caperture%2CisoSpeed%2Clens))&key=${apiKey}');
+      'https://www.googleapis.com/drive/v3/files?q=${ID}%20in%20parents&fields=files(id%2Cname%2Cdescription%2CmimeType%2CimageMediaMetadata(time%2CcameraMake%2CcameraModel%2CexposureTime%2Caperture%2CisoSpeed%2Clens)%2CthumbnailLink)&key=${apiKey}');
   var response = await http.get(url);
   if (response.statusCode == 200) {
     final Map<String, dynamic> folder = jsonDecode(await response.body);
@@ -60,8 +60,9 @@ Future<List<Map<String, dynamic>>> listFolderContents(String id) async {
               'id': folder['files'][index]['id'],
               'name': folder['files'][index]['name'],
               'description': folder['files'][index]['description'] ?? '',
-              'metadata':
-                  folder['files'][index]['imageMediaMetadata'] ?? {'type': 'na'}
+              'metadata': folder['files'][index]['imageMediaMetadata'] ??
+                  {'type': 'na'},
+              'thumbnail': folder['files'][index]['thumbnailLink']
             });
     return await files;
   } else {
@@ -78,12 +79,8 @@ Future<String> GetSampleImage() async {
 }
 
 void main() async {
-  Map<String, dynamic> file = {
-    'metadata': {'type': 'na'},
-    'id': '000'
-  };
-  print(file['metadata'].toString() + '\n');
-  print(file['id'] as String);
-  print(file['metadata']['aperture']);
+  final image = await http.get(Uri.parse(
+      'https://lh3.googleusercontent.com/drive-storage/AJQWtBNPho40rhqhYeosZYrNcIyKz_nNSddDkkx-f8v6A7rzveFeEeSRMWjCZCGXTtCegegPEPFIXWY4LsAhVc6twRxNOZEcTsIg4TCxXg=s2160'));
+  print(image.statusCode);
   // print("Sample image id:" + await GetSampleImage());
 }

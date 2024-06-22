@@ -77,13 +77,12 @@ class Album {
           final cameraStr = "${file['metadata']['cameraMake'] ?? ''}" +
               ' ' +
               "${file['metadata']['cameraModel']}";
-          this.photos.add(Photo.gdrive(file['id'])
+          this.photos.add(Photo.gdrive(file['id'], file['thumbnail'])
             ..des = file['description'] ?? ''
             ..par = shutterStr + ', ' + apertureStr + ', ' + cameraStr);
         } else {
-          this
-              .photos
-              .add(Photo.gdrive(file['id'])..des = file['description'] ?? '');
+          this.photos.add(Photo.gdrive(file['id'], file['thumbnail'])
+            ..des = file['description'] ?? '');
         }
       }
     }
@@ -105,8 +104,8 @@ class Album {
     return image;
   }
 
-  List<Image> get photosFullList {
-    List<Image> image = [];
+  List<FadeInImage> get photosFullList {
+    List<FadeInImage> image = [];
     for (int i = 0; i < photos.length; i++) {
       image.add(photos[i].fullResPhoto);
     }
@@ -116,7 +115,7 @@ class Album {
 
 class Photo {
   late Image photo;
-  late Image fullResPhoto;
+  late FadeInImage fullResPhoto;
   String des = ' ';
   String par = ' ';
 
@@ -124,10 +123,20 @@ class Photo {
     this.photo = Image.asset(path);
   }
 
-  Photo.gdrive(String id) {
-    this.photo =
-        Image.network('https://drive.google.com/thumbnail?id=${id}&sz=w2000');
-    this.fullResPhoto =
-        Image.network('https://drive.google.com/thumbnail?id=${id}&sz=w8000');
+  Photo.gdrive(String id, String thumbnailLink) {
+    final thumbnailLinkSegments = thumbnailLink.split('s220');
+    this.photo = Image.network(
+      thumbnailLinkSegments[0] + 's2160',
+      fit: BoxFit.contain,
+      alignment: Alignment.center,
+    );
+    this.fullResPhoto = FadeInImage(
+      placeholder: this.photo.image,
+      image: Image.network(
+        'https://www.googleapis.com/drive/v3/files/${id}?alt=media&key=${apiKey}',
+      ).image,
+      fit: BoxFit.contain,
+      alignment: Alignment.center,
+    );
   }
 }
