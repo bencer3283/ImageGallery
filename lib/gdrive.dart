@@ -4,7 +4,6 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import './apikey.dart';
 
-//final apiKey = '***REMOVED***';
 final galleryID = "'1n1-oZ9kcTpojhOizqLD-nZ5guaOdDLUq'";
 
 Future<List<Map<String, String>>> listAlbums() async {
