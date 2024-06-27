@@ -127,7 +127,7 @@ class Photo {
   Photo.gdrive(String id, String thumbnailLink) {
     final thumbnailLinkSegments = thumbnailLink.split('s220');
     this.thumbnail = Image.network(
-      thumbnailLinkSegments[0] + 's2160',
+      thumbnailLinkSegments[0] + 's1440',
       fit: BoxFit.contain,
       alignment: Alignment.center,
     );

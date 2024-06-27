@@ -634,11 +634,12 @@ class NextPage extends StatelessWidget {
     return Align(
         alignment: Alignment.bottomCenter,
         child: PhysicalModel(
-          color: Colors.green.shade200,
+          color: Colors.grey.shade700,
           borderRadius: BorderRadius.circular(40),
           child: IconButton(
             alignment: Alignment.bottomCenter,
             iconSize: 50,
+            color: Colors.green.shade200,
             icon: Icon(Icons.arrow_downward_rounded),
             onPressed: () {
               _entryControl.nextPage(
