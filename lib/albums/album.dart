@@ -9,7 +9,7 @@ Stream<Album> constructAlbumStream(list) async* {
     final albumInfo = await getAlbumInfo(album['id']);
     yield Album.gdrive(folderContent, albumInfo);
   }
-  return; //throw UnimplementedError();
+  return;
 }
 
 void main() async {

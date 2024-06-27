@@ -4,25 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:animations/animations.dart';
-
-import 'albums/load_album_ntuclose.dart';
-import 'albums/load_album_penghu.dart';
-import 'albums/load_album_airport.dart';
-import 'albums/load_album_ckconstruction.dart';
-import 'albums/load_album_ckpcevent.dart';
-import 'albums/load_album_ckpcsport.dart';
-import 'albums/load_album_ckpcstage.dart';
-import 'albums/load_album_ckshow.dart';
-import 'albums/load_album_huweitrain.dart';
-import 'albums/load_album_portugal.dart';
-import 'albums/load_album_russia.dart';
-import 'albums/load_album_taitungLibrary.dart';
-import 'albums/load_album_thai.dart';
-import 'albums/load_album_turkey.dart';
-import 'albums/load_album_uk.dart';
 
 import 'Viewer.dart';
 import 'AlbumGrid.dart';
@@ -32,7 +15,6 @@ import 'gdrive.dart';
 
 var _currentOffset = 0.0;
 late final List<Map<String, String>> albumList;
-List<Album> gallery = [];
 
 void main() async {
   if (defaultTargetPlatform == TargetPlatform.android ||
@@ -41,10 +23,7 @@ void main() async {
   }
   albumList = await listAlbums();
   print(albumList);
-  final albumsStream = constructAlbumStream(albumList);
-  await for (final album in albumsStream) {
-    gallery.add(album);
-  }
+
   runApp(MyApp());
 }
 
@@ -55,36 +34,155 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  GalleryRouterDelegate _routerDelegate = GalleryRouterDelegate();
-  GalleryRouteInformationParser _routeInformationParser =
-      GalleryRouteInformationParser(albumList);
+  late Future<bool> isFetched;
+  List<Album> gallery = [];
+
+  Future<bool> fetchGallery() async {
+    final albumsStream = constructAlbumStream(albumList);
+    await for (final album in albumsStream) {
+      setState(() {
+        this.gallery.add(album);
+      });
+    }
+    return true;
+  }
 
   @override
   void initState() {
     super.initState();
+    isFetched = fetchGallery();
+  }
+
+  @override
+  void reassemble() {
+    super.reassemble();
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: 'Gallery of Cheng Po Sheng\'s photography',
-      theme: ThemeData(
-        pageTransitionsTheme: PageTransitionsTheme(
-          builders: {
-            TargetPlatform.android: SharedAxisPageTransitionsBuilder(
-                transitionType: SharedAxisTransitionType.scaled,
-                fillColor: Colors.black),
-            TargetPlatform.iOS: SharedAxisPageTransitionsBuilder(
-                transitionType: SharedAxisTransitionType.scaled,
-                fillColor: Colors.black),
-            TargetPlatform.windows: SharedAxisPageTransitionsBuilder(
-                transitionType: SharedAxisTransitionType.scaled,
-                fillColor: Colors.black),
-          },
-        ),
-      ),
-      routeInformationParser: _routeInformationParser,
-      routerDelegate: _routerDelegate,
+    return FutureBuilder<bool>(
+      future: this.isFetched,
+      builder: (context, snapshot) {
+        if (snapshot.hasData && snapshot.data!) {
+          GalleryRouterDelegate _routerDelegate =
+              GalleryRouterDelegate(this.gallery);
+          GalleryRouteInformationParser _routeInformationParser =
+              GalleryRouteInformationParser(albumList);
+          return MaterialApp.router(
+            title: 'Gallery of Cheng Po Sheng\'s photography',
+            theme: ThemeData(
+              pageTransitionsTheme: PageTransitionsTheme(
+                builders: {
+                  TargetPlatform.android: SharedAxisPageTransitionsBuilder(
+                      transitionType: SharedAxisTransitionType.scaled,
+                      fillColor: Colors.black),
+                  TargetPlatform.iOS: SharedAxisPageTransitionsBuilder(
+                      transitionType: SharedAxisTransitionType.scaled,
+                      fillColor: Colors.black),
+                  TargetPlatform.windows: SharedAxisPageTransitionsBuilder(
+                      transitionType: SharedAxisTransitionType.scaled,
+                      fillColor: Colors.black),
+                },
+              ),
+            ),
+            routeInformationParser: _routeInformationParser,
+            routerDelegate: _routerDelegate,
+          );
+        } else {
+          final colors = [
+            Colors.green.shade200,
+            Colors.yellow.shade300,
+            Colors.red.shade100,
+            Colors.blueGrey.shade500
+          ];
+          return MaterialApp(
+            home: Scaffold(
+              body: Container(
+                decoration: BoxDecoration(color: Colors.black),
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'loading albums',
+                          style: TextStyle(
+                            fontFamily: 'HKGrotesk',
+                            fontSize: defaultTargetPlatform ==
+                                        TargetPlatform.android ||
+                                    defaultTargetPlatform == TargetPlatform.iOS
+                                ? 24
+                                : 30,
+                            color: Colors.grey.shade300,
+                            shadows: [
+                              Shadow(
+                                  color: Colors.grey.shade700,
+                                  offset: Offset(0.1, -0.1),
+                                  blurRadius: 10)
+                            ],
+                            height: 1.15,
+                            leadingDistribution:
+                                TextLeadingDistribution.proportional,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: SizedBox(
+                          width: 100,
+                          height: 100,
+                          child: TweenAnimationBuilder<Color?>(
+                            tween: ColorTween(
+                              begin: colors[gallery.length % 4],
+                              end: colors[gallery.length % 4 == 3
+                                  ? 0
+                                  : gallery.length % 4 + 1],
+                            ),
+                            duration: Duration(milliseconds: 150),
+                            builder: (context, value, child) =>
+                                CircularProgressIndicator(
+                              value: gallery.length / albumList.length,
+                              backgroundColor: Colors.grey.shade500,
+                              strokeWidth: 16,
+                              valueColor: AlwaysStoppedAnimation(value),
+                              strokeCap: StrokeCap.round,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          '${gallery.length} / ${albumList.length}',
+                          style: TextStyle(
+                            fontFamily: 'HKGrotesk',
+                            fontSize: defaultTargetPlatform ==
+                                        TargetPlatform.android ||
+                                    defaultTargetPlatform == TargetPlatform.iOS
+                                ? 24
+                                : 30,
+                            color: Colors.grey.shade300,
+                            shadows: [
+                              Shadow(
+                                  color: Colors.grey.shade700,
+                                  offset: Offset(0.1, -0.1),
+                                  blurRadius: 10)
+                            ],
+                            height: 1.15,
+                            leadingDistribution:
+                                TextLeadingDistribution.proportional,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        }
+      },
     );
   }
 }
@@ -103,9 +201,9 @@ class GalleryRouterDelegate extends RouterDelegate<RoutePath>
   int? _selectedAlbum = null;
   int? _selectedPhoto = null;
 
-  GalleryRouterDelegate() {
+  GalleryRouterDelegate(albums) {
     this.navigatorKey = GlobalKey<NavigatorState>();
-    this.albums = gallery;
+    this.albums = albums;
   }
 
   RoutePath get currentConfiguration {
@@ -179,9 +277,9 @@ class GalleryRouterDelegate extends RouterDelegate<RoutePath>
     fontSize: defaultTargetPlatform == TargetPlatform.android ||
             defaultTargetPlatform == TargetPlatform.iOS
         ? 24
-        : 50,
+        : 40,
     fontFamily: 'HKGrotesk',
-    color: Colors.grey.shade400,
+    color: Colors.grey.shade300,
     shadows: [
       Shadow(
           color: Colors.grey.shade700,
@@ -198,7 +296,7 @@ class GalleryRouterDelegate extends RouterDelegate<RoutePath>
             defaultTargetPlatform == TargetPlatform.iOS
         ? 24
         : 30,
-    color: Colors.grey.shade400,
+    color: Colors.grey.shade300,
     shadows: [
       Shadow(
           color: Colors.grey.shade700,
@@ -303,7 +401,10 @@ class GalleryRouterDelegate extends RouterDelegate<RoutePath>
                   SliverPadding(
                     padding: EdgeInsets.only(right: 16, left: 16),
                     sliver: SliverGrid.count(
-                        crossAxisCount: 2,
+                        crossAxisCount: MediaQuery.of(context).size.width >
+                                MediaQuery.of(context).size.height
+                            ? 2
+                            : 1,
                         crossAxisSpacing: 16,
                         mainAxisSpacing: 16,
                         children: List.generate(
@@ -348,225 +449,6 @@ class GalleryRouterDelegate extends RouterDelegate<RoutePath>
                                   ),
                                 ))),
                   ),
-                  SliverList(
-                    delegate: SliverChildListDelegate([
-                      Container(
-                        height: MediaQuery.of(context).size.height * 0.9,
-                        width: MediaQuery.of(context).size.width,
-                        color: Colors.black,
-                        child: Stack(children: [
-                          ListView(
-                            controller: _albumControl,
-                            scrollDirection: Axis.horizontal,
-                            children: [
-                              GestureDetector(
-                                onTapUp: (context) {
-                                  _homeToAlbum(0);
-                                },
-                                child: NtuClose(
-                                    textStyle_albumTitle: textStyle_albumTitle,
-                                    textStyle_albumSubtitle:
-                                        textStyle_albumSubtitle),
-                              ),
-                              GestureDetector(
-                                  onTapUp: (details) => _homeToAlbum(1),
-                                  child: PengHu(
-                                      textStyle_albumTitle:
-                                          textStyle_albumTitle,
-                                      textStyle_albumSubtitle:
-                                          textStyle_albumSubtitle)),
-                              GestureDetector(
-                                  onTapUp: (details) => _homeToAlbum(2),
-                                  child: Airport(
-                                      textStyle_albumTitle:
-                                          textStyle_albumTitle,
-                                      textStyle_albumSubtitle:
-                                          textStyle_albumSubtitle)),
-                              GestureDetector(
-                                  onTapUp: (details) => _homeToAlbum(3),
-                                  child: HuWeiTrain(
-                                      textStyle_albumTitle:
-                                          textStyle_albumTitle,
-                                      textStyle_albumSubtitle:
-                                          textStyle_albumSubtitle)),
-                              GestureDetector(
-                                  onTapUp: (details) => _homeToAlbum(4),
-                                  child: TaitungLibrary(
-                                      textStyle_albumTitle:
-                                          textStyle_albumTitle,
-                                      textStyle_albumSubtitle:
-                                          textStyle_albumSubtitle)),
-                            ],
-                          ),
-                          LastPage(entryControl: _entryControl),
-                          Opacity(
-                            opacity: defaultTargetPlatform ==
-                                        TargetPlatform.android ||
-                                    defaultTargetPlatform == TargetPlatform.iOS
-                                ? 0
-                                : 1.0,
-                            child: LastAlbum(
-                              albumControl: _albumControl,
-                            ),
-                          ),
-                          Opacity(
-                            opacity: defaultTargetPlatform ==
-                                        TargetPlatform.android ||
-                                    defaultTargetPlatform == TargetPlatform.iOS
-                                ? 0
-                                : 1.0,
-                            child: NextAlbum(
-                              albumControl: _albumControl,
-                            ),
-                          ),
-                          NextPage(entryControl: _entryControl),
-                        ]),
-                      ),
-                      Container(
-                        height: MediaQuery.of(context).size.height * 0.9,
-                        width: MediaQuery.of(context).size.width,
-                        color: Colors.black,
-                        child: Stack(children: [
-                          ListView(
-                            controller: _albumControl2,
-                            scrollDirection: Axis.horizontal,
-                            children: [
-                              GestureDetector(
-                                onTapUp: (context) {
-                                  _homeToAlbum(5);
-                                },
-                                child: CkShow(
-                                    textStyle_albumTitle: textStyle_albumTitle,
-                                    textStyle_albumSubtitle:
-                                        textStyle_albumSubtitle),
-                              ),
-                              GestureDetector(
-                                  onTapUp: (details) => _homeToAlbum(6),
-                                  child: CkConstrution(
-                                      textStyle_albumTitle:
-                                          textStyle_albumTitle,
-                                      textStyle_albumSubtitle:
-                                          textStyle_albumSubtitle)),
-                              GestureDetector(
-                                  onTapUp: (details) => _homeToAlbum(7),
-                                  child: CkpcSport(
-                                      textStyle_albumTitle:
-                                          textStyle_albumTitle,
-                                      textStyle_albumSubtitle:
-                                          textStyle_albumSubtitle)),
-                              GestureDetector(
-                                  onTapUp: (details) => _homeToAlbum(8),
-                                  child: CkpcStage(
-                                      textStyle_albumTitle:
-                                          textStyle_albumTitle,
-                                      textStyle_albumSubtitle:
-                                          textStyle_albumSubtitle)),
-                              GestureDetector(
-                                  onTapUp: (details) => _homeToAlbum(9),
-                                  child: CkpcEvent(
-                                      textStyle_albumTitle:
-                                          textStyle_albumTitle,
-                                      textStyle_albumSubtitle:
-                                          textStyle_albumSubtitle)),
-                            ],
-                          ),
-                          LastPage(entryControl: _entryControl),
-                          Opacity(
-                            opacity: defaultTargetPlatform ==
-                                        TargetPlatform.android ||
-                                    defaultTargetPlatform == TargetPlatform.iOS
-                                ? 0
-                                : 1.0,
-                            child: LastAlbum(
-                              albumControl: _albumControl2,
-                            ),
-                          ),
-                          Opacity(
-                            opacity: defaultTargetPlatform ==
-                                        TargetPlatform.android ||
-                                    defaultTargetPlatform == TargetPlatform.iOS
-                                ? 0
-                                : 1.0,
-                            child: NextAlbum(
-                              albumControl: _albumControl2,
-                            ),
-                          ),
-                          NextPage(entryControl: _entryControl),
-                        ]),
-                      ),
-                      Container(
-                        height: MediaQuery.of(context).size.height * 0.9,
-                        width: MediaQuery.of(context).size.width,
-                        color: Colors.black,
-                        child: Stack(children: [
-                          ListView(
-                            controller: _albumControl3,
-                            scrollDirection: Axis.horizontal,
-                            children: [
-                              GestureDetector(
-                                onTapUp: (context) {
-                                  _homeToAlbum(10);
-                                },
-                                child: UK(
-                                    textStyle_albumTitle: textStyle_albumTitle,
-                                    textStyle_albumSubtitle:
-                                        textStyle_albumSubtitle),
-                              ),
-                              GestureDetector(
-                                  onTapUp: (details) => _homeToAlbum(11),
-                                  child: Portugal(
-                                      textStyle_albumTitle:
-                                          textStyle_albumTitle,
-                                      textStyle_albumSubtitle:
-                                          textStyle_albumSubtitle)),
-                              GestureDetector(
-                                  onTapUp: (details) => _homeToAlbum(12),
-                                  child: Turkey(
-                                      textStyle_albumTitle:
-                                          textStyle_albumTitle,
-                                      textStyle_albumSubtitle:
-                                          textStyle_albumSubtitle)),
-                              GestureDetector(
-                                  onTapUp: (details) => _homeToAlbum(13),
-                                  child: Russia(
-                                      textStyle_albumTitle:
-                                          textStyle_albumTitle,
-                                      textStyle_albumSubtitle:
-                                          textStyle_albumSubtitle)),
-                              GestureDetector(
-                                  onTapUp: (details) => _homeToAlbum(14),
-                                  child: Thai(
-                                      textStyle_albumTitle:
-                                          textStyle_albumTitle,
-                                      textStyle_albumSubtitle:
-                                          textStyle_albumSubtitle)),
-                            ],
-                          ),
-                          LastPage(entryControl: _entryControl),
-                          Opacity(
-                            opacity: defaultTargetPlatform ==
-                                        TargetPlatform.android ||
-                                    defaultTargetPlatform == TargetPlatform.iOS
-                                ? 0
-                                : 1.0,
-                            child: LastAlbum(
-                              albumControl: _albumControl3,
-                            ),
-                          ),
-                          Opacity(
-                            opacity: defaultTargetPlatform ==
-                                        TargetPlatform.android ||
-                                    defaultTargetPlatform == TargetPlatform.iOS
-                                ? 0
-                                : 1.0,
-                            child: NextAlbum(
-                              albumControl: _albumControl3,
-                            ),
-                          ),
-                        ]),
-                      ),
-                    ]),
-                  )
                 ]),
           ),
           if (_selectedAlbum != null)
@@ -660,7 +542,7 @@ class NextAlbum extends StatelessWidget {
   Widget build(BuildContext context) {
     return Align(
         alignment: Alignment.centerRight,
-        child: IconButton(
+        child: IconButton.outlined(
           icon: Icon(
             Icons.arrow_forward_rounded,
             color: Colors.grey.shade400,
@@ -751,18 +633,21 @@ class NextPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Align(
         alignment: Alignment.bottomCenter,
-        child: IconButton(
-          icon: Icon(
-            Icons.arrow_downward_rounded,
-            color: Colors.green.shade200,
-            size: 60,
+        child: PhysicalModel(
+          color: Colors.green.shade200,
+          borderRadius: BorderRadius.circular(40),
+          child: IconButton(
+            alignment: Alignment.bottomCenter,
+            iconSize: 50,
+            icon: Icon(Icons.arrow_downward_rounded),
+            onPressed: () {
+              _entryControl.nextPage(
+                  duration: Duration(milliseconds: 450),
+                  curve: Curves.easeInOut);
+              _currentOffset = 0.0;
+            },
+            padding: EdgeInsets.only(top: 40),
           ),
-          onPressed: () {
-            _entryControl.nextPage(
-                duration: Duration(milliseconds: 450), curve: Curves.easeInOut);
-            _currentOffset = 0.0;
-          },
-          padding: EdgeInsets.only(bottom: 40),
         ));
   }
 }
