@@ -46,3 +46,6 @@ app.*.map.json
 
 # Image assets
 assets/albums/
+
+# Secrets
+apikey.dart
