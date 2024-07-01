@@ -15,8 +15,15 @@ import 'gdrive.dart';
 
 var _currentOffset = 0.0;
 late final List<Map<String, String>> albumList;
+Uri? initialRoute;
+RoutePath? initialRoutePath;
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  // Store the initial route
+  initialRoute =
+      Uri.parse(WidgetsBinding.instance.platformDispatcher.defaultRouteName);
+
   if (defaultTargetPlatform == TargetPlatform.android ||
       defaultTargetPlatform == TargetPlatform.iOS) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
@@ -36,6 +43,8 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   late Future<bool> isFetched;
   List<Album> gallery = [];
+  late GalleryRouterDelegate _routerDelegate;
+  late GalleryRouteInformationParser _routeInformationParser;
 
   Future<bool> fetchGallery() async {
     final albumsStream = constructAlbumStream(albumList);
@@ -44,6 +53,16 @@ class _MyAppState extends State<MyApp> {
         this.gallery.add(album);
       });
     }
+    _routerDelegate = GalleryRouterDelegate(this.gallery);
+    _routeInformationParser = GalleryRouteInformationParser(albumList);
+    if (initialRoute != null) {
+      initialRoutePath = await _routeInformationParser
+          .parseRouteInformation(RouteInformation(uri: initialRoute));
+
+      //_routerDelegate.setInitialRoutePath(initialRoutePath!);
+      initialRoute = null; // Clear the initial route
+    }
+
     return true;
   }
 
@@ -64,10 +83,8 @@ class _MyAppState extends State<MyApp> {
       future: this.isFetched,
       builder: (context, snapshot) {
         if (snapshot.hasData && snapshot.data!) {
-          GalleryRouterDelegate _routerDelegate =
-              GalleryRouterDelegate(this.gallery);
-          GalleryRouteInformationParser _routeInformationParser =
-              GalleryRouteInformationParser(albumList);
+          // Apply the initial route if it exists
+
           return MaterialApp.router(
             title: 'Gallery of Cheng Po Sheng\'s photography',
             theme: ThemeData(
@@ -228,6 +245,15 @@ class GalleryRouterDelegate extends RouterDelegate<RoutePath>
       _selectedAlbum = configuration.albumIndex;
       _selectedPhoto = 0;
       notifyListeners();
+    }
+  }
+
+  @override
+  Future<void> setInitialRoutePath(RoutePath configuration) async {
+    if (initialRoutePath != null) {
+      setNewRoutePath(initialRoutePath!);
+    } else {
+      setNewRoutePath(configuration);
     }
   }
 
