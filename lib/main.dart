@@ -21,8 +21,11 @@ RoutePath? initialRoutePath;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // Store the initial route
-  initialRoute =
-      Uri.parse(WidgetsBinding.instance.platformDispatcher.defaultRouteName);
+  final initialRouteName =
+      WidgetsBinding.instance.platformDispatcher.defaultRouteName;
+  if (initialRouteName != '/') {
+    initialRoute = Uri.parse(initialRouteName);
+  }
 
   if (defaultTargetPlatform == TargetPlatform.android ||
       defaultTargetPlatform == TargetPlatform.iOS) {
@@ -58,8 +61,6 @@ class _MyAppState extends State<MyApp> {
     if (initialRoute != null) {
       initialRoutePath = await _routeInformationParser
           .parseRouteInformation(RouteInformation(uri: initialRoute));
-
-      //_routerDelegate.setInitialRoutePath(initialRoutePath!);
       initialRoute = null; // Clear the initial route
     }
 
