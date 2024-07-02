@@ -226,11 +226,21 @@ class GalleryRouterDelegate extends RouterDelegate<RoutePath>
   }
 
   RoutePath get currentConfiguration {
-    if (_selectedPhoto == null) {
-      return RoutePath(albumIndex: _selectedAlbum, isViewer: false);
+    if (_selectedAlbum == null) {
+      return RoutePath(isViewer: false);
+    } else if (_selectedPhoto == null) {
+      return RoutePath(isViewer: false, albumIndex: _selectedAlbum);
     } else {
-      return RoutePath(albumIndex: _selectedAlbum, isViewer: true);
+      return RoutePath(
+          isViewer: true,
+          albumIndex: _selectedAlbum,
+          photoIndex: _selectedPhoto);
     }
+    // if (_selectedPhoto == null) {
+    //   return RoutePath(albumIndex: _selectedAlbum, isViewer: false);
+    // } else {
+    //   return RoutePath(albumIndex: _selectedAlbum, isViewer: true);
+    // }
   }
 
   @override
@@ -243,9 +253,13 @@ class GalleryRouterDelegate extends RouterDelegate<RoutePath>
       _selectedAlbum = config.albumIndex;
       _selectedPhoto = null;
       notifyListeners();
-    } else {
+    } else if (config.photoIndex == null) {
       _selectedAlbum = config.albumIndex;
       _selectedPhoto = 0;
+      notifyListeners();
+    } else {
+      _selectedAlbum = config.albumIndex;
+      _selectedPhoto = config.photoIndex;
       notifyListeners();
     }
   }
