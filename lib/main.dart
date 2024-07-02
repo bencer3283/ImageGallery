@@ -207,9 +207,10 @@ class _MyAppState extends State<MyApp> {
 
 class RoutePath {
   final int? albumIndex;
+  final int? photoIndex;
   final bool isViewer;
 
-  RoutePath({this.albumIndex, required this.isViewer});
+  RoutePath({this.albumIndex, this.photoIndex, required this.isViewer});
 }
 
 class GalleryRouterDelegate extends RouterDelegate<RoutePath>
@@ -233,17 +234,17 @@ class GalleryRouterDelegate extends RouterDelegate<RoutePath>
   }
 
   @override
-  Future<void> setNewRoutePath(RoutePath configuration) async {
-    if (configuration.albumIndex == null) {
+  Future<void> setNewRoutePath(RoutePath config) async {
+    if (config.albumIndex == null) {
       _selectedPhoto = null;
       _selectedAlbum = null;
       notifyListeners();
-    } else if (!configuration.isViewer) {
-      _selectedAlbum = configuration.albumIndex;
+    } else if (!config.isViewer) {
+      _selectedAlbum = config.albumIndex;
       _selectedPhoto = null;
       notifyListeners();
     } else {
-      _selectedAlbum = configuration.albumIndex;
+      _selectedAlbum = config.albumIndex;
       _selectedPhoto = 0;
       notifyListeners();
     }
@@ -266,6 +267,18 @@ class GalleryRouterDelegate extends RouterDelegate<RoutePath>
   void _homeToAlbum(int i) {
     _selectedAlbum = i;
     notifyListeners();
+  }
+
+  @override
+  Future<bool> popRoute() {
+    if (_selectedAlbum != null && _selectedPhoto != null) {
+      setNewRoutePath(RoutePath(isViewer: false, albumIndex: _selectedAlbum));
+    } else if (_selectedAlbum != null && _selectedPhoto == null) {
+      setNewRoutePath(RoutePath(isViewer: false));
+    } else {
+      return SynchronousFuture<bool>(false);
+    }
+    return SynchronousFuture<bool>(true);
   }
 
   late final List<Album> albums;
@@ -525,34 +538,72 @@ class GalleryRouteInformationParser extends RouteInformationParser<RoutePath> {
   @override
   Future<RoutePath> parseRouteInformation(
       RouteInformation routeInformation) async {
-    final uri = Uri.parse(routeInformation.uri.toString()).pathSegments;
-    // Handle '/'
+    final pathSeg = routeInformation.uri.pathSegments;
 
-    // if (uri.pathSegments.length == 0) {
-    //   return BookRoutePath.home();
-    // }
-
-    // Handle '/ntuclose/'
-    if (uri.length == 0) {
+    if (pathSeg.isNotEmpty && albums.contains(pathSeg[0])) {
+      if (pathSeg.length == 1) {
+        // album home
+        return RoutePath(
+            isViewer: false, albumIndex: albums.indexOf(pathSeg[0]));
+      } else if (pathSeg.length >= 2 && pathSeg.contains('viewer')) {
+        if (pathSeg.length == 3) {
+          // album specified photo
+          return RoutePath(
+              isViewer: true,
+              albumIndex: albums.indexOf(pathSeg[0]),
+              photoIndex: int.tryParse(pathSeg[2]) ?? 0);
+        } else {
+          // album photo 0
+          return RoutePath(
+              isViewer: true,
+              albumIndex: albums.indexOf(pathSeg[0]),
+              photoIndex: 0);
+        }
+      } else {
+        return RoutePath(
+            isViewer: false, albumIndex: albums.indexOf(pathSeg[0]));
+      }
+    } else {
+      // gallery home
       return RoutePath(isViewer: false);
-    } else if (uri.last == 'viewer') {
-      return RoutePath(
-          isViewer: true, albumIndex: albums.indexOf(uri[uri.length - 2]));
-    } else if (albums.contains(uri.last)) {
-      return RoutePath(isViewer: false, albumIndex: albums.indexOf(uri.last));
-    } else
-      return RoutePath(isViewer: false);
+    }
+    //   if (uri.length == 0) {
+    //     return RoutePath(isViewer: false);
+    //   } else if (uri.last == 'viewer') {
+    //     return RoutePath(
+    //         isViewer: true, albumIndex: albums.indexOf(uri[uri.length - 2]));
+    //   } else if (albums.contains(uri.last)) {
+    //     return RoutePath(isViewer: false, albumIndex: albums.indexOf(uri.last));
+    //   } else
+    //     return RoutePath(isViewer: false);
   }
 
   @override
-  RouteInformation restoreRouteInformation(RoutePath path) {
-    if (path.isViewer) {
-      return RouteInformation(
-          uri: Uri.parse('/${albums[path.albumIndex!]}/viewer'));
-    } else if (path.albumIndex != null) {
-      return RouteInformation(uri: Uri.parse('/${albums[path.albumIndex!]}'));
-    } else
+  RouteInformation restoreRouteInformation(RoutePath route) {
+    if (route.albumIndex == null) {
       return RouteInformation(uri: Uri.parse('/'));
+    } else {
+      if (route.isViewer) {
+        if (route.photoIndex == null) {
+          return RouteInformation(
+              uri: Uri.parse('/${albums[route.albumIndex!]}/viewer'));
+        } else {
+          return RouteInformation(
+              uri: Uri.parse(
+                  '/${albums[route.albumIndex!]}/viewer/${route.photoIndex}'));
+        }
+      } else {
+        return RouteInformation(
+            uri: Uri.parse('/${albums[route.albumIndex!]}'));
+      }
+    }
+    //   if (path.isViewer) {
+    //     return RouteInformation(
+    //         uri: Uri.parse('/${albums[path.albumIndex!]}/viewer'));
+    //   } else if (path.albumIndex != null) {
+    //     return RouteInformation(uri: Uri.parse('/${albums[path.albumIndex!]}'));
+    //   } else
+    //     return RouteInformation(uri: Uri.parse('/'));
   }
 }
 
