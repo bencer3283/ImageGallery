@@ -137,8 +137,11 @@ class _ViewerState extends State<Viewer>
       vsync: this,
       duration: const Duration(milliseconds: 200),
     );
-    pagecontrol = PageController(initialPage: widget.initialIndex);
-    currentIndex = widget.initialIndex;
+    final iniIdx = widget.initialIndex < widget.album.photos.length
+        ? widget.initialIndex
+        : 0;
+    pagecontrol = PageController(initialPage: iniIdx);
+    currentIndex = iniIdx;
   }
 
   @override
