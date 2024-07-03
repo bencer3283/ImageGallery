@@ -121,6 +121,9 @@ class _MyAppState extends State<MyApp> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      Spacer(
+                        flex: 4,
+                      ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
@@ -130,7 +133,7 @@ class _MyAppState extends State<MyApp> {
                             fontSize: defaultTargetPlatform ==
                                         TargetPlatform.android ||
                                     defaultTargetPlatform == TargetPlatform.iOS
-                                ? 24
+                                ? 21
                                 : 30,
                             color: Colors.grey.shade300,
                             shadows: [
@@ -148,8 +151,8 @@ class _MyAppState extends State<MyApp> {
                       Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: SizedBox(
-                          width: 100,
-                          height: 100,
+                          width: 80,
+                          height: 80,
                           child: TweenAnimationBuilder<Color?>(
                             tween: ColorTween(
                               begin: colors[gallery.length % 4],
@@ -157,7 +160,7 @@ class _MyAppState extends State<MyApp> {
                                   ? 0
                                   : gallery.length % 4 + 1],
                             ),
-                            duration: Duration(milliseconds: 150),
+                            duration: Duration(milliseconds: 200),
                             builder: (context, value, child) =>
                                 CircularProgressIndicator(
                               value: gallery.length / albumList.length,
@@ -178,7 +181,7 @@ class _MyAppState extends State<MyApp> {
                             fontSize: defaultTargetPlatform ==
                                         TargetPlatform.android ||
                                     defaultTargetPlatform == TargetPlatform.iOS
-                                ? 24
+                                ? 21
                                 : 30,
                             color: Colors.grey.shade300,
                             shadows: [
@@ -193,6 +196,9 @@ class _MyAppState extends State<MyApp> {
                           ),
                         ),
                       ),
+                      Spacer(
+                        flex: 5,
+                      )
                     ],
                   ),
                 ),
@@ -236,28 +242,27 @@ class GalleryRouterDelegate extends RouterDelegate<RoutePath>
           albumIndex: _selectedAlbum,
           photoIndex: _selectedPhoto);
     }
-    // if (_selectedPhoto == null) {
-    //   return RoutePath(albumIndex: _selectedAlbum, isViewer: false);
-    // } else {
-    //   return RoutePath(albumIndex: _selectedAlbum, isViewer: true);
-    // }
   }
 
   @override
   Future<void> setNewRoutePath(RoutePath config) async {
     if (config.albumIndex == null) {
+      // home
       _selectedPhoto = null;
       _selectedAlbum = null;
       notifyListeners();
     } else if (!config.isViewer) {
+      // album grid view
       _selectedAlbum = config.albumIndex;
       _selectedPhoto = null;
       notifyListeners();
     } else if (config.photoIndex == null) {
+      // no photo index -> album viewer photo 0
       _selectedAlbum = config.albumIndex;
       _selectedPhoto = 0;
       notifyListeners();
     } else {
+      // album viewer photo x
       _selectedAlbum = config.albumIndex;
       _selectedPhoto = config.photoIndex;
       notifyListeners();
@@ -507,19 +512,20 @@ class GalleryRouterDelegate extends RouterDelegate<RoutePath>
           ),
           if (_selectedAlbum != null)
             AlbumGridPage(
-              childWidget: AlbumGrid(
-                handleTap: _gridToViewer,
-                album: albums[_selectedAlbum ?? 0],
-              ),
-              //key: ValueKey('album in grid view')
-            ),
+                childWidget: AlbumGrid(
+                  handleTap: _gridToViewer,
+                  album: albums[_selectedAlbum ?? 0],
+                ),
+                key: ValueKey(albums[_selectedAlbum!].titleEng)),
           if (_selectedPhoto != null)
             CupertinoPage(
               child: Viewer(
                 initialIndex: _selectedPhoto,
                 album: albums[_selectedAlbum ?? 0],
               ),
-              key: ValueKey('photo viewer'),
+              key: ValueKey(albums[_selectedAlbum!].titleEng +
+                  ' photo viewer: ' +
+                  _selectedPhoto.toString()),
             ),
         ],
         onPopPage: (route, result) {
@@ -562,10 +568,11 @@ class GalleryRouteInformationParser extends RouteInformationParser<RoutePath> {
       } else if (pathSeg.length >= 2 && pathSeg.contains('viewer')) {
         if (pathSeg.length == 3) {
           // album specified photo
+          final photoIdx = int.tryParse(pathSeg[2]) ?? 1;
           return RoutePath(
               isViewer: true,
               albumIndex: albums.indexOf(pathSeg[0]),
-              photoIndex: int.tryParse(pathSeg[2]) ?? 0);
+              photoIndex: photoIdx - 1);
         } else {
           // album photo 0
           return RoutePath(
@@ -581,15 +588,6 @@ class GalleryRouteInformationParser extends RouteInformationParser<RoutePath> {
       // gallery home
       return RoutePath(isViewer: false);
     }
-    //   if (uri.length == 0) {
-    //     return RoutePath(isViewer: false);
-    //   } else if (uri.last == 'viewer') {
-    //     return RoutePath(
-    //         isViewer: true, albumIndex: albums.indexOf(uri[uri.length - 2]));
-    //   } else if (albums.contains(uri.last)) {
-    //     return RoutePath(isViewer: false, albumIndex: albums.indexOf(uri.last));
-    //   } else
-    //     return RoutePath(isViewer: false);
   }
 
   @override
@@ -604,20 +602,13 @@ class GalleryRouteInformationParser extends RouteInformationParser<RoutePath> {
         } else {
           return RouteInformation(
               uri: Uri.parse(
-                  '/${albums[route.albumIndex!]}/viewer/${route.photoIndex}'));
+                  '/${albums[route.albumIndex!]}/viewer/${route.photoIndex! + 1}'));
         }
       } else {
         return RouteInformation(
             uri: Uri.parse('/${albums[route.albumIndex!]}'));
       }
     }
-    //   if (path.isViewer) {
-    //     return RouteInformation(
-    //         uri: Uri.parse('/${albums[path.albumIndex!]}/viewer'));
-    //   } else if (path.albumIndex != null) {
-    //     return RouteInformation(uri: Uri.parse('/${albums[path.albumIndex!]}'));
-    //   } else
-    //     return RouteInformation(uri: Uri.parse('/'));
   }
 }
 
@@ -726,7 +717,7 @@ class NextPage extends StatelessWidget {
     return Align(
         alignment: Alignment.bottomCenter,
         child: PhysicalModel(
-          color: Colors.grey.shade700,
+          color: Colors.grey.shade900,
           borderRadius: BorderRadius.circular(40),
           child: IconButton(
             alignment: Alignment.bottomCenter,
@@ -746,7 +737,7 @@ class NextPage extends StatelessWidget {
 }
 
 class AlbumGridPage extends Page {
-  AlbumGridPage({required this.childWidget});
+  AlbumGridPage({required this.childWidget, super.key});
   final childWidget;
   @override
   Route createRoute(BuildContext context) {

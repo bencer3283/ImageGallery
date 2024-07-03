@@ -130,14 +130,14 @@ class _ViewerState extends State<Viewer>
   late final pagecontrol;
 
   @override
-  @override
   void initState() {
     super.initState();
     doubletapControl = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 200),
     );
-    final iniIdx = widget.initialIndex < widget.album.photos.length
+    final iniIdx = widget.initialIndex < widget.album.photos.length &&
+            widget.initialIndex >= 0
         ? widget.initialIndex
         : 0;
     pagecontrol = PageController(initialPage: iniIdx);
