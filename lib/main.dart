@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:animations/animations.dart';
+import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
 import 'Viewer.dart';
 import 'AlbumGrid.dart';
@@ -19,10 +20,16 @@ Uri? initialRoute;
 RoutePath? initialRoutePath;
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  setUrlStrategy(PathUrlStrategy());
   // Store the initial route
-  final initialRouteName =
-      WidgetsBinding.instance.platformDispatcher.defaultRouteName;
+  final initialBaseUrl = Uri.parse(Uri.decodeFull(Uri.base.toString()));
+
+  final initialRouteName = initialBaseUrl.hasFragment
+      ? initialBaseUrl.fragment
+      : initialBaseUrl.hasEmptyPath
+          ? '/'
+          : initialBaseUrl.path;
+
   if (initialRouteName != '/') {
     initialRoute = Uri.parse(initialRouteName);
   }
